@@ -606,7 +606,7 @@ a{color:inherit}
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1">מרווח גולמי (%)</label>
                         <div class="relative">
-                            <input type="number" id="gross-margin-pct" min="1" max="100" value="70"
+                            <input type="number" id="gross-margin-pct" min="1" max="100"
                                 oninput="validateMinMax(this); saveAndRecalc()" onfocus="clearOnFocus(this)"
                                 class="w-full pl-8 pr-3 py-2 border border-gray-300 bg-white rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-emerald-600"
                                 placeholder="70">
@@ -621,7 +621,7 @@ a{color:inherit}
             </div>
 
             <div class="flex justify-end mt-6">
-                <button onclick="goToStep(2)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
+                <button onclick="validateAndGoStep2()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
                     המשך לשלב הבא <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -1307,7 +1307,7 @@ a{color:inherit}
 
                 <div id="app-form-container" class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
                     <h4 class="text-base font-bold text-white mb-4 text-right">צור קשר לקבלת עזרה וניתוח הדוח:</h4>
-                    <form id="app-contact-form" class="space-y-4" onsubmit="submitAppContact(event)" action="https://formspree.io/f/xkoelzoo" method="POST">
+                    <form id="app-contact-form" class="space-y-4" onsubmit="submitAppContact(event)" data-netlify="true" name="contact" netlify-honeypot="bot-field">
                         <div>
                             <input type="hidden" name="bot-field"><input type="text" id="contact-name" name="name" placeholder="שם מלא" required class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
                         </div>
@@ -1517,7 +1517,7 @@ a{color:inherit}
                 rev2025: S.rev2025,
                 customMonths2024: S.customMonths2024,
                 customMonths2025: S.customMonths2025,
-                grossMarginPct: parseFloat(document.getElementById('gross-margin-pct')?.value) || 70,
+                grossMarginPct: parseFloat(document.getElementById('gross-margin-pct')?.value) || 0,
                 targetGrowthPct: parseFloat(document.getElementById('target-growth-pct')?.value) || 0,
                 seasonalityProfile: S.seasonalityProfile,
                 growthMode: S.growthMode,
@@ -1565,7 +1565,7 @@ a{color:inherit}
                 if(document.getElementById('revenue-2024')) document.getElementById('revenue-2024').value = S.rev2024 ? S.rev2024.toLocaleString('en-US') : '';
                 if(document.getElementById('revenue-2025')) document.getElementById('revenue-2025').value = S.rev2025 ? S.rev2025.toLocaleString('en-US') : '';
                 if(document.getElementById('target-growth-pct')) document.getElementById('target-growth-pct').value = data.targetGrowthPct || '';
-                if(document.getElementById('gross-margin-pct')) document.getElementById('gross-margin-pct').value = data.grossMarginPct || 70;
+                if(document.getElementById('gross-margin-pct')) document.getElementById('gross-margin-pct').value = data.grossMarginPct || '';
                 if(document.getElementById('input-mkt-elasticity')) document.getElementById('input-mkt-elasticity').value = data.mktElasticity || 5;
                 if(document.getElementById('slider-mkt-growth')) {
                     document.getElementById('slider-mkt-growth').value = S.mktGrowth;
@@ -1673,6 +1673,31 @@ a{color:inherit}
             }
             updateCalculatedSumIndicator();
             saveAndRecalc();
+        }
+
+        function validateAndGoStep2() {
+            const gmInput = document.getElementById('gross-margin-pct');
+            const val = parseFloat(gmInput?.value);
+            if (!gmInput || gmInput.value === '' || isNaN(val) || val < 1 || val > 100) {
+                gmInput.style.borderColor = '#ef4444';
+                gmInput.style.boxShadow = '0 0 0 2px rgba(239,68,68,0.3)';
+                const errId = 'gross-margin-error';
+                if (!document.getElementById(errId)) {
+                    const err = document.createElement('p');
+                    err.id = errId;
+                    err.style.cssText = 'color:#ef4444;font-size:12px;margin-top:4px;';
+                    err.textContent = 'נא להזין אחוז מרווח גולמי בין 1 ל-100';
+                    gmInput.closest('div').appendChild(err);
+                }
+                gmInput.focus();
+                return;
+            }
+            // תקין — נקה שגיאות
+            gmInput.style.borderColor = '';
+            gmInput.style.boxShadow = '';
+            const existingErr = document.getElementById('gross-margin-error');
+            if (existingErr) existingErr.remove();
+            goToStep(2);
         }
 
         function goToStep(stepNum) {
@@ -2308,7 +2333,7 @@ a{color:inherit}
         }
 
         function recalcAll() {
-            S.grossMarginPct = Math.max(1, parseFloat(document.getElementById('gross-margin-pct')?.value) || 70);
+            S.grossMarginPct = Math.max(1, parseFloat(document.getElementById('gross-margin-pct')?.value) || 1);
             S.mktElasticity = parseFloat(document.getElementById('input-mkt-elasticity')?.value) || 5;
             const targetGrowthInput = parseFloat(document.getElementById('target-growth-pct')?.value) || 0;
 
@@ -3387,11 +3412,12 @@ a{color:inherit}
             const name = document.getElementById('contact-name').value;
             const formContainer = document.getElementById('app-form-container');
 
+            // שלח ל-Netlify Forms
             const formData = new FormData(form);
-            fetch('https://formspree.io/f/xkoelzoo', {
+            fetch('/', {
                 method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formData).toString()
             })
             .then(() => {
                 // אירוע Analytics — ליד נשלח
