@@ -1207,6 +1207,19 @@ a{color:inherit}
                         סימולציית רגישות — What-If Analysis
                     </h3>
                     <p class="text-xs text-slate-400 mb-4">שנה את הסליידרים — כל הדוחות יתעדכנו בזמן אמת</p>
+                    <div class="mb-6">
+                        <div class="flex justify-between text-xs font-medium mb-1.5">
+                            <span>שינוי במכירות (המשפיע ביותר):</span>
+                            <span id="ui-sens-revenue" class="font-bold text-amber-400">0%</span>
+                        </div>
+                        <input type="range" id="sens-revenue-slider" min="-50" max="50" value="0" step="5"
+                            oninput="handleSensitivityChange()"
+                            class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span>−50%</span><span>0</span><span>+50%</span>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1.5 leading-relaxed">בדיקת התרחיש המשמעותי ביותר: שינוי אחיד בכל ההכנסות. זורם לרווח, ל-EBITDA, לרווח הנקי, לתזרים ולנקודת האיזון.</p>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1.5">
@@ -1462,6 +1475,7 @@ a{color:inherit}
             mktElasticity: 5, 
             manpower: [],
             sensMargin: 0,
+            sensRevenue: 0,
             sensPayroll: 0
         };
 
@@ -2450,9 +2464,11 @@ a{color:inherit}
         function handleSensitivityChange() {
             S.sensMargin  = parseFloat(document.getElementById('sens-margin-slider').value)  || 0;
             S.sensPayroll = parseFloat(document.getElementById('sens-payroll-slider').value) || 0;
+            S.sensRevenue = parseFloat(document.getElementById('sens-revenue-slider').value) || 0;
 
             document.getElementById('ui-sens-margin').innerText  = (S.sensMargin  > 0 ? '+' : '') + S.sensMargin  + '%';
             document.getElementById('ui-sens-payroll').innerText = (S.sensPayroll > 0 ? '+' : '') + S.sensPayroll + '%';
+            document.getElementById('ui-sens-revenue').innerText = (S.sensRevenue > 0 ? '+' : '') + S.sensRevenue + '%';
 
             recalcAll();
             // עדכן גרפים בדף 4 אם פתוח
@@ -2714,6 +2730,9 @@ a{color:inherit}
                     }
                 });
                 rev += manpowerYield;
+
+                // ── סימולציית שינוי במכירות (ניתוח רגישות) — חלה על סך ההכנסה החודשית ──
+                if (S.sensRevenue !== 0) rev = rev * (1 + (S.sensRevenue / 100));
 
                 // רווח גולמי ועלות מכר
                 const costOfGoodsSold = rev * (1 - (dynamicMarginPct / 100));
