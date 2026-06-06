@@ -114,6 +114,7 @@ a{color:inherit}
 .flex-wrap    {flex-wrap:wrap}
 .flex-grow    {flex-grow:1}
 .flex-shrink-0{flex-shrink:0}
+.flex-1       {flex:1 1 0%}
 .items-center {align-items:center}
 .items-start  {align-items:flex-start}
 .justify-center  {justify-content:center}
@@ -287,6 +288,27 @@ a{color:inherit}
 .bg-slate-800    {background-color:#1e293b}
 .bg-slate-900    {background-color:#0f172a}
 .bg-slate-950    {background-color:#020617}
+/* indigo palette — נדרש למודול המימון בעמוד הכדאיות */
+.bg-indigo-50    {background-color:#eef2ff}
+.bg-indigo-100   {background-color:#e0e7ff}
+.bg-indigo-600   {background-color:#4f46e5}
+.bg-indigo-900   {background-color:#312e81}
+.bg-indigo-950   {background-color:#1e1b4b}
+.bg-indigo-900\/50{background-color:rgba(49,46,129,0.5)}
+.text-indigo-300 {color:#a5b4fc}
+.text-indigo-400 {color:#818cf8}
+.text-indigo-600 {color:#4f46e5}
+.text-indigo-700 {color:#4338ca}
+.border-indigo-200{border-color:#c7d2fe}
+.border-indigo-300{border-color:#a5b4fc}
+.border-indigo-500{border-color:#6366f1}
+.border-indigo-800{border-color:#3730a3}
+.hover\:bg-indigo-50:hover{background-color:#eef2ff}
+.text-\[11px\]   {font-size:11px}
+.py-1\.5         {padding-top:.375rem;padding-bottom:.375rem}
+.pl-12           {padding-left:3rem}
+.mt-3            {margin-top:.75rem}
+.max-w-\[160px\] {max-width:160px}
 .bg-emerald-600  {background-color:#059669}
 .bg-rose-600     {background-color:#e11d48}
 .bg-rose-50      {background-color:#fff1f2}
@@ -414,53 +436,34 @@ a{color:inherit}
 
     <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6">
         
-        <div class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-gray-100">
-            <div class="flex justify-between items-start max-w-3xl mx-auto relative">
-                <div class="absolute inset-x-0 h-0.5 bg-gray-200 -z-10" style="top:19px"></div>
-                
-                <button onclick="goToStep(1)" id="btn-step-1" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-1" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-blue-600 border-blue-600 text-white shadow-md">1</div>
-                    <span id="label-step-1" class="text-xs md:text-sm font-semibold text-blue-600 hidden sm:block">הכנסות</span>
-                    <span class="text-[10px] font-bold text-blue-600 block sm:hidden">הכנסות</span>
-                </button>
-
-                <button onclick="goToStep(2)" id="btn-step-2" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-2" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">2</div>
-                    <span id="label-step-2" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">בסיס הוצאות</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">הוצאות</span>
-                </button>
-
-                <button onclick="goToStep(3)" id="btn-step-3" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-3" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">3</div>
-                    <span id="label-step-3" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">מנועי צמיחה</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">צמיחה</span>
-                </button>
-
-                <button onclick="goToStep(4)" id="btn-step-4" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-4" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">4</div>
-                    <span id="label-step-4" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">השלמת נתונים</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">נתוני עזר</span>
-                </button>
-
-                <button onclick="goToStep(5)" id="btn-step-5" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-5" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">5</div>
-                    <span id="label-step-5" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">מדדי ביצוע</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">מדדי ביצוע</span>
-                </button>
-
-                <button onclick="goToStep(6)" id="btn-step-6" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-6" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">6</div>
-                    <span id="label-step-6" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">דוחות</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">דוחות</span>
-                </button>
-
-                <button onclick="goToStep(7)" id="btn-step-7" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
-                    <div id="circle-step-7" class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-gray-300 text-gray-500">7</div>
-                    <span id="label-step-7" class="text-xs md:text-sm font-medium text-gray-500 hidden sm:block">ביצוע בפועל</span>
-                    <span class="text-[10px] font-bold text-gray-500 block sm:hidden">בפועל</span>
-                </button>
-            </div>
+        <div id="step-bar-wrap" class="bg-white rounded-xl shadow-sm p-4 mb-6 border border-gray-100">
+            <div id="mode-indicator" class="text-center text-[11px] text-slate-400 mb-2"></div>
+            <div id="step-bar-track" class="flex justify-between items-start max-w-3xl mx-auto relative"></div>
         </div>
+
+        <!-- ── מסך פתיחה: בחירת סוג העסק ── -->
+        <section id="view-step-0" class="hidden">
+            <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 border border-gray-100 max-w-3xl mx-auto">
+                <h2 class="text-xl md:text-2xl font-bold text-slate-800 text-center">איזה סוג תכנון תרצה לבנות?</h2>
+                <p class="text-sm text-slate-500 text-center mt-2 mb-6">הבחירה קובעת אילו שלבים יוצגו. תמיד אפשר להחליף בהמשך.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button onclick="chooseMode('new')" class="text-right p-5 rounded-xl border-2 border-indigo-200 hover:border-indigo-500 hover:shadow-md transition-all bg-indigo-50/40 cursor-pointer group">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="rocket" class="w-6 h-6 text-indigo-600"></i>
+                            <span class="text-base font-bold text-slate-800">עסק חדש / רעיון</span>
+                        </div>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות השקעה ומימון, תחזית ודוחות להצגה לבנק ולמשקיעים.</p>
+                    </button>
+                    <button onclick="chooseMode('existing')" class="text-right p-5 rounded-xl border-2 border-emerald-200 hover:border-emerald-500 hover:shadow-md transition-all bg-emerald-50/40 cursor-pointer group">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="line-chart" class="w-6 h-6 text-emerald-600"></i>
+                            <span class="text-base font-bold text-slate-800">עסק קיים</span>
+                        </div>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">תכנון תקציב שנתי ובקרת ביצוע בפועל מול התחזית.</p>
+                    </button>
+                </div>
+            </div>
+        </section>
 
         <section id="view-step-1" class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800 border-b pb-2">
@@ -920,7 +923,7 @@ a{color:inherit}
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded-full font-medium">נדרש לדף 5</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
+                    <div id="step4-financing-field">
                         <label class="block text-xs font-semibold text-slate-300 mb-1">
                             הוצאות מימון שנתיות (ריבית)
                             <span class="font-normal text-slate-400"> — ריבית על הלוואות, אוברדראפט</span>
@@ -969,17 +972,23 @@ a{color:inherit}
                     <h3 class="text-sm font-bold text-white">מצב תזרימי נוכחי — יתרת פתיחה</h3>
                     <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-medium">נדרש לתזרים בדף 5</span>
                 </div>
-                <div class="max-w-xs">
-                    <label class="block text-xs font-semibold text-indigo-300 mb-1">
-                        כמה כסף יש בקופה / חשבון הבנק כרגע?
-                    </label>
-                    <div class="relative">
-                        <input type="number" id="input-opening-balance" oninput="saveAndRecalc()"
-                            class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold"
-                            placeholder="0">
-                        <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-indigo-300 mb-1">
+                            כמה כסף יש בקופה / חשבון הבנק כרגע?
+                        </label>
+                        <div class="flex gap-2 items-stretch">
+                            <button type="button" id="ob-sign-btn" onclick="toggleOpeningSign()" title="סמן יתרה שלילית (אוברדראפט)"
+                                class="flex-shrink-0 w-11 rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-700 font-bold text-xl leading-none cursor-pointer hover:bg-indigo-100 transition-all">+</button>
+                            <div class="relative flex-1">
+                                <input type="text" inputmode="numeric" dir="ltr" id="input-opening-balance" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)"
+                                    class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold"
+                                    placeholder="0">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-indigo-400 mt-1.5">ממנו יחושב התזרים החודשי — ניתן להשאיר 0 אם אינך יודע. ביתרה שלילית (אוברדראפט) לחץ על כפתור ה־+ כדי להפכו ל־−</p>
                     </div>
-                    <p class="text-[11px] text-indigo-400 mt-1.5">ממנו יחושב התזרים החודשי — ניתן להשאיר 0 אם אינך יודע</p>
                 </div>
             </div>
 
@@ -989,10 +998,17 @@ a{color:inherit}
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לתחזית
                 </button>
                 <div class="flex gap-3 w-full sm:w-auto flex-col sm:flex-row">
+                    <button id="btn-save-work" onclick="saveWorkToFile()" class="js-saveload w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="save" class="w-4 h-4"></i> שמור עבודה
+                    </button>
+                    <button id="btn-load-work" onclick="document.getElementById('load-work-input').click()" class="js-saveload w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="folder-open" class="w-4 h-4"></i> טען עבודה
+                    </button>
+                    <input type="file" id="load-work-input" accept=".json,application/json" class="hidden" onchange="loadWorkFromFile(event)">
                     <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="download" class="w-4 h-4"></i> ייצוא ל-Excel
                     </button>
-                    <button onclick="goToStep(5)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
+                    <button onclick="nextFromStep4()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
                         למדדי הביצוע ←
                     </button>
                 </div>
@@ -1005,9 +1021,107 @@ a{color:inherit}
                 <button onclick="goToStep(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לתחזית
                 </button>
-                <button onclick="goToStep(5)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#059669;color:#fff">
+                <button onclick="nextFromStep4()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#059669;color:#fff">
                     למדדי ביצוע ←
                 </button>
+            </div>
+        </section>
+
+        <!-- ── שלב כדאיות ומימון (רק לעסק חדש) ── -->
+        <section id="view-step-fin" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <h2 class="text-lg font-bold mb-1 flex items-center gap-2 text-slate-800 border-b pb-2">
+                    <i data-lucide="target" class="text-indigo-600 w-5 h-5"></i> בדיקת כדאיות ומימון
+                </h2>
+                <p class="text-xs text-slate-500 mb-5">פרטי ההשקעה הראשונית והתשואה הנדרשת. בהמשך תיווסף כאן גם דרך המימון ועלותו.</p>
+
+                <div class="p-5 bg-indigo-950 rounded-xl border border-indigo-800">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">השקעה ראשונית בפרויקט</label>
+                            <div class="relative">
+                                <input type="text" inputmode="numeric" dir="ltr" id="input-investment" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)"
+                                    class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">ציוד, שיפוץ, זיכיון, מלאי פתיחה — לבדיקת החזר ותשואה</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">תשואה שנתית מינימלית שתדרוש מההשקעה</label>
+                            <div class="relative max-w-[160px]">
+                                <input type="number" id="input-required-roi" value="15" oninput="saveAndRecalc()"
+                                    class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="15">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">הרף שמתחתיו ההשקעה אינה כדאית בעיניך (ברירת מחדל 15%)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-indigo-950 rounded-xl border border-indigo-800 mt-4">
+                    <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2"><i data-lucide="banknote" class="w-4 h-4 text-indigo-300"></i> דרך המימון</h3>
+                    <div class="flex gap-2 mb-1">
+                        <button type="button" id="fin-method-equity" onclick="setFinMethod('equity')" class="flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-indigo-600 text-white cursor-pointer">הון עצמי</button>
+                        <button type="button" id="fin-method-loan" onclick="setFinMethod('loan')" class="flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer">הלוואה</button>
+                        <button type="button" id="fin-method-mixed" onclick="setFinMethod('mixed')" class="flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer">משולב</button>
+                    </div>
+                    <div id="loan-fields" style="display:none">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-indigo-300 mb-1">סכום ההלוואה</label>
+                                <div class="relative">
+                                    <input type="text" inputmode="numeric" dir="ltr" id="input-loan-amount" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-indigo-300 mb-1">ריבית שנתית</label>
+                                <div class="relative">
+                                    <input type="number" id="input-loan-rate" oninput="saveAndRecalc()" class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-indigo-300 mb-1">תקופת החזר</label>
+                                <div class="relative">
+                                    <input type="number" id="input-loan-years" oninput="saveAndRecalc()" class="w-full pl-12 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">שנים</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">אופן החזר</label>
+                            <div class="flex gap-2">
+                                <button type="button" id="repay-amort" onclick="setRepayMode('amort')" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white cursor-pointer">קרן + ריבית</button>
+                                <button type="button" id="repay-grace" onclick="setRepayMode('grace')" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer">גרייס על הקרן</button>
+                                <button type="button" id="repay-bullet" onclick="setRepayMode('bullet')" class="flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer">ריבית בלבד (בוליט)</button>
+                            </div>
+                            <div id="grace-months-wrap" class="mt-3" style="display:none">
+                                <label class="block text-xs font-semibold text-indigo-300 mb-1">חודשי גרייס (תשלום ריבית בלבד בתחילת ההלוואה)</label>
+                                <div class="relative max-w-[160px]">
+                                    <input type="number" id="input-grace-months" oninput="saveAndRecalc()" class="w-full pl-12 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">חודשים</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 text-center">
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">הון עצמי נדרש</div><div id="fin-equity-display" class="text-white font-bold text-sm">₪0</div></div>
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">תשלום חודשי משוער</div><div id="fin-payment-display" class="text-white font-bold text-sm">—</div></div>
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">ריבית שנה ראשונה</div><div id="fin-interest-display" class="text-white font-bold text-sm">—</div></div>
+                        </div>
+                        <p class="text-[11px] text-indigo-400 mt-3">הריבית מוזנת לדוח רווח והפסד; שירות החוב המלא (ריבית + קרן) משוקלל בתזרים המזומנים לפי אופן ההחזר שנבחר.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-6">
+                    <button onclick="goToStep(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להשלמת נתונים
+                    </button>
+                    <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
+                    <button onclick="goToStep(5)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
+                        למדדי הביצוע ←
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -1055,6 +1169,9 @@ a{color:inherit}
             </div>
 
             <div id="alert-flags-zone" class="space-y-2"></div>
+
+            <!-- ── בדיקת כדאיות השקעה (מוצג רק אם הוזנה השקעה ראשונית) ── -->
+            <div id="feasibility-zone" class="hidden"></div>
 
             <!-- ── גרפים ── -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1106,11 +1223,23 @@ a{color:inherit}
 
             </div><!-- /dashboard-content -->
 
+            <!-- ── בלוק "דבר עם עזרא" — הזמנה לחוות דעת מקצועית ── -->
+            <div class="p-5 rounded-xl shadow-lg text-center space-y-3" style="background:linear-gradient(to left,#1e293b,#0f172a)">
+                <h3 class="text-base md:text-lg font-bold" style="color:#ffffff">רוצה חוות דעת מקצועית על התחזית שבנית?</h3>
+                <p class="text-xs md:text-sm" style="color:#cbd5e1">עזרא אליעזר, CFO — שיחת ייעוץ ראשונית ללא עלות.</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-1">
+                    <a href="https://wa.me/972502900102?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%91%D7%A0%D7%99%D7%AA%D7%99%20%D7%AA%D7%97%D7%96%D7%99%D7%AA%20%D7%91-BudgetSmart%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%97%D7%95%D7%95%D7%AA%20%D7%93%D7%A2%D7%AA%D7%9A." target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 font-semibold px-5 py-2.5 rounded-lg transition-all shadow" style="background:#059669;color:#ffffff">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i> <span style="color:#ffffff">דבר עם עזרא ב-WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+
             <!-- כפתורי ניווט -->
             <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <button onclick="goToStep(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <button onclick="backFromStep5()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להשלמת נתונים
                 </button>
+                <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                 <button onclick="goToStep(6)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
                     לדוחות ←
                 </button>
@@ -1132,7 +1261,7 @@ a{color:inherit}
                     <i data-lucide="file-bar-chart" class="text-indigo-600 w-5 h-5"></i>
                     דוחות פיננסיים חזויים
                 </h2>
-                <p class="text-xs text-slate-500 mb-5">כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.</p>
+                <p id="reports-subtitle" class="text-xs text-slate-500 mb-5">כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.</p>
 
                 <!-- ── טאבים ── -->
                 <div class="flex gap-1 bg-slate-100 rounded-xl p-1 mb-5 overflow-x-auto">
@@ -1288,11 +1417,23 @@ a{color:inherit}
                     </div>
                 </div>
 
+                <!-- ── בלוק "דבר עם עזרא" ── -->
+                <div class="p-5 rounded-xl shadow-lg text-center space-y-3 mt-4" style="background:linear-gradient(to left,#1e293b,#0f172a)">
+                    <h3 class="text-base md:text-lg font-bold" style="color:#ffffff">רוצה חוות דעת מקצועית על התחזית שבנית?</h3>
+                    <p class="text-xs md:text-sm" style="color:#cbd5e1">עזרא אליעזר, CFO — שיחת ייעוץ ראשונית ללא עלות.</p>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center pt-1">
+                        <a href="https://wa.me/972502900102?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%A2%D7%96%D7%A8%D7%90%2C%20%D7%91%D7%A0%D7%99%D7%AA%D7%99%20%D7%AA%D7%97%D7%96%D7%99%D7%AA%20%D7%91-BudgetSmart%20%D7%95%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%97%D7%95%D7%95%D7%AA%20%D7%93%D7%A2%D7%AA%D7%9A." target="_blank" rel="noopener" class="inline-flex items-center justify-center gap-2 font-semibold px-5 py-2.5 rounded-lg transition-all shadow" style="background:#059669;color:#ffffff">
+                            <i data-lucide="message-circle" class="w-4 h-4"></i> <span style="color:#ffffff">דבר עם עזרא ב-WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+
                 <!-- כפתורי ניווט -->
                 <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-4">
                     <button onclick="goToStep(5)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה למדדי ביצוע
                     </button>
+                    <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                     <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="download" class="w-4 h-4"></i> הורד קובץ אקסל
                     </button>
@@ -1338,6 +1479,7 @@ a{color:inherit}
                     <button onclick="goToStep(6)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לדוחות
                     </button>
+                    <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                     <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="download" class="w-4 h-4"></i> הורד קובץ אקסל
                     </button>
@@ -1405,32 +1547,23 @@ a{color:inherit}
 
                 <div id="app-form-container" class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
                     <h4 class="text-base font-bold text-white mb-4 text-right">צור קשר לקבלת עזרה וניתוח הדוח:</h4>
-                    <form id="app-contact-form" class="space-y-4" onsubmit="submitAppContact(event)" data-netlify="true" name="contact" netlify-honeypot="bot-field">
+                    <form id="app-contact-form" class="space-y-4" onsubmit="submitAppContact(event)" action="https://formspree.io/f/xkoelzoo" method="POST">
                         <div>
-                            <input type="hidden" name="bot-field"><input type="text" id="contact-name" name="name" placeholder="שם מלא" required class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
+                            <input type="text" name="_gotcha" style="display:none"><input type="text" id="contact-name" name="שם" placeholder="שם מלא" required class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <input type="tel" id="contact-phone" name="phone" placeholder="טלפון נייד" required class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
+                            <input type="tel" inputmode="tel" id="contact-phone" name="טלפון" placeholder="טלפון נייד" required oninput="validatePhone(this)" title="אנא הזן מספר טלפון תקין (לפחות 9 ספרות, ללא אותיות)" class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
                             <input type="email" id="contact-email" name="email" placeholder="אימייל (אופציונלי)" class="w-full px-4 py-2.5 bg-slate-950 text-white placeholder-slate-500 rounded-lg text-sm text-right">
                         </div>
-                        <div>
-                            <div class="relative">
-                                <select id="contact-revenue" name="revenue" required class="w-full px-4 py-2.5 bg-slate-950 text-slate-300 rounded-lg text-sm text-right appearance-none cursor-pointer">
-                                    <option value="" disabled selected hidden>מחזור פעילות שנתי משוער</option>
-                                    <option value="under-1m">עד 1 מיליון ₪</option>
-                                    <option value="1m-5m">1 עד 5 מיליון ₪</option>
-                                    <option value="5m-20m">5 עד 20 מיליון ₪</option>
-                                    <option value="above-20m">מעל 20 מיליון ₪</option>
-                                </select>
-                                <div class="absolute left-3 top-3.5 pointer-events-none text-slate-400">
-                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="hidden" name="_subject" value="ליד חדש מ-BudgetSmart 📊">
                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-sm transition-all text-center cursor-pointer">
                             השארת פרטים לקבלת ניתוח ובקרה פיננסית 📊
                         </button>
                     </form>
+                    <p class="text-[11px] text-slate-400 text-center mt-3 leading-relaxed">
+                        או פנו ישירות: <a href="tel:0502900102" class="text-blue-400 font-semibold hover:underline">050-2900102</a>
+                        · <a href="mailto:ezrael1964@gmail.com" class="text-blue-400 font-semibold hover:underline">ezrael1964@gmail.com</a>
+                    </p>
                 </div>
             </div>
 
@@ -1451,6 +1584,7 @@ a{color:inherit}
         // מבנה הנתונים המרכזי של האפליקציה
         const S = {
             currentStep: 1,
+            appMode: null, // 'new' (עסק חדש — כדאיות ומימון) | 'existing' (עסק קיים) | null (טרם נבחר)
             revMode: 'even',
             reportBaseYear: 2024,   // שנת הבסיס הראשונה — דינמי
             customYear: '2024',
@@ -1467,10 +1601,18 @@ a{color:inherit}
             daMode: 'direct',
             capex: { value: 0, rate: 15 },
             financingCost: 0,
+            finMethod: 'equity', // 'equity' | 'loan' | 'mixed' — מימון ההשקעה (עסק חדש)
+            loanAmount: 0,
+            loanRate: 0,         // ריבית שנתית %
+            loanYears: 0,        // תקופת החזר בשנים
+            loanRepayMode: 'amort', // 'amort' (קרן+ריבית) | 'grace' (גרייס על הקרן) | 'bullet' (ריבית בלבד)
+            graceMonths: 0,      // חודשי גרייס (כשהמצב 'grace')
             taxRate: 23,
             taxTiming: 'monthly', // 'monthly' | 'quarterly' | 'annual' — תזמון תשלום המס בתזרים
             actuals: null, // נתוני ביצוע בפועל (שלב 7) — מאותחל בעת הצורך
             openingBalance: 0,
+            investment: 0, // השקעה ראשונית — לבדיקת כדאיות (Payback / ROI)
+            requiredRoi: 15, // תשואה שנתית מינימלית נדרשת (%) — hurdle rate
             mktGrowth: 0,
             mktElasticity: 5, 
             manpower: [],
@@ -1543,10 +1685,20 @@ a{color:inherit}
             updateExpenseAnnualLabels();
             setTaxTiming(S.taxTiming, true); // אתחול UI + הערה גם כשאין נתונים שמורים
             initLucideIcons();
+            renderSaveLoadButtons();
+            hideSaveLoadOnMobile();
             updateYearLabels();
             renderMonthlyGrid();
             recalcAll();
             renderScenariosTable();
+            // מסך פתיחה אם טרם נבחר מצב, אחרת כניסה לאשף
+            if(!S.appMode) {
+                document.getElementById('view-step-0').classList.remove('hidden');
+                document.getElementById('step-bar-wrap').classList.add('hidden');
+                document.getElementById('view-step-1').classList.add('hidden');
+            } else {
+                startWizard(1);
+            }
         });
 
         function initLucideIcons() {
@@ -1622,8 +1774,20 @@ a{color:inherit}
             S.inputs.fixed = readInput('input-fixed'); // תמיד ₪
             // מימון ומס
             S.financingCost  = readInput('input-financing');
+            // מימון ההשקעה (עסק חדש) — קריאת שדות ההלוואה
+            S.loanAmount = readInput('input-loan-amount');
+            S.loanRate   = parseFloat(document.getElementById('input-loan-rate')?.value) || 0;
+            S.loanYears  = parseFloat(document.getElementById('input-loan-years')?.value) || 0;
+            S.graceMonths = parseFloat(document.getElementById('input-grace-months')?.value) || 0;
+            // בעסק חדש עם הלוואה — הריבית נגזרת אוטומטית ומזינה את ה-P&L (במקום השדה הידני)
+            if(S.appMode === 'new' && (S.finMethod === 'loan' || S.finMethod === 'mixed')) {
+                S.financingCost = computeFinancing().year1Interest;
+            }
             S.taxRate        = parseFloat(document.getElementById('input-tax-rate')?.value) ?? 23;
-            S.openingBalance = parseFloat(document.getElementById('input-opening-balance')?.value) || 0;
+            S.openingBalance = readInput('input-opening-balance');
+            S.investment     = readInput('input-investment');
+            S.requiredRoi    = parseFloat(document.getElementById('input-required-roi')?.value);
+            if(isNaN(S.requiredRoi)) S.requiredRoi = 15;
             // D+A
             if(S.daMode === 'direct') {
                 S.inputs.depreciation  = readInput('input-depreciation');
@@ -1652,6 +1816,7 @@ a{color:inherit}
             }
 
             const dataToSave = {
+                appMode: S.appMode,
                 reportBaseYear: S.reportBaseYear || 2024,
                 revMode: S.revMode,
                 rev2024: S.rev2024,
@@ -1667,10 +1832,18 @@ a{color:inherit}
                 daMode: S.daMode,
                 capex: S.capex,
                 financingCost:  S.financingCost,
+                finMethod:      S.finMethod,
+                loanAmount:     S.loanAmount,
+                loanRate:       S.loanRate,
+                loanYears:      S.loanYears,
+                loanRepayMode:  S.loanRepayMode,
+                graceMonths:    S.graceMonths,
                 taxRate:        S.taxRate,
                 taxTiming:      S.taxTiming,
                 actuals:        S.actuals || null,
                 openingBalance: S.openingBalance,
+                investment:     S.investment,
+                requiredRoi:    S.requiredRoi,
                 mktGrowth: S.mktGrowth,
                 mktElasticity: parseFloat(document.getElementById('input-mkt-elasticity')?.value) || 5,
                 manpower: S.manpower
@@ -1683,6 +1856,7 @@ a{color:inherit}
             if (!saved) return;
             try {
                 const data = JSON.parse(saved);
+                S.appMode = data.appMode || null;
                 S.revMode = data.revMode || 'even';
                 S.reportBaseYear = data.reportBaseYear || 2024;
                 const baseYearEl = document.getElementById('report-base-year');
@@ -1700,11 +1874,19 @@ a{color:inherit}
                 S.daMode = data.daMode || 'direct';
                 S.capex  = data.capex  || { value: 0, rate: 15 };
                 S.financingCost  = data.financingCost  || 0;
+                S.finMethod      = data.finMethod      || 'equity';
+                S.loanAmount     = data.loanAmount     || 0;
+                S.loanRate       = data.loanRate       || 0;
+                S.loanYears      = data.loanYears      || 0;
+                S.loanRepayMode  = data.loanRepayMode  || 'amort';
+                S.graceMonths    = data.graceMonths    || 0;
                 S.taxRate        = data.taxRate        ?? 23;
                 S.taxTiming      = data.taxTiming      || 'monthly';
                 if(data.actuals) S.actuals = data.actuals;
                 setTaxTiming(S.taxTiming, true); // silent — עדכון UI בלבד
                 S.openingBalance = data.openingBalance || 0;
+                S.investment = data.investment || 0;
+                S.requiredRoi = (data.requiredRoi !== undefined && data.requiredRoi !== null) ? data.requiredRoi : 15;
                 S.mktGrowth = data.mktGrowth || 0;
                 S.manpower = data.manpower || [];
 
@@ -1732,7 +1914,29 @@ a{color:inherit}
                 const obEl  = document.getElementById('input-opening-balance');
                 if(finEl) finEl.value = S.financingCost > 0 ? S.financingCost.toLocaleString('en-US') : '';
                 if(taxEl) taxEl.value = S.taxRate ?? 23;
-                if(obEl)  obEl.value = S.openingBalance !== 0 ? S.openingBalance : '';
+                if(obEl) {
+                    if(S.openingBalance !== 0) {
+                        const _obNeg = S.openingBalance < 0;
+                        obEl.value = (_obNeg ? '-' : '') + Math.abs(Math.round(S.openingBalance)).toLocaleString('en-US');
+                        obEl.style.color = _obNeg ? '#dc2626' : '';
+                    } else { obEl.value = ''; obEl.style.color = ''; }
+                    updateOpeningSignBtn();
+                }
+                const invEl = document.getElementById('input-investment');
+                if(invEl) invEl.value = S.investment > 0 ? Math.round(S.investment).toLocaleString('en-US') : '';
+                const rrEl = document.getElementById('input-required-roi');
+                if(rrEl) rrEl.value = S.requiredRoi;
+                // שחזור שדות מימון ההשקעה (עסק חדש)
+                const laEl = document.getElementById('input-loan-amount');
+                if(laEl) laEl.value = S.loanAmount > 0 ? Math.round(S.loanAmount).toLocaleString('en-US') : '';
+                const lrEl = document.getElementById('input-loan-rate');
+                if(lrEl) lrEl.value = S.loanRate || '';
+                const lyEl = document.getElementById('input-loan-years');
+                if(lyEl) lyEl.value = S.loanYears || '';
+                const gmEl = document.getElementById('input-grace-months');
+                if(gmEl) gmEl.value = S.graceMonths || '';
+                setRepayMode(S.loanRepayMode || 'amort', true); // silent
+                setFinMethod(S.finMethod || 'equity', true); // silent — עדכון UI
                 if(S.daMode === 'direct') {
                     const depEl = document.getElementById('input-depreciation');
                     const amoEl = document.getElementById('input-amortization');
@@ -1782,6 +1986,57 @@ a{color:inherit}
                 localStorage.removeItem('cfo_budget_app_data');
                 window.location.reload();
             }
+        }
+
+        // ── שמירת עבודה לקובץ (מחשב בלבד — בנייד הכפתורים מוסתרים) ──
+        function saveWorkToFile() {
+            saveDataToStorage(); // סנכרון מה-DOM ושמירה ל-localStorage
+            const data = localStorage.getItem('cfo_budget_app_data');
+            if(!data) { showToastNotification('אין נתונים לשמירה עדיין'); return; }
+            const blob = new Blob([data], { type:'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const today = new Date().toISOString().slice(0,10);
+            const a = document.createElement('a');
+            a.href = url; a.download = `BudgetSmart-תחזית-${today}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToastNotification('העבודה נשמרה לקובץ 💾');
+        }
+
+        // ── טעינת עבודה מקובץ ──
+        function loadWorkFromFile(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsed = JSON.parse(e.target.result);
+                    if(typeof parsed !== 'object' || parsed === null || !('revMode' in parsed)) throw new Error('invalid');
+                    localStorage.setItem('cfo_budget_app_data', JSON.stringify(parsed));
+                    loadSavedData();
+                    recalcAll();
+                    showToastNotification('העבודה נטענה בהצלחה 📂');
+                } catch(err) {
+                    showToastNotification('הקובץ אינו תקין או אינו שייך לכלי');
+                }
+                event.target.value = ''; // איפוס לאפשר טעינה חוזרת של אותו קובץ
+            };
+            reader.readAsText(file);
+        }
+
+        // ── הורדת קבצים נחסמת בנייד/בהטמעה — מסתירים שם את שמור/טען ──
+        function hideSaveLoadOnMobile() {
+            const isMobileUA = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+            if(!isMobileUA) return;
+            document.querySelectorAll('.js-saveload').forEach(el => { el.style.display = 'none'; });
+        }
+        // ── הזרקת כפתורי שמור/טען לכל הדפים (מחשב בלבד) ──
+        function renderSaveLoadButtons() {
+            const html =
+                '<button onclick="saveWorkToFile()" class="js-saveload w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer"><i data-lucide="save" class="w-4 h-4"></i> שמור עבודה</button>' +
+                '<button onclick="document.getElementById(\'load-work-input\').click()" class="js-saveload w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer"><i data-lucide="folder-open" class="w-4 h-4"></i> טען עבודה</button>';
+            document.querySelectorAll('.saveload-slot').forEach(slot => { slot.innerHTML = html; });
+            initLucideIcons();
         }
 
         function parseAndFormatInput(inputElement) {
@@ -1908,39 +2163,223 @@ a{color:inherit}
             return p && f;
         }
 
-        function goToStep(stepNum) {
-            // ── ולידציית חובה לפני מעבר קדימה ──
-            if(stepNum > S.currentStep) {
-                if(S.currentStep === 1 && !validateStep1()) return;
-                if(S.currentStep === 2 && !validateStep2()) return;
-            }
-            document.getElementById(`view-step-${S.currentStep}`).classList.add('hidden');
-            document.getElementById(`circle-step-${S.currentStep}`).className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-white border-blue-600 text-blue-600";
-            
-            S.currentStep = stepNum;
-            document.getElementById(`view-step-${S.currentStep}`).classList.remove('hidden');
-            document.getElementById(`circle-step-${S.currentStep}`).className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-blue-600 border-blue-600 text-white shadow-md";
-            
-            for (let i = 1; i < stepNum; i++) {
-                document.getElementById(`circle-step-${i}`).className = "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all bg-blue-50 border-blue-600 text-blue-600";
-            }
+        // ── מנוע ניווט מבוסס-רצף לפי מצב העסק ──
+        const STEP_DEFS  = { '1':'הכנסות', '2':'בסיס הוצאות', '3':'מנועי צמיחה', '4':'השלמת נתונים', 'fin':'כדאיות ומימון', '5':'מדדי ביצוע', '6':'דוחות', '7':'ביצוע בפועל' };
+        const STEP_SHORT = { '1':'הכנסות', '2':'הוצאות', '3':'צמיחה', '4':'נתוני עזר', 'fin':'כדאיות', '5':'מדדי ביצוע', '6':'דוחות', '7':'בפועל' };
+        function stepSequence() {
+            return (S.appMode === 'new') ? ['1','2','3','4','fin','5','6','7'] : ['1','2','3','4','5','6','7'];
+        }
+        function renderStepBar() {
+            const track = document.getElementById('step-bar-track');
+            if(!track) return;
+            const seq = stepSequence();
+            const curIdx = seq.indexOf(String(S.currentStep));
+            let html = '<div class="absolute inset-x-0 h-0.5 bg-gray-200 -z-10" style="top:19px"></div>';
+            seq.forEach((id, i) => {
+                let circleCls, labelCls;
+                if(i === curIdx)    { circleCls = 'bg-blue-600 border-blue-600 text-white shadow-md'; labelCls = 'text-blue-600 font-semibold'; }
+                else if(i < curIdx) { circleCls = 'bg-blue-50 border-blue-600 text-blue-600';         labelCls = 'text-blue-600 font-medium'; }
+                else                { circleCls = 'bg-white border-gray-300 text-gray-500';           labelCls = 'text-gray-500 font-medium'; }
+                html += `<button onclick="goToStep('${id}')" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${circleCls}">${i+1}</div>
+                    <span class="text-xs md:text-sm ${labelCls} hidden sm:block">${STEP_DEFS[id]}</span>
+                    <span class="text-[10px] font-bold ${labelCls} block sm:hidden">${STEP_SHORT[id]}</span>
+                </button>`;
+            });
+            track.innerHTML = html;
+        }
 
-            gaEvent("step_complete", "wizard", "step_" + S.currentStep);
-            if(stepNum === 5) {
+        // ── מסך פתיחה: בחירת מצב ──
+        function chooseMode(mode) {
+            S.appMode = mode;
+            saveDataToStorage();
+            startWizard(1);
+        }
+        function startWizard(stepId) {
+            const picker = document.getElementById('view-step-0');
+            if(picker) picker.classList.add('hidden');
+            const bar = document.getElementById('step-bar-wrap');
+            if(bar) bar.classList.remove('hidden');
+            ['1','2','3','4','fin','5','6','7'].forEach(id => {
+                const v = document.getElementById(`view-step-${id}`);
+                if(v) v.classList.add('hidden');
+            });
+            S.currentStep = (String(stepId) === 'fin') ? 'fin' : Number(stepId);
+            const tgt = document.getElementById(`view-step-${stepId}`);
+            if(tgt) tgt.classList.remove('hidden');
+            renderStepBar();
+            applyModeVisibility();
+            applyModeCopy();
+            initLucideIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ── מעברים בגבול דף 4 ↔ דף 5 (תלוי-מצב) ──
+        function nextFromStep4(){ goToStep(S.appMode === 'new' ? 'fin' : 5); }
+        function backFromStep5(){ goToStep(S.appMode === 'new' ? 'fin' : 4); }
+
+        // ── מימון ההשקעה (עסק חדש) ──
+        function finNum(id){ const el=document.getElementById(id); if(!el) return 0; const v=(el.value||'').replace(/,/g,'').replace(/[^0-9.\-]/g,''); return parseFloat(v)||0; }
+        function computeFinancing() {
+            const inv    = finNum('input-investment');
+            const method = S.finMethod;
+            const loan   = (method === 'loan' || method === 'mixed') ? finNum('input-loan-amount') : 0;
+            const rate   = finNum('input-loan-rate');
+            const years  = finNum('input-loan-years');
+            const repay  = S.loanRepayMode || 'amort';
+            const mr = rate / 100 / 12;
+            const n  = Math.round(years * 12);
+            let grace = (repay === 'grace') ? Math.round(finNum('input-grace-months')) : 0;
+            if(grace < 0) grace = 0;
+            if(n > 0 && grace > n - 1) grace = Math.max(0, n - 1); // להשאיר לפחות חודש אחד לאמורטיזציה
+
+            const interest  = new Array(12).fill(0);
+            const principal = new Array(12).fill(0);
+            let monthlyPayment = 0;
+
+            if(loan > 0 && n > 0) {
+                if(repay === 'bullet') {
+                    monthlyPayment = loan * mr;                       // ריבית בלבד; הקרן בסוף התקופה
+                } else {
+                    const amortMonths = n - grace;                    // חודשי האמורטיזציה (אחרי גרייס)
+                    monthlyPayment = (mr > 0)
+                        ? loan * mr / (1 - Math.pow(1 + mr, -amortMonths))
+                        : loan / amortMonths;
+                }
+                let bal = loan;
+                for(let i = 0; i < n && i < 12; i++) {
+                    const it = bal * mr;
+                    let pr = 0;
+                    if(repay === 'bullet') {
+                        pr = (i === n - 1) ? bal : 0;                 // בלון בחודש האחרון של ההלוואה
+                    } else if(repay === 'grace' && i < grace) {
+                        pr = 0;                                       // תקופת חסד — קרן 0, ריבית בלבד
+                    } else {
+                        pr = monthlyPayment - it;
+                        if(pr > bal) pr = bal;
+                    }
+                    interest[i]  = it;
+                    principal[i] = pr;
+                    bal -= pr;
+                    if(bal < 0.01) bal = 0;
+                }
+            }
+            const year1Interest  = interest.reduce((a, b) => a + b, 0);
+            const year1Principal = principal.reduce((a, b) => a + b, 0);
+            const equity = Math.max(0, inv - loan);
+            return { inv, loan, rate, years, repay, grace, monthlyPayment, year1Interest, year1Principal, equity, schedule: { interest, principal } };
+        }
+        function setFinMethod(method, silent) {
+            S.finMethod = method;
+            const map = { equity:'fin-method-equity', loan:'fin-method-loan', mixed:'fin-method-mixed' };
+            Object.keys(map).forEach(m => {
+                const btn = document.getElementById(map[m]);
+                if(!btn) return;
+                btn.className = (m === method)
+                    ? 'flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-indigo-600 text-white cursor-pointer'
+                    : 'flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer';
+            });
+            const loanFields = document.getElementById('loan-fields');
+            if(loanFields) loanFields.style.display = (method === 'equity') ? 'none' : '';
+            updateFinancingUI();
+            if(!silent) saveAndRecalc();
+        }
+        // ── אופן החזר ההלוואה: אמורטיזציה / גרייס / בוליט ──
+        function setRepayMode(mode, silent) {
+            S.loanRepayMode = mode;
+            const map = { amort:'repay-amort', grace:'repay-grace', bullet:'repay-bullet' };
+            Object.keys(map).forEach(m => {
+                const btn = document.getElementById(map[m]);
+                if(!btn) return;
+                btn.className = (m === mode)
+                    ? 'flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all bg-indigo-600 text-white cursor-pointer'
+                    : 'flex-1 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer';
+            });
+            const graceWrap = document.getElementById('grace-months-wrap');
+            if(graceWrap) graceWrap.style.display = (mode === 'grace') ? '' : 'none';
+            updateFinancingUI();
+            if(!silent) saveAndRecalc();
+        }
+        function updateFinancingUI() {
+            const f = computeFinancing();
+            const fmt = n => '₪' + Math.round(n).toLocaleString('en-US');
+            const eq  = document.getElementById('fin-equity-display');
+            const pay = document.getElementById('fin-payment-display');
+            const intr= document.getElementById('fin-interest-display');
+            if(eq)   eq.textContent   = fmt(f.equity);
+            if(pay)  pay.textContent  = f.monthlyPayment > 0 ? fmt(f.monthlyPayment) : '—';
+            if(intr) intr.textContent = f.year1Interest  > 0 ? fmt(f.year1Interest)  : '—';
+        }
+        // ── הסתרת שדה המימון הידני בדף 4 בעסק חדש (המימון נגזר מההלוואה) ──
+        function applyModeVisibility() {
+            const fin4 = document.getElementById('step4-financing-field');
+            if(fin4) fin4.style.display = (S.appMode === 'new') ? 'none' : '';
+        }
+        // ── אפקטים תזרימיים של ההשקעה והמימון (הפן הממומן) — רק בעסק חדש ──
+        function financedCashEffects() {
+            if(S.appMode !== 'new') return { startAdj: 0 };
+            const f = computeFinancing();
+            return { startAdj: (f.loan || 0) - (f.inv || 0) };  // הלוואה נכנסת (חודש 0), השקעה יוצאת
+        }
+        function effectiveOpeningBalance() {
+            return (S.openingBalance || 0) + financedCashEffects().startAdj;
+        }
+        // ── ליטוש כיתוב לפי מצב ──
+        function applyModeCopy() {
+            const ind = document.getElementById('mode-indicator');
+            if(ind) {
+                const label = (S.appMode === 'new') ? 'עסק חדש — כדאיות ומימון' : 'עסק קיים — תכנון ובקרה';
+                ind.innerHTML = `מצב: <span class="font-semibold text-slate-500">${label}</span> · <button onclick="switchMode()" class="text-indigo-600 hover:underline font-semibold cursor-pointer">החלף</button>`;
+            }
+            const rep = document.getElementById('reports-subtitle');
+            if(rep) {
+                rep.textContent = (S.appMode === 'new')
+                    ? 'דוחות פיננסיים להצגה לבנק, למשקיעים ולגופי מימון — מבוססים על נתוני התחזית שהזנת. שינוי בסליידרי הרגישות ישתקף מיידית.'
+                    : 'כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.';
+            }
+        }
+        function switchMode() {
+            ['1','2','3','4','fin','5','6','7'].forEach(id => { const v=document.getElementById(`view-step-${id}`); if(v) v.classList.add('hidden'); });
+            const bar = document.getElementById('step-bar-wrap');
+            if(bar) bar.classList.add('hidden');
+            const picker = document.getElementById('view-step-0');
+            if(picker) picker.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToStep(stepId) {
+            const seq = stepSequence();
+            const key = String(stepId);
+            const tgtIdx = seq.indexOf(key);
+            if(tgtIdx === -1) return; // דף שאינו ברצף של המצב הנוכחי
+            const curIdx = seq.indexOf(String(S.currentStep));
+            // ── ולידציית חובה לפני מעבר קדימה ──
+            if(tgtIdx > curIdx) {
+                if(String(S.currentStep) === '1' && !validateStep1()) return;
+                if(String(S.currentStep) === '2' && !validateStep2()) return;
+            }
+            const curView = document.getElementById(`view-step-${S.currentStep}`);
+            if(curView) curView.classList.add('hidden');
+
+            S.currentStep = (key === 'fin') ? 'fin' : Number(key);
+            const tgtView = document.getElementById(`view-step-${key}`);
+            if(tgtView) tgtView.classList.remove('hidden');
+            renderStepBar();
+
+            gaEvent("step_complete", "wizard", "step_" + key);
+            if(key === '5') {
                 recalcAll();
                 setTimeout(() => { renderFinalDashboardCharts(); renderExtraCharts(); renderCashFlowTable(); }, 50);
             }
-            if(stepNum === 6) {
+            if(key === '6') {
                 recalcAll();
-                setTimeout(() => {
-                    switchReportTab('budget');
-                    updateSensKPIs();
-                }, 50);
+                setTimeout(() => { switchReportTab('budget'); updateSensKPIs(); }, 50);
             }
-            if(stepNum === 7) {
+            if(key === '7') {
                 recalcAll();
                 setTimeout(() => { renderActualsPage(); if(window.lucide) lucide.createIcons(); }, 50);
             }
+            if(key === 'fin') { recalcAll(); }
             // מאזין resize — מרנדר מחדש טבלאות שלב 6 בשינוי גודל
             if(!window._resizeListenerAdded) {
                 window._resizeListenerAdded = true;
@@ -1948,7 +2387,6 @@ a{color:inherit}
                     if(S.currentStep === 6) { renderPLTable(); renderCashFlowFullTable(); }
                 });
             }
-
             // גלילה לראש הדף בכל מעבר בין שלבים
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -2115,9 +2553,32 @@ a{color:inherit}
             const isNegative = allowNegative && el.value.trim().startsWith('-');
             const raw = el.value.replace(/,/g, '').replace(/[^\d]/g, '');
             const num = parseInt(raw, 10) || 0;
-            if(num === 0) { el.value = ''; }
+            if(num === 0) { el.value = isNegative ? '-' : ''; }
             else { el.value = (isNegative ? '-' : '') + num.toLocaleString('en-US'); }
+            if(allowNegative) { el.style.color = (isNegative && num > 0) ? '#dc2626' : ''; updateOpeningSignBtn(); }
             saveAndRecalc();
+        }
+
+        // ── כפתור סימן ליתרת הקופה (אוברדראפט) — פתרון מינוס לנייד ──
+        function toggleOpeningSign() {
+            const el = document.getElementById('input-opening-balance');
+            if(!el) return;
+            let v = el.value.trim();
+            if(v.startsWith('-')) { v = v.replace(/^-/, ''); }
+            else { v = (v && v !== '0') ? '-' + v : '-'; }
+            el.value = v;
+            formatAndHandleFinanceInput(el); // עיצוב מחדש + צבע + עדכון הכפתור
+            el.focus();
+        }
+        function updateOpeningSignBtn() {
+            const el  = document.getElementById('input-opening-balance');
+            const btn = document.getElementById('ob-sign-btn');
+            if(!el || !btn) return;
+            const neg = el.value.trim().startsWith('-');
+            btn.textContent       = neg ? '\u2212' : '+';
+            btn.style.background   = neg ? '#dc2626' : '';
+            btn.style.color        = neg ? '#ffffff' : '';
+            btn.style.borderColor  = neg ? '#dc2626' : '';
         }
 
         function renderPLTable() {
@@ -2135,6 +2596,8 @@ a{color:inherit}
             const minW = isMobile ? '70px'      : '90px';
             const lblW = isMobile ? '110px'     : '190px';
             const totW = isMobile ? '75px'      : '110px';
+            const pctW = isMobile ? 50          : 72;
+            const annualRev = months.reduce((s,m) => s + (m.revenue||0), 0);
 
             const headEl = document.getElementById('pl-table-head');
             const bodyEl = document.getElementById('pl-table-body');
@@ -2147,7 +2610,9 @@ a{color:inherit}
             let hdr = `<tr style="background:#1e3a8a;color:#fff;font-size:${fs}">`;
             hdr += `<th style="padding:${pad};text-align:right;position:sticky;right:0;background:#1e3a8a;z-index:3;min-width:${lblW};max-width:${lblW}">סעיף</th>`;
             months.forEach(m => { hdr += `<th style="padding:${padC};text-align:center;min-width:${minW};white-space:nowrap">${m.monthName}</th>`; });
-            hdr += `<th style="padding:${padC};text-align:center;min-width:${totW};background:#0f172a;position:sticky;left:0;z-index:3">סה"כ שנתי</th></tr>`;
+            hdr += `<th style="padding:${padC};text-align:center;min-width:${totW};background:#0f172a;position:sticky;left:${isMobile?'0':pctW+'px'};z-index:3${isMobile?';box-shadow:-2px 0 5px rgba(0,0,0,0.25)':''}">סה"כ שנתי</th>`;
+            if(!isMobile) hdr += `<th style="padding:${padC};text-align:center;min-width:${pctW}px;max-width:${pctW}px;background:#0f172a;position:sticky;left:0;z-index:3;box-shadow:-2px 0 5px rgba(0,0,0,0.25)">% ממכירות</th>`;
+            hdr += `</tr>`;
             headEl.innerHTML = hdr;
 
             const totalDA = (S.inputs.depreciation||0) + (S.inputs.amortization||0);
@@ -2278,7 +2743,14 @@ a{color:inherit}
                     tcell = `<span style="color:${tv>=0?'#fff':'#fca5a5'}">${fmt(tv)}</span>`;
                 }
                 // שיעור מס — שורת מידע בסוף
-                body += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${totW}">${tcell}</td>`;
+                const pctTxt = (row.key === 'revenue') ? '' : (annualRev > 0 ? (total/annualRev*100).toFixed(1)+'%' : '—');
+                if(isMobile) {
+                    const sub = (pctTxt && pctTxt !== '—') ? `<br><span style="font-size:9px;font-weight:600;opacity:0.8">${pctTxt}</span>` : '';
+                    body += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${totW}">${tcell}${sub}</td>`;
+                } else {
+                    body += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:${pctW}px;z-index:2;min-width:${totW}">${tcell}</td>`;
+                    body += `<td style="padding:${padC};text-align:center;font-weight:600;font-size:11px;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${pctW}px;max-width:${pctW}px">${pctTxt}</td>`;
+                }
                 body += '</tr>';
             });
 
@@ -2290,7 +2762,8 @@ a{color:inherit}
                 body += `<tr style="background:#f8fafc;color:#64748b;font-size:${fs};font-style:italic;">`;
                 body += `<td style="padding:${pad};position:sticky;right:0;z-index:2;background:#f8fafc;box-shadow:2px 0 5px rgba(0,0,0,0.05);min-width:${lblW};max-width:${lblW}">שיעור מס בפועל</td>`;
                 months.forEach(() => { body += `<td style="padding:${padC};text-align:center;border-left:1px solid #e2e8f0;">—</td>`; });
-                body += `<td style="padding:${padC};text-align:center;font-weight:600;background:#f1f5f9;color:#475569;position:sticky;left:0;z-index:2">${effectiveRate}%</td>`;
+                body += `<td style="padding:${padC};text-align:center;font-weight:600;background:#f1f5f9;color:#475569;position:sticky;left:${isMobile?'0':pctW+'px'};z-index:2${isMobile?';box-shadow:-2px 0 5px rgba(0,0,0,0.08)':''};min-width:${totW}">${effectiveRate}%</td>`;
+                if(!isMobile) body += `<td style="padding:${padC};text-align:center;background:#f1f5f9;color:#94a3b8;position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${pctW}px;max-width:${pctW}px">—</td>`;
                 body += '</tr>';
             }
 
@@ -2329,14 +2802,14 @@ a{color:inherit}
             headEl.innerHTML = hdr;
 
             // חישוב יתרות
-            const openBal = S.openingBalance || 0;
+            const openBal = effectiveOpeningBalance();
             let balance = openBal;
             const data = months.map(m => {
-                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0);
+                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                 const ob = balance;
                 const cb = ob + netCF;
                 balance = cb;
-                return { openBal:ob, revenue:m.revenue, cogs:m.costOfGoods, mkt:m.mktCost, payroll:m.payrollCost, fixed:m.fixedCost, financing:m.financing||0, tax:m.taxCash||0, netCF, closeBal:cb };
+                return { openBal:ob, revenue:m.revenue, cogs:m.costOfGoods, mkt:m.mktCost, payroll:m.payrollCost, fixed:m.fixedCost, financing:(m.cfFinancing!=null?m.cfFinancing:(m.financing||0)), tax:m.taxCash||0, netCF, closeBal:cb };
             });
 
             const cfRows = [
@@ -2600,6 +3073,11 @@ a{color:inherit}
         }
 
         function recalcAll() {
+            if(typeof updateFinancingUI === 'function') updateFinancingUI();
+            // בעסק חדש עם הלוואה — הריבית הנגזרת מזינה את ה-P&L (לפני החישוב)
+            if(S.appMode === 'new' && (S.finMethod === 'loan' || S.finMethod === 'mixed')) {
+                S.financingCost = computeFinancing().year1Interest;
+            }
             S.grossMarginPct = parseFloat(document.getElementById('gross-margin-pct')?.value) || 0;
             S.mktElasticity = parseFloat(document.getElementById('input-mkt-elasticity')?.value) || 5;
             const targetGrowthInput = parseFloat(document.getElementById('target-growth-pct')?.value) || 0;
@@ -2703,6 +3181,8 @@ a{color:inherit}
             const monthsData = [];
             let totalRev = 0, totalGross = 0, totalEbit = 0, totalEbitda = 0, totalCashExpenses = 0;
             const dynamicMarginPct = Math.max(1, Math.min(100, S.grossMarginPct + S.sensMargin));
+            const _fin = (S.appMode === 'new') ? computeFinancing() : null; // לוח סילוקין חודשי (אם הלוואה)
+            const _hasLoan = !!(_fin && _fin.loan > 0);
 
             for (let i = 0; i < 12; i++) {
                 const mNum = i + 1;
@@ -2760,8 +3240,9 @@ a{color:inherit}
                 const ebit  = grossProfit - totalOpEx - monthlyDA;
                 // EBITDA = EBIT + D + A (מחזיר את הפחת הלא-מזומן)
                 const ebitda = ebit + monthlyDA;
-                // EBT = EBIT פחות הוצאות מימון חודשיות
-                const monthlyFinancing = (S.financingCost || 0) / 12;
+                // EBT = EBIT פחות הוצאות מימון חודשיות (ריבית בלבד — לפי לוח הסילוקין אם הלוואה)
+                const monthlyFinancing = _hasLoan ? (_fin.schedule.interest[i] || 0) : ((S.financingCost || 0) / 12);
+                const monthlyPrincipal = _hasLoan ? (_fin.schedule.principal[i] || 0) : 0;
                 const ebt = ebit - monthlyFinancing;
                 // המס מחושב שנתית אחרי הלולאה (קיזוז חודשים מפסידים) — כאן placeholder בלבד
                 const taxAmount = 0;
@@ -2772,7 +3253,8 @@ a{color:inherit}
                     mktCost: mktCost, payrollCost: payrollCost, fixedCost: fixedCost, opex: totalOpEx,
                     depreciation: monthlyDA, ebit: ebit, ebitda: ebitda,
                     financing: monthlyFinancing, ebt: ebt, tax: taxAmount, netIncome: netIncome,
-                    cashExpenses: mCashExpenses
+                    cashExpenses: mCashExpenses, loanPrincipal: monthlyPrincipal,
+                    cfFinancing: monthlyFinancing + monthlyPrincipal
                 });
 
                 totalRev += rev; 
@@ -2858,6 +3340,9 @@ a{color:inherit}
 
             evaluateBudgetAlertFlags(monthsData, breakEvenPoint);
 
+            // ── בדיקת כדאיות השקעה — Payback / ROI / GO-NO-GO ──
+            updateFeasibility(totalNet, monthsData);
+
             // empty state — הצג/הסתר לפי קיום נתונים
             const hasData = totalRev > 0;
             const emptyBanner = document.getElementById('empty-state-banner');
@@ -2879,11 +3364,11 @@ a{color:inherit}
             });
 
             // ── תזרים מצטבר שלילי (הדגל הקריטי: העסק נגמר לו המזומן) ──
-            const openBal = S.openingBalance || 0;
+            const openBal = effectiveOpeningBalance();
             let bal = openBal, minBal = openBal, minBalIdx = -1, firstNegIdx = -1, lastNegIdx = -1;
             let anyNeg = false;
             months.forEach((m, i) => {
-                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0);
+                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                 bal += netCF;
                 if(bal < minBal) { minBal = bal; minBalIdx = i; }
                 if(bal < 0) { anyNeg = true; if(firstNegIdx === -1) firstNegIdx = i; lastNegIdx = i; }
@@ -2943,6 +3428,109 @@ a{color:inherit}
             }
 
             initLucideIcons();
+        }
+
+        // ════════════════════════════════════════════════════════════
+        //  בדיקת כדאיות השקעה — ROI (ראשי) + Payback (משני) + GO/NO-GO
+        // ════════════════════════════════════════════════════════════
+        function updateFeasibility(totalNet, monthsData) {
+            const zone = document.getElementById('feasibility-zone');
+            if(!zone) return;
+            const investment = S.investment || 0;
+
+            // כרטיס הכדאיות מוצג רק ב"עסק חדש", וכשיש השקעה
+            if(S.appMode !== 'new' || investment <= 0) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
+            zone.classList.remove('hidden');
+
+            // ── מדדים ──
+            // ROI שנתי = רווח נקי שנתי ÷ השקעה ראשונית
+            const roiPct = (totalNet / investment) * 100;
+
+            // תקופת החזר (Payback) בחודשים — לפי רווח נקי מצטבר חודשי.
+            // מניחים שהקצב החודשי של השנה הראשונה נמשך גם מעבר לה (הנחת קצב מייצג).
+            let paybackMonths = null; // null = לא מוחזר בטווח סביר
+            let cum = 0, found = false;
+            for(let i=0; i<monthsData.length; i++){
+                cum += (monthsData[i].netIncome || 0);
+                if(cum >= investment){ paybackMonths = i+1; found = true; break; }
+            }
+            if(!found){
+                // לא הוחזר תוך 12 חודש — מעריכים לפי קצב שנתי, אם חיובי
+                if(totalNet > 0){
+                    paybackMonths = Math.round((investment / totalNet) * 12);
+                } else {
+                    paybackMonths = null; // רווח שנתי לא חיובי — לא מוחזר
+                }
+            }
+
+            // ── הכרעת GO/NO-GO לפי מרחק מהתשואה הנדרשת ──
+            const required = (S.requiredRoi !== undefined && S.requiredRoi !== null && !isNaN(S.requiredRoi)) ? S.requiredRoi : 15;
+            const gap = roiPct - required; // פער בנקודות אחוז (חיובי = מעל היעד)
+            let level; // 'go' | 'caution' | 'nogo'
+            if(gap >= 0)        level = 'go';      // עומד או עולה על היעד
+            else if(gap >= -3)  level = 'caution'; // עד 3 נק' מתחת ליעד
+            else                level = 'nogo';    // מעל 3 נק' מתחת ליעד
+            // אם ההשקעה כלל אינה מוחזרת (רווח לא חיובי) — תמיד NO-GO
+            if(paybackMonths === null) level = 'nogo';
+
+            // טקסט המרחק מהיעד
+            const gapAbs = Math.abs(gap).toFixed(1);
+            let gapTxt;
+            if(paybackMonths === null) {
+                gapTxt = `דרשת ${required}% — אך התחזית אינה מניבה רווח שמחזיר את ההשקעה.`;
+            } else if(gap >= 0) {
+                gapTxt = `דרשת ${required}% — התחזית מניבה ${roiPct.toFixed(1)}%, <strong>עודף של ${gapAbs} נקודות אחוז מעל היעד</strong>.`;
+            } else {
+                gapTxt = `דרשת ${required}% — התחזית מניבה ${roiPct.toFixed(1)}%, <strong>פער של ${gapAbs} נקודות אחוז מתחת ליעד</strong>.`;
+            }
+
+            const cfg = {
+                go:      { emoji:'🟢', title:'GO — עומד ביעד התשואה שלך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'התחזית עומדת בתשואה שדרשת. מומלץ להמשיך לבדיקה מעמיקה.' },
+                caution: { emoji:'🟡', title:'גבולי — קרוב ליעד אך לא עומד בו', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'התחזית מתקרבת ליעד שלך. כדאי לבחון הנחות ותרחישים לשיפור.' },
+                nogo:    { emoji:'🔴', title:'NO-GO — מתחת ליעד התשואה שלך', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'התחזית רחוקה מהתשואה שדרשת לפי הנתונים שהוזנו.' }
+            }[level];
+
+            const roiTxt = roiPct.toFixed(1) + '%';
+            const paybackTxt = paybackMonths === null
+                ? 'לא מוחזר'
+                : (paybackMonths <= 12
+                    ? paybackMonths + ' חודשים'
+                    : (paybackMonths/12).toFixed(1) + ' שנים');
+
+            zone.innerHTML = `
+                <div class="rounded-xl border-2 p-5 space-y-4" style="background:${cfg.bg};border-color:${cfg.border}">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">${cfg.emoji}</span>
+                        <div>
+                            <h3 class="text-base font-bold" style="color:${cfg.fg}">${cfg.title}</h3>
+                            <p class="text-xs" style="color:${cfg.fg};opacity:.85">${cfg.sub}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">תשואה שנתית (ROI)</div>
+                            <div class="text-2xl font-extrabold" style="color:${cfg.fg}">${roiTxt}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">רווח נקי ÷ השקעה</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">תקופת החזר</div>
+                            <div class="text-2xl font-extrabold text-slate-800">${paybackTxt}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">עד החזר ההשקעה</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
+                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">השקעה ראשונית</div>
+                            <div class="text-2xl font-extrabold text-slate-800">${fmtILS(investment)}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">סך ההון המושקע</div>
+                        </div>
+                    </div>
+                    <div class="bg-white/70 rounded-lg p-3 text-sm font-medium" style="color:${cfg.fg}">
+                        🎯 ${gapTxt}
+                    </div>
+                    <p class="text-[11px] leading-relaxed bg-white/60 rounded-lg p-2.5" style="color:${cfg.fg}">
+                        <strong>שים לב:</strong> ההכרעה מבוססת על <strong>שנה מייצגת אחת</strong>. עסק חדש לרוב מפסיד בשנה הראשונה,
+                        ולכן להחלטת השקעה מהותית מומלצת ראייה רב-שנתית (NPV/IRR). התחזית טובה כמו ההנחות שהוזנו בה — מומלץ לאמת מול נתוני ענף.
+                    </p>
+                </div>`;
         }
 
         function renderFinalDashboardCharts() {
@@ -3156,7 +3744,7 @@ a{color:inherit}
                 if(window.chartCashFlowInstance) window.chartCashFlowInstance.destroy();
 
                 // חשב תזרים חודשי ומצטבר
-                const openBal = S.openingBalance || 0;
+                const openBal = effectiveOpeningBalance();
                 let cumulative = openBal;
                 const netCFData      = [];
                 const cumulativeData = [];
@@ -3164,7 +3752,7 @@ a{color:inherit}
 
                 months.forEach(m => {
                     const net = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost
-                                - m.fixedCost - (m.financing||0) - (m.taxCash||0);
+                                - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                     cumulative += net;
                     netCFData.push(Math.round(net));
                     cumulativeData.push(Math.round(cumulative));
@@ -3255,6 +3843,7 @@ a{color:inherit}
             const minW = isMobile ? '68px'      : '88px';
             const lblW = isMobile ? '110px'     : '190px';
             const totW = isMobile ? '72px'      : '108px';
+            const pctW = isMobile ? 50          : 72;
 
             const hint = document.getElementById('tab-scroll-hint-budget');
             if(hint) hint.style.display = isMobile ? 'flex' : 'none';
@@ -3267,12 +3856,14 @@ a{color:inherit}
             const hasDA   = totalDA > 0;
             const hasFinancing = (S.financingCost||0) > 0;
             const hasTax = cachedOutput.monthsData.some(m => (m.tax||0) > 0);
+            const annualRev = cachedOutput.monthsData.reduce((s,m) => s + (m.revenue||0), 0);
 
             let hdr = `<th style="padding:${pad};text-align:right;position:sticky;right:0;background:#1e3a8a;z-index:3;min-width:${lblW};max-width:${lblW};color:#fff;font-size:${fs}">סעיף תקציבי</th>`;
             cachedOutput.monthsData.forEach(m => {
                 hdr += `<th style="padding:${padC};text-align:center;min-width:${minW};white-space:nowrap;background:#1e3a8a;color:#fff;font-size:${fs}">${m.monthName}</th>`;
             });
-            hdr += `<th style="padding:${padC};text-align:center;min-width:${totW};background:#0f172a;color:#fff;position:sticky;left:0;z-index:3;font-size:${fs}">סה"כ שנתי</th>`;
+            hdr += `<th style="padding:${padC};text-align:center;min-width:${totW};background:#0f172a;color:#fff;position:sticky;left:${isMobile?'0':pctW+'px'};z-index:3;font-size:${fs}${isMobile?';box-shadow:-2px 0 5px rgba(0,0,0,0.25)':''}">סה"כ שנתי</th>`;
+            if(!isMobile) hdr += `<th style="padding:${padC};text-align:center;min-width:${pctW}px;max-width:${pctW}px;background:#0f172a;color:#fff;position:sticky;left:0;z-index:3;font-size:${fs};box-shadow:-2px 0 5px rgba(0,0,0,0.25)">% ממכירות</th>`;
             headRow.innerHTML = hdr;
             headRow.style.cssText = 'background:#1e3a8a;color:#fff;';
             tbody.innerHTML = '';
@@ -3328,7 +3919,14 @@ a{color:inherit}
 
                 let tcell = row.isDepreciation ? `(${fmt(Math.abs(tv))})` : fmt(tv);
                 if(row.key==='ebitda'||row.key==='ebit'||row.key==='netIncome') tcell = `<span style="color:${tv>=0?'#fff':'#fca5a5'}">${fmt(tv)}</span>`;
-                html += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${totW}">${tcell}</td>`;
+                const pctTxt = (row.key === 'revenue') ? '' : (annualRev > 0 ? (total/annualRev*100).toFixed(1)+'%' : '—');
+                if(isMobile) {
+                    const sub = (pctTxt && pctTxt !== '—') ? `<br><span style="font-size:9px;font-weight:600;opacity:0.8">${pctTxt}</span>` : '';
+                    html += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${totW}">${tcell}${sub}</td>`;
+                } else {
+                    html += `<td style="padding:${padC};text-align:center;font-weight:700;background:${row.totBg};color:${row.totFg};position:sticky;left:${pctW}px;z-index:2;min-width:${totW}">${tcell}</td>`;
+                    html += `<td style="padding:${padC};text-align:center;font-weight:600;font-size:11px;background:${row.totBg};color:${row.totFg};position:sticky;left:0;z-index:2;box-shadow:-2px 0 5px rgba(0,0,0,0.08);min-width:${pctW}px;max-width:${pctW}px">${pctTxt}</td>`;
+                }
                 html += '</tr>';
                 tbody.innerHTML += html;
             });
@@ -3415,10 +4013,10 @@ a{color:inherit}
             dataRow(26,'רווח נקי','netIncome','1E3A8A','FFFFFF',{valbold:true,sz:10,totFill:'166534',totFcol:'FFFFFF'});
 
             // ── טבלה ג': תזרים מזומנים ──
-            const openBal = S.openingBalance || 0;
+            const openBal = effectiveOpeningBalance();
             let bal = openBal; const ob=[], cb=[];
             M.forEach(m => {
-                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0);
+                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                 ob.push(bal); bal += netCF; cb.push(bal);
             });
             titleRow(29,'תזרים מזומנים צפוי בשנה הבאה','065F46',14);
@@ -3432,7 +4030,7 @@ a{color:inherit}
             dataRow(34,' שיווק','mktCost','F8FAFC','334155',{lblbold:false,sz:10});
             dataRow(35,' שכר','payrollCost','F8FAFC','334155',{lblbold:false,sz:10});
             dataRow(36,'עלות קבועה אחרת','fixedCost','FFFFFF','334155',{lblbold:false,sz:10});
-            dataRow(37,' מימון','financing','FFFFFF','DC2626',{lblbold:false,sz:10});
+            dataRow(37,' מימון','cfFinancing','FFFFFF','DC2626',{lblbold:false,sz:10});
             dataRow(38,' מס','taxCash','FFFFFF','DC2626',{lblbold:false,sz:10});
             // תזרים נטו
             put1(39,1,'תזרים נטו', st('DBEAFE','1E40AF',{bold:true,sz:10,alH:'right'}));
@@ -3644,7 +4242,7 @@ a{color:inherit}
             const fixedDefault = S.inputs.fixed || 0;
             const rate = (S.taxRate ?? 23)/100;
             const taxTiming = S.taxTiming || 'monthly';
-            const openBal = S.openingBalance || 0;
+            const openBal = effectiveOpeningBalance();
             const gross=[], netCf=[], cum=[], net=[];
             let cumEBT=0, prevYTDtax=0, bal=openBal, qAccrual=0;
             for(let m=0;m<12;m++){
@@ -3662,7 +4260,7 @@ a{color:inherit}
                 if(taxTiming==='monthly') taxCash=accr;
                 else if(taxTiming==='quarterly'){ qAccrual+=accr; if(m===2||m===5||m===8||m===11){ taxCash=qAccrual; qAccrual=0; } }
                 else { if(m===11) taxCash=ytd; }
-                const ncf=rev-cogs-mkt-pay-fix-fin-taxCash;
+                const ncf=rev-cogs-mkt-pay-fix-fin-taxCash-((F[m]&&F[m].loanPrincipal)||0);
                 netCf[m]=ncf; bal+=ncf; cum[m]=bal;
             }
             return { gross, netCf, cum, net };
@@ -3978,20 +4576,38 @@ a{color:inherit}
             container.innerHTML = t;
         }
 
+        // ── אימות טלפון: לפחות 9 ספרות, ללא אותיות (JS — אמין בכל הדפדפנים) ──
+        function validatePhone(el) {
+            const v = (el.value || '').trim();
+            if(v === '') { el.setCustomValidity(''); return; } // required מטפל בריק
+            const digits = (v.match(/\d/g) || []).length;
+            const hasLetters = /[A-Za-z\u0590-\u05FF]/.test(v);
+            if(hasLetters || digits < 9) {
+                el.setCustomValidity('אנא הזן מספר טלפון תקין (לפחות 9 ספרות, ללא אותיות)');
+            } else {
+                el.setCustomValidity('');
+            }
+        }
+
         function submitAppContact(event) {
             event.preventDefault();
             const form = document.getElementById('app-contact-form');
+            const phoneEl = document.getElementById('contact-phone');
+            validatePhone(phoneEl);
+            if(!phoneEl.checkValidity()) { phoneEl.reportValidity(); phoneEl.focus(); return; }
             const name = document.getElementById('contact-name').value;
             const formContainer = document.getElementById('app-form-container');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if(submitBtn){ submitBtn.disabled = true; submitBtn.innerText = 'שולח...'; }
 
-            // שלח ל-Netlify Forms
-            const formData = new FormData(form);
-            fetch('/', {
+            // שלח ל-Formspree
+            fetch(form.action, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formData).toString()
+                body: new FormData(form),
+                headers: { 'Accept': 'application/json' }
             })
-            .then(() => {
+            .then(response => {
+                if(!response.ok) throw new Error('server');
                 // אירוע Analytics — ליד נשלח
                 gaEvent('form_submit', 'contact', 'budget_tool_lead');
                 formContainer.innerHTML = `
@@ -4002,12 +4618,16 @@ a{color:inherit}
                     </div>`;
             })
             .catch(() => {
-                // fallback — גם אם הfetch נכשל, תראה הודעת הצלחה (Netlify Forms עצמם עובדים)
+                // גיבוי — אם השליחה נכשלה, להציג דרכי קשר ישירות כדי לא לאבד את הליד
                 formContainer.innerHTML = `
-                    <div class="text-center py-10 space-y-4">
-                        <div class="text-5xl text-emerald-500">📥</div>
-                        <h4 class="text-lg font-bold text-white">הפרטים התקבלו, ${name}.</h4>
-                        <p class="text-sm text-slate-300 max-w-xs mx-auto leading-relaxed">ניצור איתך קשר בהקדם!</p>
+                    <div class="text-center py-8 space-y-4">
+                        <div class="text-4xl text-amber-400">📞</div>
+                        <h4 class="text-base font-bold text-white">אירעה תקלה בשליחה.</h4>
+                        <p class="text-sm text-slate-300 max-w-xs mx-auto leading-relaxed">אפשר לפנות לעזרא ישירות:</p>
+                        <div class="flex flex-col gap-2 items-center">
+                            <a href="tel:0502900102" class="text-blue-400 font-bold hover:underline">📞 050-2900102</a>
+                            <a href="mailto:ezrael1964@gmail.com" class="text-blue-400 font-bold hover:underline">✉️ ezrael1964@gmail.com</a>
+                        </div>
                     </div>`;
             });
         }
