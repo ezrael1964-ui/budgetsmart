@@ -413,6 +413,35 @@ a{color:inherit}
 .divider-row  {background:#f1f5f9;height:15px}
 .total-cell   {font-weight:700;background:#e2e8f0}
 
+/* BudgetSmart route separation — mode picker mobile safety */
+[data-mode-choice]{position:relative;z-index:20;touch-action:manipulation;-webkit-tap-highlight-color:rgba(79,70,229,.15);min-height:118px}
+.mode-only-new.hidden,.mode-only-existing.hidden{display:none!important}
+
+
+/* BudgetSmart Executive Summary print support */
+#print-executive-summary-wrap { page-break-inside: avoid; }
+@media print {
+  body * { visibility: hidden !important; }
+  #print-executive-summary-wrap, #print-executive-summary-wrap * { visibility: visible !important; }
+  #print-executive-summary-wrap {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 24px !important;
+  }
+  .no-print { display: none !important; }
+}
+
+
+/* BudgetSmart remaining fixes — advanced D&A field */
+.bs-advanced-toggle{display:inline-flex;align-items:center;gap:.35rem;border:1px solid #334155;border-radius:.5rem;padding:.4rem .7rem;color:#cbd5e1;background:#1e293b;font-size:11px;font-weight:600;cursor:pointer}
+.bs-advanced-toggle:hover{background:#334155}
+
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -444,28 +473,26 @@ a{color:inherit}
         <!-- ── מסך פתיחה: בחירת סוג העסק ── -->
         <section id="view-step-0" class="hidden">
             <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 border border-gray-100 max-w-3xl mx-auto">
-                <h2 class="text-xl md:text-2xl font-bold text-slate-800 text-center">איזה סוג תכנון תרצה לבנות?</h2>
-                <p class="text-sm text-slate-500 text-center mt-2 mb-6">הבחירה קובעת אילו שלבים יוצגו. תמיד אפשר להחליף בהמשך.</p>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-800 text-center">בחר את סוג התכנון הפיננסי הרצוי</h2>
+                <p class="text-sm text-slate-500 text-center mt-2 mb-6">בחר את סוג התכנון המתאים:</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <button onclick="chooseMode('new')" class="text-right p-5 rounded-xl border-2 border-indigo-200 hover:border-indigo-500 hover:shadow-md transition-all bg-indigo-50/40 cursor-pointer group">
+                    <button type="button" data-mode-choice="existing" onclick="chooseMode('existing')" class="text-right p-5 rounded-xl border-2 border-emerald-200 hover:border-emerald-500 hover:shadow-md transition-all bg-emerald-50/40 cursor-pointer group">
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="rocket" class="w-6 h-6 text-indigo-600"></i>
-                            <span class="text-base font-bold text-slate-800">עסק חדש / רעיון</span>
+                            <span class="text-base font-bold text-slate-800">תקציב ותחזית</span>
                         </div>
-                        <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות השקעה ומימון, תחזית ודוחות להצגה לבנק ולמשקיעים.</p>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">תכנון תקציב ותחזית פיננסית לעסק קיים</p>
                     </button>
-                    <button onclick="chooseMode('existing')" class="text-right p-5 rounded-xl border-2 border-emerald-200 hover:border-emerald-500 hover:shadow-md transition-all bg-emerald-50/40 cursor-pointer group">
+                    <button type="button" data-mode-choice="new" onclick="chooseMode('new')" class="text-right p-5 rounded-xl border-2 border-indigo-200 hover:border-indigo-500 hover:shadow-md transition-all bg-indigo-50/40 cursor-pointer group">
                         <div class="flex items-center gap-2 mb-2">
-                            <i data-lucide="line-chart" class="w-6 h-6 text-emerald-600"></i>
-                            <span class="text-base font-bold text-slate-800">עסק קיים</span>
+                            <span class="text-base font-bold text-slate-800">בדיקת כדאיות</span>
                         </div>
-                        <p class="text-[13px] text-slate-600 leading-relaxed">תכנון תקציב שנתי ובקרת ביצוע בפועל מול התחזית.</p>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות כלכלית לעסק חדש או השקעה</p>
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="view-step-1" class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <section id="view-step-1" class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hidden">
             <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-800 border-b pb-2">
                 <i data-lucide="database" class="text-blue-600 w-5 h-5"></i> נתוני הכנסות ומרווח גולמי
             </h2>
@@ -477,7 +504,7 @@ a{color:inherit}
             </div>
 
             <div id="even-revenue-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div>
+                <div id="revenue-prev-wrap" class="mode-only-existing">
                     <label class="block text-sm font-medium text-gray-700 mb-1">מחזור הכנסות שנתי — <span class="font-bold" id="lbl-rev-prev">שנה שעברה (2024)</span></label>
                     <div class="relative">
                         <input inputmode="decimal" type="text" id="revenue-2024" oninput="formatAndHandleAnnualInput('2024', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right" placeholder="0">
@@ -568,7 +595,7 @@ a{color:inherit}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
 
                     <!-- עמודת גידול -->
-                    <div>
+                    <div id="growth-column" class="mode-only-existing">
                         <label class="block text-sm font-semibold text-slate-700 mb-2">אחוז גידול לתחזית — <span id="lbl-forecast-growth">שנה הבאה (2026)</span></label>
 
                         <!-- toggle בחירת מקור הגידול -->
@@ -717,7 +744,7 @@ a{color:inherit}
                 <button onclick="goToStep(1)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לנתוני בסיס
                 </button>
-                <button onclick="goToStep(3)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
+                <button onclick="nextFromStep2()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
                     המשך לשלב הבא <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -834,12 +861,12 @@ a{color:inherit}
 
                     <!-- הסבר מקור הנתון -->
                     <div class="mb-4 text-xs text-slate-300 space-y-1.5 bg-slate-800 rounded-lg p-3">
-                        <p class="flex items-start gap-1.5">
+                        <p id="da-existing-note" class="flex items-start gap-1.5 mode-only-existing">
                             <i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5"></i>
                             <span><strong class="text-emerald-400">עסק קיים:</strong> קח את סכום הפחת מדוח רווח והפסד (שורת "פחת והפחתות"), או מדוח תזרים מזומנים בסעיף "התאמות לרווח נקי".</span>
                         </p>
-                        <p class="flex items-start gap-1.5">
-                            <i data-lucide="rocket" class="w-3.5 h-3.5 text-blue-400 flex-shrink-0 mt-0.5"></i>
+                        <p id="da-new-note" class="flex items-start gap-1.5 mode-only-new text-sm leading-relaxed">
+                            <i data-lucide="rocket" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
                             <span><strong class="text-blue-400">עסק חדש / CapEx:</strong> אם אין עדיין דוחות — הזן את שווי הציוד ואחוז הפחת השנתי, והמערכת תחשב עבורך.</span>
                         </p>
                         <p class="flex items-start gap-1.5 pt-1 border-t border-slate-700">
@@ -855,25 +882,33 @@ a{color:inherit}
                     </div>
 
                     <!-- מצב ישיר -->
-                    <div id="da-direct-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">
-                                פחת שנתי — Depreciation
-                                <span class="font-normal text-slate-400">(רכוש מוחשי: ציוד, רכב, שיפוצים)</span>
-                            </label>
-                            <div class="relative">
-                                <input type="text" id="input-depreciation" oninput="formatAndHandleDAInput('depreciation', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
-                                <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                    <div id="da-direct-fields" class="space-y-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">
+                                    פחת שנתי — Depreciation
+                                    <span class="font-normal text-slate-400">(רכוש מוחשי: ציוד, רכב, שיפוצים)</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" id="input-depreciation" oninput="formatAndHandleDAInput('depreciation', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-300 mb-1">
-                                הפחתות שנתיות — Amortization
-                                <span class="font-normal text-slate-400">(רכוש בלתי מוחשי: מוניטין, פטנטים, תוכנה)</span>
-                            </label>
-                            <div class="relative">
-                                <input type="text" id="input-amortization" oninput="formatAndHandleDAInput('amortization', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
-                                <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                        <button type="button" id="toggle-amortization-advanced" onclick="toggleAmortizationAdvanced()" class="bs-advanced-toggle">
+                            הצג שדה מתקדם: הפחתות שנתיות
+                        </button>
+                        <div id="amortization-advanced-wrap" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-700">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">
+                                    הפחתות שנתיות — Amortization
+                                    <span class="font-normal text-slate-400">(רכוש בלתי מוחשי: מוניטין, פטנטים, תוכנה)</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" id="input-amortization" oninput="formatAndHandleDAInput('amortization', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-1.5">שדה מתקדם בלבד — מתאים בעיקר לנכסים בלתי מוחשיים. ברוב העסקים ניתן להשאיר 0.</p>
                             </div>
                         </div>
                     </div>
@@ -965,36 +1000,9 @@ a{color:inherit}
                 </p>
             </div>
 
-            <!-- ── יתרת פתיחה תזרימית ── -->
-            <div class="p-5 bg-indigo-950 rounded-xl border border-indigo-800">
-                <div class="flex items-center gap-2 mb-3">
-                    <i data-lucide="wallet" class="w-4 h-4 text-indigo-300 flex-shrink-0"></i>
-                    <h3 class="text-sm font-bold text-white">מצב תזרימי נוכחי — יתרת פתיחה</h3>
-                    <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-medium">נדרש לתזרים בדף 5</span>
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-indigo-300 mb-1">
-                            כמה כסף יש בקופה / חשבון הבנק כרגע?
-                        </label>
-                        <div class="flex gap-2 items-stretch">
-                            <button type="button" id="ob-sign-btn" onclick="toggleOpeningSign()" title="סמן יתרה שלילית (אוברדראפט)"
-                                class="flex-shrink-0 w-11 rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-700 font-bold text-xl leading-none cursor-pointer hover:bg-indigo-100 transition-all">+</button>
-                            <div class="relative flex-1">
-                                <input type="text" inputmode="numeric" dir="ltr" id="input-opening-balance" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)"
-                                    class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold"
-                                    placeholder="0">
-                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
-                            </div>
-                        </div>
-                        <p class="text-[11px] text-indigo-400 mt-1.5">ממנו יחושב התזרים החודשי — ניתן להשאיר 0 אם אינך יודע. ביתרה שלילית (אוברדראפט) לחץ על כפתור ה־+ כדי להפכו ל־−</p>
-                    </div>
-                </div>
-            </div>
-
             <!-- כפתורי ניווט — מחוץ ל-dashboard-content כדי שתמיד יהיו גלויים -->
             <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <button onclick="goToStep(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                <button onclick="backFromStep4()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לתחזית
                 </button>
                 <div class="flex gap-3 w-full sm:w-auto flex-col sm:flex-row">
@@ -1015,16 +1023,6 @@ a{color:inherit}
             </div>
 
             </div>
-
-            <!-- כפתורי ניווט -->
-            <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <button onclick="goToStep(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לתחזית
-                </button>
-                <button onclick="nextFromStep4()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#059669;color:#fff">
-                    למדדי ביצוע ←
-                </button>
-            </div>
         </section>
 
         <!-- ── שלב כדאיות ומימון (רק לעסק חדש) ── -->
@@ -1036,7 +1034,7 @@ a{color:inherit}
                 <p class="text-xs text-slate-500 mb-5">פרטי ההשקעה הראשונית והתשואה הנדרשת. בהמשך תיווסף כאן גם דרך המימון ועלותו.</p>
 
                 <div class="p-5 bg-indigo-950 rounded-xl border border-indigo-800">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-indigo-300 mb-1">השקעה ראשונית בפרויקט</label>
                             <div class="relative">
@@ -1045,6 +1043,29 @@ a{color:inherit}
                                 <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
                             </div>
                             <p class="text-[11px] text-indigo-400 mt-1.5">ציוד, שיפוץ, זיכיון, מלאי פתיחה — לבדיקת החזר ותשואה</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">יתרת מזומן קיימת בבנק</label>
+                            <div class="flex gap-2 items-stretch">
+                                <button type="button" id="ob-sign-btn" onclick="toggleOpeningSign()" title="סמן יתרה שלילית (אוברדראפט)"
+                                    class="flex-shrink-0 w-11 rounded-lg border border-indigo-300 bg-indigo-50 text-indigo-700 font-bold text-xl leading-none cursor-pointer hover:bg-indigo-100 transition-all">+</button>
+                                <div class="relative flex-1">
+                                    <input type="text" inputmode="numeric" dir="ltr" id="input-opening-balance" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)"
+                                        class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold"
+                                        placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">מזומן זמין בחשבון/קופה. יתרה חיובית מקטינה את ההלוואה הנדרשת; באוברדראפט לחץ על + כדי להפוך ל־−.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">הון עצמי נוסף שיוזרם לפרויקט</label>
+                            <div class="relative">
+                                <input type="text" inputmode="numeric" dir="ltr" id="input-equity-contribution" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)"
+                                    class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">הון בעלים/משקיעים מעבר למזומן הקיים בבנק. אם אין — השאר 0.</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-indigo-300 mb-1">תשואה שנתית מינימלית שתדרוש מההשקעה</label>
@@ -1068,9 +1089,9 @@ a{color:inherit}
                     <div id="loan-fields" style="display:none">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
                             <div>
-                                <label class="block text-xs font-semibold text-indigo-300 mb-1">סכום ההלוואה</label>
+                                <label class="block text-xs font-semibold text-indigo-300 mb-1">הלוואה נדרשת / מימון חסר</label>
                                 <div class="relative">
-                                    <input type="text" inputmode="numeric" dir="ltr" id="input-loan-amount" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="0">
+                                    <input type="text" inputmode="numeric" dir="ltr" id="input-loan-amount" readonly class="w-full pl-8 pr-3 py-2 border border-indigo-300 rounded-lg bg-indigo-50 text-slate-800 outline-none text-right font-semibold" placeholder="0">
                                     <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">₪</span>
                                 </div>
                             </div>
@@ -1104,22 +1125,23 @@ a{color:inherit}
                                 </div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4 text-center">
-                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">הון עצמי נדרש</div><div id="fin-equity-display" class="text-white font-bold text-sm">₪0</div></div>
-                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">תשלום חודשי משוער</div><div id="fin-payment-display" class="text-white font-bold text-sm">—</div></div>
-                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">ריבית שנה ראשונה</div><div id="fin-interest-display" class="text-white font-bold text-sm">—</div></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mt-4 text-center">
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">מימון נדרש</div><div id="fin-funding-required-display" class="text-white font-bold text-sm">₪0</div></div>
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">הלוואה נדרשת</div><div id="fin-loan-required-display" class="text-white font-bold text-sm">₪0</div></div>
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">החזר חודשי חזוי</div><div id="fin-payment-display" class="text-white font-bold text-sm">—</div></div>
+                            <div class="bg-indigo-900/50 rounded-lg p-2"><div class="text-[11px] text-indigo-300">ריבית שנתית חזויה</div><div id="fin-interest-display" class="text-white font-bold text-sm">—</div></div>
                         </div>
                         <p class="text-[11px] text-indigo-400 mt-3">הריבית מוזנת לדוח רווח והפסד; שירות החוב המלא (ריבית + קרן) משוקלל בתזרים המזומנים לפי אופן ההחזר שנבחר.</p>
                     </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-6">
-                    <button onclick="goToStep(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להשלמת נתונים
+                    <button onclick="backFromFin()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להוצאות חזויות
                     </button>
                     <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
-                    <button onclick="goToStep(5)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
-                        למדדי הביצוע ←
+                    <button onclick="nextFromFin()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
+                        לפחת ומס ←
                     </button>
                 </div>
             </div>
@@ -1262,6 +1284,9 @@ a{color:inherit}
                     דוחות פיננסיים חזויים
                 </h2>
                 <p id="reports-subtitle" class="text-xs text-slate-500 mb-5">כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.</p>
+
+                <!-- ── סיכום מנהלים — מוצג במסלול בדיקת כדאיות ── -->
+                <div id="executive-summary-zone" class="hidden mb-6"></div>
 
                 <!-- ── טאבים ── -->
                 <div class="flex gap-1 bg-slate-100 rounded-xl p-1 mb-5 overflow-x-auto">
@@ -1603,6 +1628,8 @@ a{color:inherit}
             financingCost: 0,
             finMethod: 'equity', // 'equity' | 'loan' | 'mixed' — מימון ההשקעה (עסק חדש)
             loanAmount: 0,
+            equityContribution: 0, // הון עצמי נוסף שיוזרם לטובת ההשקעה
+            fundingRequired: 0,
             loanRate: 0,         // ריבית שנתית %
             loanYears: 0,        // תקופת החזר בשנים
             loanRepayMode: 'amort', // 'amort' (קרן+ריבית) | 'grace' (גרייס על הקרן) | 'bullet' (ריבית בלבד)
@@ -1691,14 +1718,9 @@ a{color:inherit}
             renderMonthlyGrid();
             recalcAll();
             renderScenariosTable();
-            // מסך פתיחה אם טרם נבחר מצב, אחרת כניסה לאשף
-            if(!S.appMode) {
-                document.getElementById('view-step-0').classList.remove('hidden');
-                document.getElementById('step-bar-wrap').classList.add('hidden');
-                document.getElementById('view-step-1').classList.add('hidden');
-            } else {
-                startWizard(1);
-            }
+            // מסך פתיחה תמיד מוצג בטעינה — בחירת המסלול ננעלת לאחר הבחירה
+            showModePicker();
+            attachModePickerHandlers();
         });
 
         function initLucideIcons() {
@@ -1775,12 +1797,14 @@ a{color:inherit}
             // מימון ומס
             S.financingCost  = readInput('input-financing');
             // מימון ההשקעה (עסק חדש) — קריאת שדות ההלוואה
-            S.loanAmount = readInput('input-loan-amount');
+            S.equityContribution = readInput('input-equity-contribution');
+            S.loanAmount = computeFinancing().loan;
+            S.fundingRequired = computeFinancing().fundingRequired;
             S.loanRate   = parseFloat(document.getElementById('input-loan-rate')?.value) || 0;
             S.loanYears  = parseFloat(document.getElementById('input-loan-years')?.value) || 0;
             S.graceMonths = parseFloat(document.getElementById('input-grace-months')?.value) || 0;
             // בעסק חדש עם הלוואה — הריבית נגזרת אוטומטית ומזינה את ה-P&L (במקום השדה הידני)
-            if(S.appMode === 'new' && (S.finMethod === 'loan' || S.finMethod === 'mixed')) {
+            if(S.appMode === 'new') {
                 S.financingCost = computeFinancing().year1Interest;
             }
             S.taxRate        = parseFloat(document.getElementById('input-tax-rate')?.value) ?? 23;
@@ -1834,6 +1858,8 @@ a{color:inherit}
                 financingCost:  S.financingCost,
                 finMethod:      S.finMethod,
                 loanAmount:     S.loanAmount,
+                equityContribution: S.equityContribution,
+                fundingRequired: S.fundingRequired,
                 loanRate:       S.loanRate,
                 loanYears:      S.loanYears,
                 loanRepayMode:  S.loanRepayMode,
@@ -1876,6 +1902,8 @@ a{color:inherit}
                 S.financingCost  = data.financingCost  || 0;
                 S.finMethod      = data.finMethod      || 'equity';
                 S.loanAmount     = data.loanAmount     || 0;
+                S.equityContribution = data.equityContribution || 0;
+                S.fundingRequired = data.fundingRequired || 0;
                 S.loanRate       = data.loanRate       || 0;
                 S.loanYears      = data.loanYears      || 0;
                 S.loanRepayMode  = data.loanRepayMode  || 'amort';
@@ -1927,6 +1955,8 @@ a{color:inherit}
                 const rrEl = document.getElementById('input-required-roi');
                 if(rrEl) rrEl.value = S.requiredRoi;
                 // שחזור שדות מימון ההשקעה (עסק חדש)
+                const ecEl = document.getElementById('input-equity-contribution');
+                if(ecEl) ecEl.value = S.equityContribution > 0 ? Math.round(S.equityContribution).toLocaleString('en-US') : '';
                 const laEl = document.getElementById('input-loan-amount');
                 if(laEl) laEl.value = S.loanAmount > 0 ? Math.round(S.loanAmount).toLocaleString('en-US') : '';
                 const lrEl = document.getElementById('input-loan-rate');
@@ -2163,11 +2193,19 @@ a{color:inherit}
             return p && f;
         }
 
-        // ── מנוע ניווט מבוסס-רצף לפי מצב העסק ──
-        const STEP_DEFS  = { '1':'הכנסות', '2':'בסיס הוצאות', '3':'מנועי צמיחה', '4':'השלמת נתונים', 'fin':'כדאיות ומימון', '5':'מדדי ביצוע', '6':'דוחות', '7':'ביצוע בפועל' };
-        const STEP_SHORT = { '1':'הכנסות', '2':'הוצאות', '3':'צמיחה', '4':'נתוני עזר', 'fin':'כדאיות', '5':'מדדי ביצוע', '6':'דוחות', '7':'בפועל' };
+        // ── מנוע ניווט מבוסס-רצף לפי מסלול התכנון ──
+        const STEP_DEFS_EXISTING  = { '1':'הכנסות', '2':'בסיס הוצאות', '3':'מנועי צמיחה', '4':'השלמת נתונים', '5':'מדדי ביצוע', '6':'דוחות', '7':'ביצוע בפועל' };
+        const STEP_SHORT_EXISTING = { '1':'הכנסות', '2':'הוצאות', '3':'צמיחה', '4':'השלמות', '5':'מדדים', '6':'דוחות', '7':'בפועל' };
+        const STEP_DEFS_NEW       = { '1':'הכנסות חזויות', '2':'הוצאות חזויות', 'fin':'השקעה ומימון', '4':'פחת ומס', '5':'כדאיות ומדדי ביצוע', '6':'דוחות', '7':'בקרה בפועל' };
+        const STEP_SHORT_NEW      = { '1':'הכנסות', '2':'הוצאות', 'fin':'מימון', '4':'פחת/מס', '5':'מדדים', '6':'דוחות', '7':'בקרה' };
         function stepSequence() {
-            return (S.appMode === 'new') ? ['1','2','3','4','fin','5','6','7'] : ['1','2','3','4','5','6','7'];
+            return (S.appMode === 'new') ? ['1','2','fin','4','5','6','7'] : ['1','2','3','4','5','6','7'];
+        }
+        function getStepDefs() {
+            return (S.appMode === 'new') ? STEP_DEFS_NEW : STEP_DEFS_EXISTING;
+        }
+        function getStepShortDefs() {
+            return (S.appMode === 'new') ? STEP_SHORT_NEW : STEP_SHORT_EXISTING;
         }
         function renderStepBar() {
             const track = document.getElementById('step-bar-track');
@@ -2182,16 +2220,33 @@ a{color:inherit}
                 else                { circleCls = 'bg-white border-gray-300 text-gray-500';           labelCls = 'text-gray-500 font-medium'; }
                 html += `<button onclick="goToStep('${id}')" class="flex flex-col items-center gap-2 group focus:outline-none cursor-pointer">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm border-2 transition-all ${circleCls}">${i+1}</div>
-                    <span class="text-xs md:text-sm ${labelCls} hidden sm:block">${STEP_DEFS[id]}</span>
-                    <span class="text-[10px] font-bold ${labelCls} block sm:hidden">${STEP_SHORT[id]}</span>
+                    <span class="text-xs md:text-sm ${labelCls} hidden sm:block">${getStepDefs()[id]}</span>
+                    <span class="text-[10px] font-bold ${labelCls} block sm:hidden">${getStepShortDefs()[id]}</span>
                 </button>`;
             });
             track.innerHTML = html;
         }
 
-        // ── מסך פתיחה: בחירת מצב ──
+        // ── מסך פתיחה: בחירת מסלול ──
+        function showModePicker() {
+            ['1','2','3','4','fin','5','6','7'].forEach(id => {
+                const v = document.getElementById(`view-step-${id}`);
+                if(v) v.classList.add('hidden');
+            });
+            const picker = document.getElementById('view-step-0');
+            if(picker) picker.classList.remove('hidden');
+            const bar = document.getElementById('step-bar-wrap');
+            if(bar) bar.classList.add('hidden');
+            initLucideIcons();
+        }
+        function attachModePickerHandlers() {
+            // בחירת המסלול מטופלת ע"י onclick המוטבע על הכפתורים (אמין בנייד ובמחשב).
+            // אירוע touchend גולמי + preventDefault חנק את ה-click הטבעי וגרם לכך
+            // שהקשות בנייד לא נקלטו. נשארת הסתמכות על click הטבעי בלבד.
+        }
         function chooseMode(mode) {
             S.appMode = mode;
+            S.currentStep = 1;
             saveDataToStorage();
             startWizard(1);
         }
@@ -2204,8 +2259,11 @@ a{color:inherit}
                 const v = document.getElementById(`view-step-${id}`);
                 if(v) v.classList.add('hidden');
             });
-            S.currentStep = (String(stepId) === 'fin') ? 'fin' : Number(stepId);
-            const tgt = document.getElementById(`view-step-${stepId}`);
+            const seq = stepSequence();
+            const requested = String(stepId);
+            const safeStep = seq.includes(requested) ? requested : seq[0];
+            S.currentStep = (safeStep === 'fin') ? 'fin' : Number(safeStep);
+            const tgt = document.getElementById(`view-step-${safeStep}`);
             if(tgt) tgt.classList.remove('hidden');
             renderStepBar();
             applyModeVisibility();
@@ -2214,24 +2272,32 @@ a{color:inherit}
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ── מעברים בגבול דף 4 ↔ דף 5 (תלוי-מצב) ──
-        function nextFromStep4(){ goToStep(S.appMode === 'new' ? 'fin' : 5); }
-        function backFromStep5(){ goToStep(S.appMode === 'new' ? 'fin' : 4); }
+        // ── מעברים תלויי-מסלול ──
+        function nextFromStep2(){ goToStep(S.appMode === 'new' ? 'fin' : 3); }
+        function backFromFin(){ goToStep(2); }
+        function nextFromFin(){ goToStep(4); }
+        function backFromStep4(){ goToStep(S.appMode === 'new' ? 'fin' : 3); }
+        function nextFromStep4(){ goToStep(5); }
+        function backFromStep5(){ goToStep(4); }
 
         // ── מימון ההשקעה (עסק חדש) ──
         function finNum(id){ const el=document.getElementById(id); if(!el) return 0; const v=(el.value||'').replace(/,/g,'').replace(/[^0-9.\-]/g,''); return parseFloat(v)||0; }
         function computeFinancing() {
-            const inv    = finNum('input-investment');
-            const method = S.finMethod;
-            const loan   = (method === 'loan' || method === 'mixed') ? finNum('input-loan-amount') : 0;
-            const rate   = finNum('input-loan-rate');
-            const years  = finNum('input-loan-years');
-            const repay  = S.loanRepayMode || 'amort';
+            const inv = Math.max(0, finNum('input-investment'));
+            const openingBalanceRaw = finNum('input-opening-balance') || S.openingBalance || 0;
+            const cashAvailable = Math.max(0, openingBalanceRaw);
+            const openingOverdraft = Math.max(0, -openingBalanceRaw);
+            const equityContribution = Math.max(0, finNum('input-equity-contribution') || S.equityContribution || 0);
+            const fundingRequired = Math.max(0, inv + openingOverdraft - cashAvailable - equityContribution);
+            const loan = fundingRequired;
+            const rate = Math.max(0, finNum('input-loan-rate'));
+            const years = Math.max(0, finNum('input-loan-years'));
+            const repay = S.loanRepayMode || 'amort';
             const mr = rate / 100 / 12;
             const n  = Math.round(years * 12);
             let grace = (repay === 'grace') ? Math.round(finNum('input-grace-months')) : 0;
             if(grace < 0) grace = 0;
-            if(n > 0 && grace > n - 1) grace = Math.max(0, n - 1); // להשאיר לפחות חודש אחד לאמורטיזציה
+            if(n > 0 && grace > n - 1) grace = Math.max(0, n - 1);
 
             const interest  = new Array(12).fill(0);
             const principal = new Array(12).fill(0);
@@ -2239,9 +2305,9 @@ a{color:inherit}
 
             if(loan > 0 && n > 0) {
                 if(repay === 'bullet') {
-                    monthlyPayment = loan * mr;                       // ריבית בלבד; הקרן בסוף התקופה
+                    monthlyPayment = loan * mr;
                 } else {
-                    const amortMonths = n - grace;                    // חודשי האמורטיזציה (אחרי גרייס)
+                    const amortMonths = Math.max(1, n - grace);
                     monthlyPayment = (mr > 0)
                         ? loan * mr / (1 - Math.pow(1 + mr, -amortMonths))
                         : loan / amortMonths;
@@ -2251,9 +2317,9 @@ a{color:inherit}
                     const it = bal * mr;
                     let pr = 0;
                     if(repay === 'bullet') {
-                        pr = (i === n - 1) ? bal : 0;                 // בלון בחודש האחרון של ההלוואה
+                        pr = (i === n - 1) ? bal : 0;
                     } else if(repay === 'grace' && i < grace) {
-                        pr = 0;                                       // תקופת חסד — קרן 0, ריבית בלבד
+                        pr = 0;
                     } else {
                         pr = monthlyPayment - it;
                         if(pr > bal) pr = bal;
@@ -2266,8 +2332,8 @@ a{color:inherit}
             }
             const year1Interest  = interest.reduce((a, b) => a + b, 0);
             const year1Principal = principal.reduce((a, b) => a + b, 0);
-            const equity = Math.max(0, inv - loan);
-            return { inv, loan, rate, years, repay, grace, monthlyPayment, year1Interest, year1Principal, equity, schedule: { interest, principal } };
+            const equityUsed = Math.min(inv + openingOverdraft, cashAvailable + equityContribution);
+            return { inv, openingBalanceRaw, cashAvailable, openingOverdraft, equityContribution, fundingRequired, loan, rate, years, repay, grace, monthlyPayment, year1Interest, year1Principal, equity: equityUsed, schedule: { interest, principal } };
         }
         function setFinMethod(method, silent) {
             S.finMethod = method;
@@ -2280,7 +2346,7 @@ a{color:inherit}
                     : 'flex-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all bg-white text-slate-600 border border-indigo-200 hover:bg-indigo-50 cursor-pointer';
             });
             const loanFields = document.getElementById('loan-fields');
-            if(loanFields) loanFields.style.display = (method === 'equity') ? 'none' : '';
+            if(loanFields) loanFields.style.display = ''; // מוצג תמיד כדי להציג הלוואה נדרשת ותנאי החזר אם יש מימון חסר
             updateFinancingUI();
             if(!silent) saveAndRecalc();
         }
@@ -2302,48 +2368,108 @@ a{color:inherit}
         }
         function updateFinancingUI() {
             const f = computeFinancing();
+            S.loanAmount = f.loan;
+            S.fundingRequired = f.fundingRequired;
+            S.equityContribution = f.equityContribution;
             const fmt = n => '₪' + Math.round(n).toLocaleString('en-US');
-            const eq  = document.getElementById('fin-equity-display');
+            const loanInput = document.getElementById('input-loan-amount');
+            const fundingEl = document.getElementById('fin-funding-required-display');
+            const loanEl = document.getElementById('fin-loan-required-display');
+            const legacyEq = document.getElementById('fin-equity-display');
             const pay = document.getElementById('fin-payment-display');
             const intr= document.getElementById('fin-interest-display');
-            if(eq)   eq.textContent   = fmt(f.equity);
-            if(pay)  pay.textContent  = f.monthlyPayment > 0 ? fmt(f.monthlyPayment) : '—';
-            if(intr) intr.textContent = f.year1Interest  > 0 ? fmt(f.year1Interest)  : '—';
+            if(loanInput) loanInput.value = f.loan > 0 ? Math.round(f.loan).toLocaleString('en-US') : '';
+            if(fundingEl) fundingEl.textContent = fmt(f.fundingRequired);
+            if(loanEl) loanEl.textContent = fmt(f.loan);
+            if(legacyEq) legacyEq.textContent = fmt(f.equity);
+            if(pay) pay.textContent = f.monthlyPayment > 0 ? fmt(f.monthlyPayment) : '—';
+            if(intr) intr.textContent = f.year1Interest > 0 ? fmt(f.year1Interest) : '—';
         }
         // ── הסתרת שדה המימון הידני בדף 4 בעסק חדש (המימון נגזר מההלוואה) ──
+        function setVisibleById(id, show) {
+            const el = document.getElementById(id);
+            if(el) el.classList.toggle('hidden', !show);
+        }
         function applyModeVisibility() {
+            const isNew = S.appMode === 'new';
+            document.querySelectorAll('.mode-only-new').forEach(el => el.classList.toggle('hidden', !isNew));
+            document.querySelectorAll('.mode-only-existing').forEach(el => el.classList.toggle('hidden', isNew));
             const fin4 = document.getElementById('step4-financing-field');
-            if(fin4) fin4.style.display = (S.appMode === 'new') ? 'none' : '';
+            if(fin4) fin4.style.display = isNew ? 'none' : '';
+            setVisibleById('revenue-prev-wrap', !isNew);
+            setVisibleById('custom-monthly-section', !isNew && S.revMode === 'custom');
+            setVisibleById('growth-column', !isNew);
+            const customToggle = document.querySelector('.mb-6.bg-slate-50.p-2.rounded-lg.inline-flex');
+            if(customToggle) customToggle.classList.toggle('hidden', isNew);
+            const hint = document.getElementById('new-business-hint');
+            if(hint) hint.classList.toggle('hidden', !isNew);
+            if(isNew) {
+                S.revMode = 'even';
+                setRevenueInputMode('even', true);
+            }
         }
         // ── אפקטים תזרימיים של ההשקעה והמימון (הפן הממומן) — רק בעסק חדש ──
         function financedCashEffects() {
             if(S.appMode !== 'new') return { startAdj: 0 };
             const f = computeFinancing();
-            return { startAdj: (f.loan || 0) - (f.inv || 0) };  // הלוואה נכנסת (חודש 0), השקעה יוצאת
+            return { startAdj: (f.loan || 0) + (f.equityContribution || 0) - (f.inv || 0) };  // מימון נכנס והשקעה יוצאת; בור פתיחה נסגר ע״י הלוואה נדרשת
         }
         function effectiveOpeningBalance() {
             return (S.openingBalance || 0) + financedCashEffects().startAdj;
         }
         // ── ליטוש כיתוב לפי מצב ──
         function applyModeCopy() {
+            const isNew = S.appMode === 'new';
             const ind = document.getElementById('mode-indicator');
             if(ind) {
-                const label = (S.appMode === 'new') ? 'עסק חדש — כדאיות ומימון' : 'עסק קיים — תכנון ובקרה';
-                ind.innerHTML = `מצב: <span class="font-semibold text-slate-500">${label}</span> · <button onclick="switchMode()" class="text-indigo-600 hover:underline font-semibold cursor-pointer">החלף</button>`;
+                const label = isNew ? 'בדיקת כדאיות כלכלית' : 'תקציב ותחזית לעסק קיים';
+                ind.innerHTML = `מסלול: <span class="font-semibold text-slate-500">${label}</span>`;
             }
+            const title1 = document.querySelector('#view-step-1 h2');
+            if(title1) title1.innerHTML = isNew
+                ? '<i data-lucide="database" class="text-blue-600 w-5 h-5"></i> הכנסות חזויות ומרווח גולמי'
+                : '<i data-lucide="database" class="text-blue-600 w-5 h-5"></i> נתוני הכנסות ומרווח גולמי';
+            const title2 = document.querySelector('#view-step-2 h2');
+            if(title2) title2.innerHTML = isNew
+                ? '<i data-lucide="sliders" class="text-blue-600 w-5 h-5"></i> הוצאות חזויות חודשיות'
+                : '<i data-lucide="sliders" class="text-blue-600 w-5 h-5"></i> שלב 2: בסיס הוצאות אופרטיביות (חודשי)';
+            const title4 = document.querySelector('#view-step-4 h2');
+            if(title4) title4.innerHTML = isNew
+                ? '<i data-lucide="calculator" class="text-blue-600 w-5 h-5"></i> פחת, מס ותזרים — להשלמת בדיקת הכדאיות'
+                : '<i data-lucide="calculator" class="text-blue-600 w-5 h-5"></i> שלב 4: השלמת נתונים — לדוחות P&L ותזרים';
+            const lblPrev = document.getElementById('lbl-rev-prev');
+            if(lblPrev) lblPrev.textContent = 'שנה שעברה';
+            const lblCurr = document.getElementById('lbl-rev-curr');
+            if(lblCurr) lblCurr.textContent = isNew ? 'תחזית הכנסות לשנה הבאה' : 'השנה';
+            const kpiGrowth = document.getElementById('kpi-growth-vs-prev');
+            if(kpiGrowth && isNew) kpiGrowth.textContent = 'מבוסס על תחזית שהוזנה';
             const rep = document.getElementById('reports-subtitle');
             if(rep) {
-                rep.textContent = (S.appMode === 'new')
-                    ? 'דוחות פיננסיים להצגה לבנק, למשקיעים ולגופי מימון — מבוססים על נתוני התחזית שהזנת. שינוי בסליידרי הרגישות ישתקף מיידית.'
+                rep.textContent = isNew
+                    ? 'דוחות פיננסיים לבדיקת כדאיות — מבוססים על תחזית ההכנסות, ההוצאות, ההשקעה והמימון שהוזנו.'
                     : 'כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.';
             }
+            document.querySelectorAll('button[onclick="nextFromStep4()"]').forEach(btn => {
+                btn.innerHTML = isNew ? 'לדף הבא ←' : 'למדדי הביצוע ←';
+            });
+            const annualCompareCard = document.getElementById('lbl-annual-chart-years')?.closest('.bg-white');
+            if(annualCompareCard) {
+                annualCompareCard.classList.remove('hidden');
+                const title = annualCompareCard.querySelector('h3');
+                const subtitle = document.getElementById('lbl-annual-chart-years');
+                if(isNew) {
+                    if(title) title.textContent = 'החזר השקעה מצטבר — Payback';
+                    if(subtitle) subtitle.textContent = 'קו מצטבר של רווח נקי מול ההשקעה הראשונית';
+                } else {
+                    if(title) title.textContent = 'השוואה שנתית — הכנסות (אלפי ₪)';
+                    if(subtitle) subtitle.textContent = `${getYears().prev} · ${getYears().curr} · תחזית שנה הבאה`;
+                }
+            }
+            if((parseFloat(String(document.getElementById('input-amortization')?.value || '0').replace(/[^0-9.\-]/g,'')) || 0) > 0) toggleAmortizationAdvanced(true);
+            initLucideIcons();
         }
         function switchMode() {
-            ['1','2','3','4','fin','5','6','7'].forEach(id => { const v=document.getElementById(`view-step-${id}`); if(v) v.classList.add('hidden'); });
-            const bar = document.getElementById('step-bar-wrap');
-            if(bar) bar.classList.add('hidden');
-            const picker = document.getElementById('view-step-0');
-            if(picker) picker.classList.remove('hidden');
+            showModePicker();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -2365,6 +2491,8 @@ a{color:inherit}
             const tgtView = document.getElementById(`view-step-${key}`);
             if(tgtView) tgtView.classList.remove('hidden');
             renderStepBar();
+            applyModeVisibility();
+            applyModeCopy();
 
             gaEvent("step_complete", "wizard", "step_" + key);
             if(key === '5') {
@@ -2490,6 +2618,21 @@ a{color:inherit}
             }
             if(!silent) saveAndRecalc();
             updateExpenseAnnualLabels();
+        }
+
+
+        function toggleAmortizationAdvanced(forceShow) {
+            const wrap = document.getElementById('amortization-advanced-wrap');
+            const btn = document.getElementById('toggle-amortization-advanced');
+            if(!wrap) return;
+            const hasValue = (parseFloat(String(document.getElementById('input-amortization')?.value || '0').replace(/[^0-9.\-]/g,'')) || 0) > 0;
+            const shouldShow = (typeof forceShow === 'boolean') ? forceShow : wrap.classList.contains('hidden');
+            wrap.classList.toggle('hidden', !shouldShow);
+            if(btn) btn.textContent = shouldShow ? 'הסתר שדה מתקדם: הפחתות שנתיות' : 'הצג שדה מתקדם: הפחתות שנתיות';
+            if(hasValue && !shouldShow) {
+                wrap.classList.remove('hidden');
+                if(btn) btn.textContent = 'הסתר שדה מתקדם: הפחתות שנתיות';
+            }
         }
 
         function setDAMode(mode) {
@@ -3073,9 +3216,11 @@ a{color:inherit}
         }
 
         function recalcAll() {
+            if(typeof applyModeVisibility === 'function') applyModeVisibility();
+            if(typeof applyModeCopy === 'function') applyModeCopy();
             if(typeof updateFinancingUI === 'function') updateFinancingUI();
             // בעסק חדש עם הלוואה — הריבית הנגזרת מזינה את ה-P&L (לפני החישוב)
-            if(S.appMode === 'new' && (S.finMethod === 'loan' || S.finMethod === 'mixed')) {
+            if(S.appMode === 'new') {
                 S.financingCost = computeFinancing().year1Interest;
             }
             S.grossMarginPct = parseFloat(document.getElementById('gross-margin-pct')?.value) || 0;
@@ -3091,21 +3236,24 @@ a{color:inherit}
 
             // ── הצג/הסתר hint לעסק חדש ──
             const newBizHint = document.getElementById('new-business-hint');
-            if(newBizHint) newBizHint.classList.toggle('hidden', S.rev2024 > 0 || S.rev2025 > 0);
+            if(newBizHint) newBizHint.classList.toggle('hidden', S.appMode !== 'new');
 
             // ── הצג/הסתר לוח עונתיות (רק כשאין נתונים חודשיים) ──
             const seasonBox = document.getElementById('no-monthly-seasonality-box');
             const hasMonthly = S.revMode === 'custom' && (S.rev2024 > 0 || S.rev2025 > 0);
-            if(seasonBox) seasonBox.classList.toggle('hidden', hasMonthly);
+            if(seasonBox) seasonBox.classList.toggle('hidden', S.appMode === 'new' || hasMonthly);
 
             // ── בסיס שנתי חזוי 2026 ──
-            const baseYear = S.rev2025 > 0 ? S.rev2025 : S.rev2024;
+            const baseYear = S.appMode === 'new' ? S.rev2025 : (S.rev2025 > 0 ? S.rev2025 : S.rev2024);
 
             // ── בחירת אחוז גידול לפי מצב ──
             let effectiveGrowthPct = 0;
             let growthSourceLabel = '';
 
-            if(S.growthMode === 'historical' && hasBothYears) {
+            if(S.appMode === 'new') {
+                effectiveGrowthPct = 0;
+                growthSourceLabel = 'תחזית הכנסות שהוזנה';
+            } else if(S.growthMode === 'historical' && hasBothYears) {
                 // השתמש בגידול היסטורי אוטומטי
                 effectiveGrowthPct = trendGrowthPct;
                 growthSourceLabel = (trendGrowthPct >= 0 ? '+' : '') + trendGrowthPct.toFixed(1) + '% גידול היסטורי';
@@ -3192,7 +3340,7 @@ a{color:inherit}
                 rev = annualBase2026 * weights[i];
 
                 // ── אלסטיות שיווק ──
-                if (S.mktGrowth > 0 && S.mktElasticity > 0) {
+                if (S.appMode !== 'new' && S.mktGrowth > 0 && S.mktElasticity > 0) {
                     const marketingImpactFactor = Math.log1p(S.mktGrowth / 100) * (S.mktElasticity / 100);
                     rev = rev * (1 + marketingImpactFactor);
                 }
@@ -3201,7 +3349,7 @@ a{color:inherit}
                 // עלות שכר: מלאה מחודש ההתחלה
                 // תשואה: 40% בחודש הראשון, 80% בשני, 100% מהחודש השלישי ואילך
                 let manpowerYield = 0, manpowerCost = 0;
-                S.manpower.forEach(emp => {
+                if(S.appMode !== 'new') S.manpower.forEach(emp => {
                     if (mNum >= emp.startMonth) {
                         manpowerCost += emp.cost;
                         const monthsActive = mNum - emp.startMonth + 1;
@@ -3222,7 +3370,7 @@ a{color:inherit}
                 let mktCost = S.modes.marketing === 'ils' ? S.inputs.marketing : (rev * (S.inputs.marketing / 100));
                 // כאשר שיווק ב-% מהמחזור — הגידול כבר נספג דרך הכנסות גבוהות יותר (אלסטיות)
                 // לכן מכפילים את תוספת הסליידר רק כאשר שיווק מוגדר בש"ח קבוע
-                if(S.mktGrowth > 0 && S.modes.marketing === 'ils') mktCost = mktCost * (1 + (S.mktGrowth / 100));
+                if(S.appMode !== 'new' && S.mktGrowth > 0 && S.modes.marketing === 'ils') mktCost = mktCost * (1 + (S.mktGrowth / 100));
 
                 // הוצאות שכר חודשיות
                 // סנסיטיביות חלה רק על שכר הבסיס — עובדים חדשים הוזנו בעלות מוגדרת ידנית
@@ -3306,7 +3454,7 @@ a{color:inherit}
                 : avgMonthlyRev * (S.inputs.marketing / 100);
             const fixedOpex      = S.inputs.fixed; // תמיד ₪ — אין אחוזים
             // עלות עובדים חדשים — ממוצע חודשי לאורך השנה (עלות קבועה מרגע הגיוס)
-            const avgManpowerCost = S.manpower.length > 0
+            const avgManpowerCost = (S.appMode !== 'new' && S.manpower.length > 0)
                 ? S.manpower.reduce((sum, emp) => sum + emp.cost * (13 - emp.startMonth) / 12, 0)
                 : 0;
             const totalMonthlyFixed = fixedPayroll + fixedMarketing + fixedOpex + avgManpowerCost;
@@ -3342,6 +3490,7 @@ a{color:inherit}
 
             // ── בדיקת כדאיות השקעה — Payback / ROI / GO-NO-GO ──
             updateFeasibility(totalNet, monthsData);
+            renderExecutiveSummary(totalNet, monthsData);
 
             // empty state — הצג/הסתר לפי קיום נתונים
             const hasData = totalRev > 0;
@@ -3430,107 +3579,306 @@ a{color:inherit}
             initLucideIcons();
         }
 
+        function calculateIRR(cashFlows) {
+            if(!Array.isArray(cashFlows) || cashFlows.length < 2) return null;
+            const hasNegative = cashFlows.some(v => v < 0);
+            const hasPositive = cashFlows.some(v => v > 0);
+            if(!hasNegative || !hasPositive) return null;
+            const npv = rate => cashFlows.reduce((sum, cf, idx) => sum + cf / Math.pow(1 + rate, idx), 0);
+            let low = -0.9999;
+            let high = 10;
+            let npvLow = npv(low);
+            let npvHigh = npv(high);
+            let expandCount = 0;
+            while(npvLow * npvHigh > 0 && expandCount < 10) {
+                high *= 2;
+                npvHigh = npv(high);
+                expandCount++;
+            }
+            if(npvLow * npvHigh > 0) return null;
+            for(let i = 0; i < 120; i++) {
+                const mid = (low + high) / 2;
+                const npvMid = npv(mid);
+                if(Math.abs(npvMid) < 0.0001) return mid;
+                if(npvLow * npvMid <= 0) {
+                    high = mid;
+                    npvHigh = npvMid;
+                } else {
+                    low = mid;
+                    npvLow = npvMid;
+                }
+            }
+            return (low + high) / 2;
+        }
+
+        function formatPctValue(value, digits = 1) {
+            if(value === null || value === undefined || !isFinite(value)) return 'לא זמין';
+            return value.toFixed(digits) + '%';
+        }
+
+        function getInvestmentColor(value, type) {
+            if(type === 'dscr') {
+                if(value === null || value === undefined || !isFinite(value)) return { bg:'#f8fafc', border:'#cbd5e1', fg:'#475569', label:'לא זמין' };
+                if(value < 1) return { bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', label:'אדום' };
+                if(value <= 1.1) return { bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', label:'צהוב' };
+                return { bg:'#ecfdf5', border:'#10b981', fg:'#065f46', label:'ירוק' };
+            }
+            if(value === null || value === undefined || !isFinite(value)) return { bg:'#f8fafc', border:'#cbd5e1', fg:'#475569', label:'לא זמין' };
+            if(value <= 0) return { bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', label:'אדום' };
+            return { bg:'#ecfdf5', border:'#10b981', fg:'#065f46', label:'ירוק' };
+        }
+
+        function kpiCard(title, value, subtitle, colorCfg) {
+            const cfg = colorCfg || { bg:'#ffffff', border:'#e2e8f0', fg:'#0f172a' };
+            return `
+                <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}66">
+                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">${title}</div>
+                    <div class="text-2xl font-extrabold" style="color:${cfg.fg}">${value}</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">${subtitle}</div>
+                </div>`;
+        }
+
+
+        function computeInvestmentSummary(totalNet, monthsData) {
+            const investment = S.investment || 0;
+            if(S.appMode !== 'new' || investment <= 0 || !Array.isArray(monthsData)) return null;
+
+            const roiPct = (totalNet / investment) * 100;
+
+            // ── תזרימים חודשיים על שני בסיסים ──
+            // תפעולי = לפני שירות חוב (ריבית+קרן). מודד את כדאיות הפרויקט עצמו — זהה לכל צורת מימון (בולט/שפיצר/גרייס).
+            // משקיע = אחרי שירות חוב מלא. מה שנשאר בפועל לבעל המניות — הבסיס להחלטה ולסיכון.
+            const opCFmonthly  = monthsData.map(m => (m.revenue||0) - (m.costOfGoods||0) - (m.mktCost||0) - (m.payrollCost||0) - (m.fixedCost||0) - (m.taxCash||0));
+            const finCFmonthly = monthsData.map(m => (m.revenue||0) - (m.costOfGoods||0) - (m.mktCost||0) - (m.payrollCost||0) - (m.fixedCost||0) - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0));
+            const annualOpCashFlow = opCFmonthly.reduce((s,v)=>s+v,0);
+            const annualCashFlow   = finCFmonthly.reduce((s,v)=>s+v,0); // תזרים משקיע (אחרי שירות חוב) — בסיס IRR/GO-NO-GO/DSCR הקיים
+
+            // ── Payback תזרימי מול מלוא ההשקעה (לא רווח חשבונאי) ──
+            const paybackFrom = (arr, annual) => {
+                let c = 0;
+                for(let i=0;i<arr.length;i++){ c += arr[i]; if(c >= investment) return i+1; }
+                return annual > 0 ? Math.round((investment / annual) * 12) : null;
+            };
+            const paybackOpMonths  = paybackFrom(opCFmonthly,  annualOpCashFlow);  // תפעולי
+            const paybackFinMonths = paybackFrom(finCFmonthly, annualCashFlow);    // משקיע (אחרי שירות חוב)
+            const paybackMonths    = paybackFinMonths; // מזין את דירוג הסיכון — הבסיס השמרני (אחרי שירות חוב)
+
+            // ── IRR: משקיע (אחרי מימון — בסיס ההחלטה) ותפעולי (כדאיות הפרויקט — זהה לכל מימון) ──
+            const irrRate   = calculateIRR([-investment, annualCashFlow,   annualCashFlow,   annualCashFlow,   annualCashFlow,   annualCashFlow]);
+            const irrPct    = irrRate === null ? null : irrRate * 100;
+            const irrOpRate = calculateIRR([-investment, annualOpCashFlow, annualOpCashFlow, annualOpCashFlow, annualOpCashFlow, annualOpCashFlow]);
+            const irrOpPct  = irrOpRate === null ? null : irrOpRate * 100;
+
+            const fin = computeFinancing();
+            const annualDebtService = (fin.year1Interest || 0) + (fin.year1Principal || 0);
+            // DSCR = תזרים זמין לשירות חוב (CFADS) ÷ שירות חוב. התזרים התפעולי הוא בדיוק ה-CFADS (לפני ריבית וקרן).
+            const cfads = annualOpCashFlow;
+            const dscr = annualDebtService > 0 ? cfads / annualDebtService : null;
+            // הלוואת בולט/גרייס: שנת הפירעון אינה ממודלת באקסטרפולציה הרב-שנתית
+            const isBalloonLoan = (fin.loan > 0) && (fin.repay === 'bullet' || (fin.grace || 0) > 0);
+
+            let decisionLevel = 'caution';
+            if(totalNet < 0 || roiPct <= 0 || (irrPct !== null && irrPct <= 0)) decisionLevel = 'nogo';
+            else if(totalNet > 0 && roiPct > 0 && irrPct !== null && irrPct > 0) decisionLevel = 'go';
+
+            const decisionCfg = {
+                go:      { emoji:'🟢', title:'כדאי להשקיע', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'ROI חיובי, IRR חיובי והרווחיות לאחר כלל ההוצאות חיובית.' },
+                caution: { emoji:'🟡', title:'כדאי לבדוק לעומק', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד המדדים חסר או גבולי. מומלץ לבדוק הנחות, תמחור ומבנה מימון.' },
+                nogo:    { emoji:'🔴', title:'לא כדאי להשקיע לפי הנתונים', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'ROI / IRR / רווחיות מצביעים על סיכון מהותי או הפסד.' }
+            }[decisionLevel];
+
+            let riskLevel = 'medium';
+            if(roiPct <= 0 || (irrPct !== null && irrPct <= 0) || (dscr !== null && dscr < 1)) riskLevel = 'high';
+            else if(roiPct > 0 && irrPct !== null && irrPct > 0 && (dscr === null || dscr > 1.1) && paybackMonths !== null && paybackMonths < 60) riskLevel = 'low';
+            else if((dscr !== null && dscr >= 1 && dscr <= 1.1) || (paybackMonths !== null && paybackMonths >= 60 && paybackMonths <= 84)) riskLevel = 'medium';
+
+            const riskCfg = {
+                low:    { emoji:'🟢', title:'סיכון נמוך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'ROI ו-IRR חיוביים, יכולת שירות חוב תקינה ותקופת החזר סבירה.' },
+                medium: { emoji:'🟡', title:'סיכון בינוני', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד המדדים גבולי. מומלץ לבדוק תרחישים והנחות לפני החלטה סופית.' },
+                high:   { emoji:'🔴', title:'סיכון גבוה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'קיימת אינדיקציה ל-ROI/IRR שלילי או DSCR נמוך מ-1.' }
+            }[riskLevel];
+
+            const fmtPayback = pm => pm === null
+                ? 'לא מוחזר'
+                : (pm <= 12 ? pm + ' חודשים' : (pm/12).toFixed(1) + ' שנים');
+            const paybackTxt   = fmtPayback(paybackFinMonths); // משקיע (אחרי שירות חוב)
+            const paybackOpTxt = fmtPayback(paybackOpMonths);  // תפעולי
+
+            const conclusion = decisionLevel === 'go' && riskLevel === 'low'
+                ? 'הפרויקט מציג רווחיות חיובית, תשואה חיובית ויכולת החזר חוב מספקת. בהתאם לנתונים שהוזנו, ההשקעה נראית כדאית.'
+                : (decisionLevel === 'nogo' || riskLevel === 'high'
+                    ? 'הפרויקט מציג סיכון גבוה או רווחיות לא מספקת. מומלץ לבחון מחדש את ההשקעה, את מבנה המימון או את הנחות ההכנסות וההוצאות.'
+                    : 'הפרויקט מציג כדאיות חלקית. מומלץ לבצע בדיקה נוספת של ההנחות והתרחישים לפני קבלת החלטה.');
+
+            return {
+                investment,
+                openingBalance: effectiveOpeningBalance(),
+                equityContribution: S.equityContribution || 0,
+                fundingRequired: fin.fundingRequired || 0,
+                loanRequired: fin.loan || 0,
+                annualDebtService,
+                totalNet,
+                annualCashFlow,
+                annualOpCashFlow,
+                roiPct,
+                irrPct,
+                irrOpPct,
+                paybackMonths,
+                paybackFinMonths,
+                paybackOpMonths,
+                paybackTxt,
+                paybackOpTxt,
+                isBalloonLoan,
+                dscr,
+                dscrTxt: dscr === null ? 'ללא חוב' : dscr.toFixed(2),
+                breakEvenPoint: cachedOutput ? cachedOutput.breakEvenPoint : 0,
+                decisionLevel,
+                decisionCfg,
+                riskLevel,
+                riskCfg,
+                conclusion
+            };
+        }
+
+        function renderExecutiveSummary(totalNet, monthsData) {
+            const zone = document.getElementById('executive-summary-zone');
+            if(!zone) return;
+            const summary = computeInvestmentSummary(totalNet, monthsData);
+            if(!summary) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
+            zone.classList.remove('hidden');
+
+            const row = (label, value) => `<div class="flex justify-between gap-4 py-2 border-b border-slate-100 text-sm"><span class="text-slate-500 font-medium">${label}</span><span class="font-bold text-slate-900 text-left">${value}</span></div>`;
+            zone.innerHTML = `
+                <div id="print-executive-summary-wrap" class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-slate-200 pb-3">
+                        <div>
+                            <h3 class="text-lg font-extrabold text-slate-900 flex items-center gap-2"><span>📌</span> סיכום מנהלים — בדיקת כדאיות</h3>
+                            <p class="text-xs text-slate-500 mt-1">סיכום מרכזי לבנק, משקיע או קבלת החלטה פנימית.</p>
+                        </div>
+                        <button type="button" onclick="printExecutiveSummary()" class="no-print bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer text-sm">
+                            📄 הדפס סיכום מנהלים
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
+                            <h4 class="text-sm font-bold text-slate-700 mb-2">נתוני השקעה ומימון</h4>
+                            ${row('השקעה נדרשת', '₪' + fmtILS(summary.investment))}
+                            ${row('יתרת מזומן קיימת', '₪' + fmtILS(summary.openingBalance))}
+                            ${row('הון עצמי', '₪' + fmtILS(summary.equityContribution))}
+                            ${row('הלוואה נדרשת', '₪' + fmtILS(summary.loanRequired))}
+                            ${row('נקודת איזון חודשית', '₪' + fmtILS(summary.breakEvenPoint))}
+                        </div>
+                        <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
+                            <h4 class="text-sm font-bold text-slate-700 mb-2">מדדי כדאיות וסיכון</h4>
+                            ${row('ROI', formatPctValue(summary.roiPct))}
+                            ${row('IRR משקיע (אחרי מימון)', formatPctValue(summary.irrPct))}
+                            ${row('IRR תפעולי (הפרויקט)', formatPctValue(summary.irrOpPct))}
+                            ${row('Payback — משקיע', summary.paybackTxt)}
+                            ${row('Payback — תפעולי', summary.paybackOpTxt)}
+                            ${row('DSCR', summary.dscrTxt)}
+                            ${row('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`)}
+                            ${row('החלטת השקעה', `${summary.decisionCfg.emoji} ${summary.decisionCfg.title}`)}
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border-2 p-4" style="background:${summary.decisionCfg.bg};border-color:${summary.decisionCfg.border}">
+                        <div class="flex items-start gap-3">
+                            <span class="text-3xl">${summary.decisionCfg.emoji}</span>
+                            <div>
+                                <h4 class="text-base font-extrabold" style="color:${summary.decisionCfg.fg}">מסקנה אוטומטית</h4>
+                                <p class="text-sm leading-relaxed mt-1" style="color:${summary.decisionCfg.fg}">${summary.conclusion}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 rounded-lg p-3">
+                        <strong>הערה:</strong> IRR מחושב על תחזית ל־5 שנים המבוססת על ביצועי שנת התחזית הנוכחית. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.${summary.isBalloonLoan ? ' <strong>הלוואת בולט/גרייס:</strong> החזר הקרן בשנת הפירעון אינו כלול באקסטרפולציה הרב־שנתית — יש לבדוק את יכולת ההחזר באותה שנה בנפרד.' : ''}
+                    </p>
+                </div>`;
+            initLucideIcons();
+        }
+
+        function printExecutiveSummary() {
+            const zone = document.getElementById('executive-summary-zone');
+            if(!zone || zone.classList.contains('hidden')) { alert('אין סיכום מנהלים זמין להדפסה.'); return; }
+            window.print();
+        }
+
         // ════════════════════════════════════════════════════════════
-        //  בדיקת כדאיות השקעה — ROI (ראשי) + Payback (משני) + GO/NO-GO
+        //  בדיקת כדאיות השקעה — KPI ייעודיים למסלול עסק חדש
         // ════════════════════════════════════════════════════════════
         function updateFeasibility(totalNet, monthsData) {
             const zone = document.getElementById('feasibility-zone');
             if(!zone) return;
-            const investment = S.investment || 0;
+            const summary = computeInvestmentSummary(totalNet, monthsData);
 
-            // כרטיס הכדאיות מוצג רק ב"עסק חדש", וכשיש השקעה
-            if(S.appMode !== 'new' || investment <= 0) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
+            if(!summary) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
             zone.classList.remove('hidden');
 
-            // ── מדדים ──
-            // ROI שנתי = רווח נקי שנתי ÷ השקעה ראשונית
-            const roiPct = (totalNet / investment) * 100;
-
-            // תקופת החזר (Payback) בחודשים — לפי רווח נקי מצטבר חודשי.
-            // מניחים שהקצב החודשי של השנה הראשונה נמשך גם מעבר לה (הנחת קצב מייצג).
-            let paybackMonths = null; // null = לא מוחזר בטווח סביר
-            let cum = 0, found = false;
-            for(let i=0; i<monthsData.length; i++){
-                cum += (monthsData[i].netIncome || 0);
-                if(cum >= investment){ paybackMonths = i+1; found = true; break; }
-            }
-            if(!found){
-                // לא הוחזר תוך 12 חודש — מעריכים לפי קצב שנתי, אם חיובי
-                if(totalNet > 0){
-                    paybackMonths = Math.round((investment / totalNet) * 12);
-                } else {
-                    paybackMonths = null; // רווח שנתי לא חיובי — לא מוחזר
-                }
-            }
-
-            // ── הכרעת GO/NO-GO לפי מרחק מהתשואה הנדרשת ──
-            const required = (S.requiredRoi !== undefined && S.requiredRoi !== null && !isNaN(S.requiredRoi)) ? S.requiredRoi : 15;
-            const gap = roiPct - required; // פער בנקודות אחוז (חיובי = מעל היעד)
-            let level; // 'go' | 'caution' | 'nogo'
-            if(gap >= 0)        level = 'go';      // עומד או עולה על היעד
-            else if(gap >= -3)  level = 'caution'; // עד 3 נק' מתחת ליעד
-            else                level = 'nogo';    // מעל 3 נק' מתחת ליעד
-            // אם ההשקעה כלל אינה מוחזרת (רווח לא חיובי) — תמיד NO-GO
-            if(paybackMonths === null) level = 'nogo';
-
-            // טקסט המרחק מהיעד
-            const gapAbs = Math.abs(gap).toFixed(1);
-            let gapTxt;
-            if(paybackMonths === null) {
-                gapTxt = `דרשת ${required}% — אך התחזית אינה מניבה רווח שמחזיר את ההשקעה.`;
-            } else if(gap >= 0) {
-                gapTxt = `דרשת ${required}% — התחזית מניבה ${roiPct.toFixed(1)}%, <strong>עודף של ${gapAbs} נקודות אחוז מעל היעד</strong>.`;
-            } else {
-                gapTxt = `דרשת ${required}% — התחזית מניבה ${roiPct.toFixed(1)}%, <strong>פער של ${gapAbs} נקודות אחוז מתחת ליעד</strong>.`;
-            }
-
-            const cfg = {
-                go:      { emoji:'🟢', title:'GO — עומד ביעד התשואה שלך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'התחזית עומדת בתשואה שדרשת. מומלץ להמשיך לבדיקה מעמיקה.' },
-                caution: { emoji:'🟡', title:'גבולי — קרוב ליעד אך לא עומד בו', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'התחזית מתקרבת ליעד שלך. כדאי לבחון הנחות ותרחישים לשיפור.' },
-                nogo:    { emoji:'🔴', title:'NO-GO — מתחת ליעד התשואה שלך', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'התחזית רחוקה מהתשואה שדרשת לפי הנתונים שהוזנו.' }
-            }[level];
-
-            const roiTxt = roiPct.toFixed(1) + '%';
-            const paybackTxt = paybackMonths === null
-                ? 'לא מוחזר'
-                : (paybackMonths <= 12
-                    ? paybackMonths + ' חודשים'
-                    : (paybackMonths/12).toFixed(1) + ' שנים');
+            const roiColor = getInvestmentColor(summary.roiPct, 'roi');
+            const irrColor = getInvestmentColor(summary.irrPct, 'irr');
+            const dscrColor = getInvestmentColor(summary.dscr, 'dscr');
 
             zone.innerHTML = `
-                <div class="rounded-xl border-2 p-5 space-y-4" style="background:${cfg.bg};border-color:${cfg.border}">
+                <div class="rounded-xl border-2 p-5 space-y-4" style="background:${summary.decisionCfg.bg};border-color:${summary.decisionCfg.border}">
                     <div class="flex items-center gap-3">
-                        <span class="text-3xl">${cfg.emoji}</span>
+                        <span class="text-3xl">${summary.decisionCfg.emoji}</span>
                         <div>
-                            <h3 class="text-base font-bold" style="color:${cfg.fg}">${cfg.title}</h3>
-                            <p class="text-xs" style="color:${cfg.fg};opacity:.85">${cfg.sub}</p>
+                            <h3 class="text-base font-bold" style="color:${summary.decisionCfg.fg}">${summary.decisionCfg.title}</h3>
+                            <p class="text-xs" style="color:${summary.decisionCfg.fg};opacity:.85">${summary.decisionCfg.sub}</p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">תשואה שנתית (ROI)</div>
-                            <div class="text-2xl font-extrabold" style="color:${cfg.fg}">${roiTxt}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">רווח נקי ÷ השקעה</div>
-                        </div>
-                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">תקופת החזר</div>
-                            <div class="text-2xl font-extrabold text-slate-800">${paybackTxt}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">עד החזר ההשקעה</div>
-                        </div>
-                        <div class="bg-white rounded-lg p-3 border" style="border-color:${cfg.border}33">
-                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">השקעה ראשונית</div>
-                            <div class="text-2xl font-extrabold text-slate-800">${fmtILS(investment)}</div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">סך ההון המושקע</div>
-                        </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        ${kpiCard('IRR משקיע (אחרי מימון)', formatPctValue(summary.irrPct), 'תזרים אחרי שירות חוב × 5 שנים — בסיס ההחלטה', irrColor)}
+                        ${kpiCard('IRR תפעולי (הפרויקט)', formatPctValue(summary.irrOpPct), 'כדאיות הפרויקט — זהה לכל צורת מימון', getInvestmentColor(summary.irrOpPct, 'irr'))}
+                        ${kpiCard('ROI', formatPctValue(summary.roiPct), 'רווח נקי שנתי ÷ השקעה', roiColor)}
+                        ${kpiCard('תקופת החזר — משקיע', summary.paybackTxt, 'תזרים אחרי שירות חוב, מול מלוא ההשקעה', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('תקופת החזר — תפעולית', summary.paybackOpTxt, 'תזרים תפעולי לפני מימון, מול מלוא ההשקעה', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`, summary.riskCfg.sub, summary.riskCfg)}
+                        ${kpiCard('DSCR', summary.dscrTxt, summary.dscr === null ? 'אין הלוואה נדרשת' : 'תזרים שנתי ÷ שירות חוב שנתי', dscrColor)}
+                        ${kpiCard('נקודת איזון חודשית', '₪' + fmtILS(summary.breakEvenPoint), 'רף מכירות חודשי לכיסוי העלויות', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('השקעה נדרשת', '₪' + fmtILS(summary.investment), 'סך ההשקעה בפרויקט', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('מימון נדרש', '₪' + fmtILS(summary.fundingRequired), 'לאחר מזומן קיים והון עצמי', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('הלוואה נדרשת', '₪' + fmtILS(summary.loanRequired), 'מימון חסר לסגירה לפני התחלה', { border:'#cbd5e1', fg:'#0f172a' })}
+                        ${kpiCard('רווח שנתי חזוי', '₪' + fmtILS(summary.totalNet), 'לאחר פחת, מימון ומס', getInvestmentColor(summary.totalNet, 'profit'))}
+                        ${kpiCard('תזרים שנתי חזוי', '₪' + fmtILS(summary.annualCashFlow), 'לאחר מס ושירות חוב שנה 1', getInvestmentColor(summary.annualCashFlow, 'cashflow'))}
                     </div>
-                    <div class="bg-white/70 rounded-lg p-3 text-sm font-medium" style="color:${cfg.fg}">
-                        🎯 ${gapTxt}
+
+                    <div class="bg-white/70 rounded-lg p-3 text-sm font-medium" style="color:${summary.decisionCfg.fg}">
+                        החלטת ההשקעה מבוססת על שילוב של <strong>IRR</strong>, <strong>ROI</strong> ורווחיות לאחר כלל ההוצאות. DSCR וסיכון ההשקעה מוצגים כמדדי בקרה משלימים.
                     </div>
-                    <p class="text-[11px] leading-relaxed bg-white/60 rounded-lg p-2.5" style="color:${cfg.fg}">
-                        <strong>שים לב:</strong> ההכרעה מבוססת על <strong>שנה מייצגת אחת</strong>. עסק חדש לרוב מפסיד בשנה הראשונה,
-                        ולכן להחלטת השקעה מהותית מומלצת ראייה רב-שנתית (NPV/IRR). התחזית טובה כמו ההנחות שהוזנו בה — מומלץ לאמת מול נתוני ענף.
+                    <p class="text-[11px] leading-relaxed bg-white/60 rounded-lg p-2.5" style="color:${summary.decisionCfg.fg}">
+                        <strong>הערה:</strong> IRR מחושב על תחזית ל־5 שנים המבוססת על ביצועי שנת התחזית הנוכחית. כאשר תיבנה תחזית רב־שנתית מלאה, ניתן יהיה להחליף את ההנחה בתזרימים שנתיים אמיתיים.${summary.isBalloonLoan ? ' <strong>הלוואת בולט/גרייס:</strong> החזר הקרן בשנת הפירעון אינו כלול באקסטרפולציה הרב־שנתית — יש לבדוק את יכולת ההחזר באותה שנה בנפרד.' : ''}
                     </p>
                 </div>`;
+        }
+
+        function stabilizeChartConfig(config) {
+            config.options = config.options || {};
+            config.options.responsive = true;
+            config.options.maintainAspectRatio = false;
+            config.options.animation = false;
+            config.options.resizeDelay = 150;
+            return config;
+        }
+
+        function updateOrCreateChart(existingChart, ctx, config) {
+            config = stabilizeChartConfig(config);
+            if(existingChart) {
+                const currentType = existingChart.config && existingChart.config.type;
+                if(currentType && config.type && currentType !== config.type) {
+                    existingChart.destroy();
+                    return new Chart(ctx, config);
+                }
+                existingChart.data = config.data;
+                existingChart.options = config.options;
+                if(config.plugins) existingChart.config.plugins = config.plugins;
+                existingChart.update('none');
+                return existingChart;
+            }
+            return new Chart(ctx, config);
         }
 
         function renderFinalDashboardCharts() {
@@ -3542,11 +3890,9 @@ a{color:inherit}
 
             const labels = cachedOutput.monthsData.map(m => m.monthName);
             
-            // מניעת כפילויות ובעיות ריצוד - השמדת אינסטנס קיים בצורה בטוחה
-            if(chartRevExpInstance) chartRevExpInstance.destroy();
-            if(chartEbitdaInstance) chartEbitdaInstance.destroy();
+            // עדכון יציב של הגרפים ללא destroy/create כדי למנוע קפיצות וריצוד.
 
-            chartRevExpInstance = new Chart(ctx1, {
+            chartRevExpInstance = updateOrCreateChart(chartRevExpInstance, ctx1, {
                 type: 'bar',
                 data: {
                     labels: labels,
@@ -3563,7 +3909,7 @@ a{color:inherit}
                 }
             });
 
-            chartEbitdaInstance = new Chart(ctx2, {
+            chartEbitdaInstance = updateOrCreateChart(chartEbitdaInstance, ctx2, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -3615,7 +3961,6 @@ a{color:inherit}
             // ── גרף עוגה משופר: פילוח סך ההוצאות כולל COGS ──
             const ctx3 = document.getElementById('chart-expenses-pie')?.getContext('2d');
             if(ctx3) {
-                if(chartPieInstance) chartPieInstance.destroy();
                 const totCogs  = months.reduce((s,m)=>s+m.costOfGoods,       0);
                 const totPay   = months.reduce((s,m)=>s+m.payrollCost,       0);
                 const totMkt   = months.reduce((s,m)=>s+m.mktCost,           0);
@@ -3652,7 +3997,7 @@ a{color:inherit}
                         });
                     }
                 };
-                chartPieInstance = new Chart(ctx3, {
+                chartPieInstance = updateOrCreateChart(chartPieInstance, ctx3, {
                     type: 'doughnut',
                     plugins: [pieLabelsPlugin],
                     data: {
@@ -3686,62 +4031,103 @@ a{color:inherit}
                 });
             }
 
-            // ── גרף עמודות: השוואה שנתית ──
+            // ── גרף השוואה שנתית / החזר השקעה מצטבר לפי מסלול ──
             const ctx4 = document.getElementById('chart-annual-compare')?.getContext('2d');
             if(ctx4) {
-                if(chartAnnualInstance) chartAnnualInstance.destroy();
-                const forecast = cachedOutput.totalRev;
-                const { prev, curr, forecast: forecastYear } = getYears();
-                const annualLabels = [], annualData = [], annualColors = [];
-                if(S.rev2024 > 0){ annualLabels.push('שנה שעברה (' + prev + ')'); annualData.push(Math.round(S.rev2024)); annualColors.push('#94a3b8'); }
-                if(S.rev2025 > 0){ annualLabels.push('השנה (' + curr + ')');      annualData.push(Math.round(S.rev2025)); annualColors.push('#3b82f6'); }
-                if(forecast > 0) { annualLabels.push('תחזית (' + forecastYear + ')'); annualData.push(Math.round(forecast)); annualColors.push('#10b981'); }
-                // תוסף לציור תווית הערך מעל כל עמודה — באלפי ₪ עם פסיקים
-                const annualValueLabels = {
-                    id: 'annualValueLabels',
-                    afterDatasetsDraw(chart) {
-                        const { ctx } = chart;
-                        const meta = chart.getDatasetMeta(0);
-                        ctx.save();
-                        ctx.font = '700 12px system-ui, -apple-system, sans-serif';
-                        ctx.fillStyle = '#0f172a';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'bottom';
-                        meta.data.forEach((bar, i) => {
-                            const val = chart.data.datasets[0].data[i];
-                            if(val == null) return;
-                            const thousands = Math.round(val / 1000).toLocaleString('en-US'); // אלפים + פסיקים
-                            ctx.fillText(thousands, bar.x, bar.y - 6);
-                        });
-                        ctx.restore();
-                    }
-                };
-                chartAnnualInstance = new Chart(ctx4, {
-                    type: 'bar',
-                    plugins: [annualValueLabels],
-                    data: {
-                        labels: annualLabels,
-                        datasets: [{ label: 'הכנסות', data: annualData, backgroundColor: annualColors, borderRadius: 6 }]
-                    },
-                    options: {
-                        responsive: true, maintainAspectRatio: false,
-                        layout: { padding: { top: 28 } },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: { callbacks: { label: c => ' ₪' + c.raw.toLocaleString() } },
-                            datalabels: false
+                if(S.appMode === 'new') {
+                    const investment = Number(S.investment || 0);
+                    let cumulativeNet = 0;
+                    const cumulativeData = cachedOutput.monthsData.map(m => {
+                        cumulativeNet += (m.netIncome || 0);
+                        return Math.round(cumulativeNet);
+                    });
+                    const investmentLine = cachedOutput.monthsData.map(() => Math.round(investment));
+                    const paybackIndex = investment > 0 ? cumulativeData.findIndex(v => v >= investment) : -1;
+                    const paybackLabel = paybackIndex >= 0 ? cachedOutput.monthsData[paybackIndex].monthName : 'טרם הוחזר בשנה הראשונה';
+                    chartAnnualInstance = updateOrCreateChart(chartAnnualInstance, ctx4, {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [
+                                {
+                                    label: 'רווח נקי מצטבר',
+                                    data: cumulativeData,
+                                    borderColor: '#4f46e5',
+                                    backgroundColor: 'rgba(79,70,229,0.12)',
+                                    fill: true,
+                                    tension: 0.25,
+                                    pointRadius: 3
+                                },
+                                {
+                                    label: 'השקעה ראשונית',
+                                    data: investmentLine,
+                                    borderColor: '#f59e0b',
+                                    borderDash: [6, 4],
+                                    fill: false,
+                                    pointRadius: 0
+                                }
+                            ]
                         },
-                        scales: {
-                            y: { ticks: { callback: v => (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } }
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' },
+                                tooltip: { callbacks: { label: c => `${c.dataset.label}: ₪${Number(c.raw || 0).toLocaleString('en-US')}` } },
+                                title: { display: investment > 0, text: paybackIndex >= 0 ? `החזר השקעה צפוי: ${paybackLabel}` : 'ההשקעה אינה מוחזרת בשנה הראשונה לפי התחזית' }
+                            },
+                            scales: { y: { ticks: { callback: v => '₪' + (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } } }
                         }
-                    }
-                });
+                    });
+                } else {
+                    const forecast = cachedOutput.totalRev;
+                    const { prev, curr, forecast: forecastYear } = getYears();
+                    const annualLabels = [], annualData = [], annualColors = [];
+                    if(S.rev2024 > 0){ annualLabels.push('שנה שעברה (' + prev + ')'); annualData.push(Math.round(S.rev2024)); annualColors.push('#94a3b8'); }
+                    if(S.rev2025 > 0){ annualLabels.push('השנה (' + curr + ')');      annualData.push(Math.round(S.rev2025)); annualColors.push('#3b82f6'); }
+                    if(forecast > 0) { annualLabels.push('תחזית (' + forecastYear + ')'); annualData.push(Math.round(forecast)); annualColors.push('#10b981'); }
+                    const annualValueLabels = {
+                        id: 'annualValueLabels',
+                        afterDatasetsDraw(chart) {
+                            const { ctx } = chart;
+                            const meta = chart.getDatasetMeta(0);
+                            ctx.save();
+                            ctx.font = '700 12px system-ui, -apple-system, sans-serif';
+                            ctx.fillStyle = '#0f172a';
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+                            meta.data.forEach((bar, i) => {
+                                const val = chart.data.datasets[0].data[i];
+                                if(val == null) return;
+                                const thousands = Math.round(val / 1000).toLocaleString('en-US');
+                                ctx.fillText(thousands, bar.x, bar.y - 6);
+                            });
+                            ctx.restore();
+                        }
+                    };
+                    chartAnnualInstance = updateOrCreateChart(chartAnnualInstance, ctx4, {
+                        type: 'bar',
+                        plugins: [annualValueLabels],
+                        data: {
+                            labels: annualLabels,
+                            datasets: [{ label: 'הכנסות', data: annualData, backgroundColor: annualColors, borderRadius: 6 }]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            layout: { padding: { top: 28 } },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { callbacks: { label: c => ' ₪' + c.raw.toLocaleString() } },
+                                datalabels: false
+                            },
+                            scales: { y: { ticks: { callback: v => (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } } }
+                        }
+                    });
+                }
             }
-
             // ── גרף תזרים מזומנים: עמודות חודשי + קו מצטבר ──
             const ctx5 = document.getElementById('chart-cashflow-combined')?.getContext('2d');
             if(ctx5) {
-                if(window.chartCashFlowInstance) window.chartCashFlowInstance.destroy();
 
                 // חשב תזרים חודשי ומצטבר
                 const openBal = effectiveOpeningBalance();
@@ -3759,7 +4145,7 @@ a{color:inherit}
                     barColors.push(net >= 0 ? 'rgba(16,185,129,0.75)' : 'rgba(239,68,68,0.75)');
                 });
 
-                window.chartCashFlowInstance = new Chart(ctx5, {
+                window.chartCashFlowInstance = updateOrCreateChart(window.chartCashFlowInstance, ctx5, {
                     data: {
                         labels,
                         datasets: [
