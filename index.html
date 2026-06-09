@@ -1758,8 +1758,8 @@ a{color:inherit}
             q4_peak: [0.90, 0.90, 0.93, 0.90, 0.90, 0.93, 0.93, 0.93, 0.97, 1.15, 1.22, 1.22]
         };
 
-        // פונקציית פורמט גלובלית — פסיק אלפים ללא ₪
-        const fmtILS = n => Math.round(n).toLocaleString('he-IL');
+        // פונקציית פורמט גלובלית — פסיק אלפים ללא ₪. מגנה מפני NaN/Infinity (מציג 0 במקום "NaN")
+        const fmtILS = n => Math.round(Number.isFinite(n) ? n : 0).toLocaleString('he-IL');
 
         let chartRevExpInstance = null;
         let chartEbitdaInstance = null;
@@ -2124,6 +2124,29 @@ a{color:inherit}
             return function(...args) {
                 clearTimeout(timer);
                 timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        // throttle — מריץ את הפונקציה לכל היותר פעם אחת בכל מרווח (interval), עם הרצה אחרונה מובטחת בסוף.
+        // מתאים לאירועים רציפים (גרירת סליידר) שבהם רוצים עדכון חלק ורציף בקצב מבוקר, להבדיל מ-debounce שממתין לעצירה.
+        function throttle(fn, interval) {
+            let lastRun = 0;
+            let trailingTimer = null;
+            return function(...args) {
+                const now = Date.now();
+                const remaining = interval - (now - lastRun);
+                if(remaining <= 0) {
+                    if(trailingTimer) { clearTimeout(trailingTimer); trailingTimer = null; }
+                    lastRun = now;
+                    fn.apply(this, args);
+                } else if(!trailingTimer) {
+                    // מבטיח שהמצב הסופי (העמדה האחרונה של הסליידר) תמיד יחושב
+                    trailingTimer = setTimeout(() => {
+                        lastRun = Date.now();
+                        trailingTimer = null;
+                        fn.apply(this, args);
+                    }, remaining);
+                }
             };
         }
 
@@ -3331,14 +3354,14 @@ a{color:inherit}
                 tr.className = "border-b hover:bg-slate-50";
                 let optionsHtml = '';
                 monthNames.forEach((m, idx) => {
-                    optionsHtml += `<option value="${idx+1}" ${row.startMonth === idx+1 ? 'selected':''}>${m}</option>`;
+                    optionsHtml += `<option value="${idx+1}" ${row.startMonth === idx+1 ? 'selected':''}>${escapeHtml(m)}</option>`;
                 });
 
                 let fmtCost = row.cost ? row.cost.toLocaleString('en-US') : '';
                 let fmtYield = row.yield ? row.yield.toLocaleString('en-US') : '';
 
                 tr.innerHTML = `
-                    <td class="p-2"><input type="text" value="${row.label}" oninput="handleManpowerChange(${row.id}, 'label', this.value)" onfocus="if(this.value==='עובד חדש'){this.value='';this.select()}" onblur="if(this.value.trim()===''){this.value='עובד חדש';handleManpowerChange(${row.id},'label','עובד חדש')}" class="w-full px-2 py-1 text-sm border rounded bg-white"></td>
+                    <td class="p-2"><input type="text" value="${escapeHtml(row.label)}" oninput="handleManpowerChange(${row.id}, 'label', this.value)" onfocus="if(this.value==='עובד חדש'){this.value='';this.select()}" onblur="if(this.value.trim()===''){this.value='עובד חדש';handleManpowerChange(${row.id},'label','עובד חדש')}" class="w-full px-2 py-1 text-sm border rounded bg-white"></td>
                     <td class="p-2"><select onchange="handleManpowerChange(${row.id}, 'startMonth', this.value)" class="w-full px-1 py-1 text-sm border rounded bg-white">${optionsHtml}</select></td>
                     <td class="p-2"><input type="text" value="${fmtCost}" oninput="handleManpowerChange(${row.id}, 'cost', this.value, this)" onfocus="clearOnFocus(this)" class="w-full px-2 py-1 text-sm border rounded bg-white text-right" placeholder="0"></td>
                     <td class="p-2"><input type="text" value="${fmtYield}" oninput="handleManpowerChange(${row.id}, 'yield', this.value, this)" onfocus="clearOnFocus(this)" class="w-full px-2 py-1 text-sm border rounded bg-white text-right" placeholder="0"></td>
@@ -3354,10 +3377,17 @@ a{color:inherit}
             S.sensPayroll = parseFloat(document.getElementById('sens-payroll-slider').value) || 0;
             S.sensRevenue = parseFloat(document.getElementById('sens-revenue-slider').value) || 0;
 
+            // עדכון התוויות — מיידי וזול, כדי שהמשתמש יראה את הערך זז תוך כדי גרירה
             document.getElementById('ui-sens-margin').innerText  = (S.sensMargin  > 0 ? '+' : '') + S.sensMargin  + '%';
             document.getElementById('ui-sens-payroll').innerText = (S.sensPayroll > 0 ? '+' : '') + S.sensPayroll + '%';
             document.getElementById('ui-sens-revenue').innerText = (S.sensRevenue > 0 ? '+' : '') + S.sensRevenue + '%';
 
+            // החישוב הכבד (recalc + גרפים + טבלאות) מוגבל ב-throttle כדי למנוע ריצוד והאטה בגרירה רציפה
+            sensRecalcThrottled();
+        }
+
+        // החלק הכבד של ניתוח הרגישות — מופרד כדי שניתן יהיה להריץ אותו ב-throttle
+        function runSensitivityRecalc() {
             recalcAll();
             // עדכן גרפים בדף 4 אם פתוח
             if(S.currentStep === 5) {
@@ -3374,6 +3404,7 @@ a{color:inherit}
             }
             updateSensKPIs();
         }
+        const sensRecalcThrottled = throttle(runSensitivityRecalc, 120);
 
         let cachedOutput = null;
 
@@ -3983,7 +4014,9 @@ a{color:inherit}
 
             const fmtPayback = pm => pm === null
                 ? 'לא מוחזר'
-                : (pm <= 12 ? pm + ' חודשים' : (pm/12).toFixed(1) + ' שנים');
+                : (pm <= 12 ? pm + ' חודשים'
+                    : (pm > 120 ? 'מעל 10 שנים'   // מעבר לאופק סביר — רווח חיובי אך זעיר ביחס להשקעה
+                        : (pm/12).toFixed(1) + ' שנים'));
             const paybackTxt   = fmtPayback(paybackMonths);   // רווח נקי (אחרי מימון ומס)
             const paybackOpTxt = fmtPayback(paybackOpMonths); // רווח תפעולי (EBITDA — לפני מימון ומס)
 
@@ -4185,8 +4218,12 @@ a{color:inherit}
         }
 
 
-        function htmlEscapePdfReport(value) {
+        // escaping כללי לתווי HTML — מונע הזרקת קוד כאשר טקסט חופשי מהמשתמש מוטמע ב-HTML
+        function escapeHtml(value) {
             return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+        function htmlEscapePdfReport(value) {
+            return escapeHtml(value);
         }
 
         function calcMonthlyCashFlowForPdf(m) {
@@ -4611,6 +4648,14 @@ a{color:inherit}
             return config;
         }
 
+        // פירמוט תווית כספית לציר/טולטיפ: סימן ₪ עטוף ב-LRM כדי שיישב נכון משמאל למספר ב-RTL, עם תמיכה בערכים שליליים
+        function fmtAxisILS(v) {
+            const num = Number(v) || 0;
+            const abs = Math.abs(num);
+            const body = abs >= 1000 ? (abs / 1000).toFixed(0) + 'K' : String(abs);
+            const sign = num < 0 ? '-' : '';
+            return '\u200E' + sign + '₪' + body + '\u200E';
+        }
         function updateOrCreateChart(existingChart, ctx, config) {
             config = stabilizeChartConfig(config);
             if(existingChart) {
@@ -4651,23 +4696,25 @@ a{color:inherit}
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { tooltip: { textDirection: 'rtl', callbacks: { label: ctx => `${ctx.dataset.label}: ₪${ctx.raw.toLocaleString()}` } } },
-                    scales: { y: { ticks: { callback: v => '₪' + (Math.abs(v)>=1000 ? (v/1000).toFixed(0)+'K' : v) } } }
+                    plugins: { tooltip: { textDirection: 'rtl', callbacks: { label: ctx => `${ctx.dataset.label}: ${fmtAxisILS(ctx.raw)}` } } },
+                    scales: { y: { reverse: false, ticks: { callback: v => fmtAxisILS(v) } } }
                 }
             });
 
+            const ebitdaData = cachedOutput.monthsData.map(m => Math.round(m.ebitda));
             chartEbitdaInstance = updateOrCreateChart(chartEbitdaInstance, ctx2, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'EBITDA — רווח לפני פחת, מימון ומס (₪)',
-                        data: cachedOutput.monthsData.map(m => Math.round(m.ebitda)),
+                        data: ebitdaData,
                         borderColor: '#10b981',
                         backgroundColor: 'rgba(16, 185, 129, 0.07)',
                         fill: true,
                         tension: 0.3,
-                        pointBackgroundColor: '#10b981',
+                        // נקודה אדומה לחודש מפסיד (EBITDA שלילי), ירוקה לחודש רווחי
+                        pointBackgroundColor: ctx => (ctx.parsed && ctx.parsed.y < 0) ? '#f43f5e' : '#10b981',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 4,
@@ -4680,15 +4727,23 @@ a{color:inherit}
                     plugins: {
                         tooltip: {
                             textDirection: 'rtl',
-                            callbacks: { label: ctx => `EBITDA: ₪${ctx.raw.toLocaleString()}` }
+                            callbacks: { label: ctx => `EBITDA: ${fmtAxisILS(ctx.raw)}` }
                         },
                         legend: { display: false }
                     },
                     scales: {
                         y: {
-                            min: 0,
-                            ticks: { callback: v => '₪' + (Math.abs(v) >= 1000 ? (v/1000).toFixed(0) + 'K' : v) },
-                            grid: { color: 'rgba(0,0,0,0.05)' }
+                            // reverse:false — מונע היפוך ציר ה-Y שנגרם מ-dir=rtl של העמוד (ערכים גבוהים למעלה, נמוכים למטה)
+                            reverse: false,
+                            // beginAtZero — האפס תמיד נכלל בציר כך שרואים בבירור אם הערכים מעל או מתחת לאפס.
+                            // אינו חוסם ערכים שליליים: כשיש EBITDA שלילי הציר יורד מתחת לאפס.
+                            beginAtZero: true,
+                            ticks: { callback: v => fmtAxisILS(v) },
+                            grid: {
+                                // קו האפס מודגש תמיד — מסמן ויזואלית את הגבול בין רווח להפסד
+                                color: ctx => (ctx.tick && ctx.tick.value === 0) ? 'rgba(15,23,42,0.55)' : 'rgba(0,0,0,0.05)',
+                                lineWidth: ctx => (ctx.tick && ctx.tick.value === 0) ? 2 : 1
+                            }
                         },
                         x: {
                             grid: { display: false }
@@ -4820,10 +4875,10 @@ a{color:inherit}
                             maintainAspectRatio: false,
                             plugins: {
                                 legend: { position: 'bottom' },
-                                tooltip: { callbacks: { label: c => `${c.dataset.label}: ₪${Number(c.raw || 0).toLocaleString('en-US')}` } },
+                                tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmtAxisILS(c.raw)}` } },
                                 title: { display: investment > 0, text: paybackIndex >= 0 ? `החזר השקעה צפוי: ${paybackLabel}` : 'ההשקעה אינה מוחזרת בשנה הראשונה לפי התחזית' }
                             },
-                            scales: { y: { ticks: { callback: v => '₪' + (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } } }
+                            scales: { y: { reverse: false, ticks: { callback: v => fmtAxisILS(v) } } }
                         }
                     });
                 } else {
@@ -4864,10 +4919,10 @@ a{color:inherit}
                             layout: { padding: { top: 28 } },
                             plugins: {
                                 legend: { display: false },
-                                tooltip: { callbacks: { label: c => ' ₪' + c.raw.toLocaleString() } },
+                                tooltip: { callbacks: { label: c => fmtAxisILS(c.raw) } },
                                 datalabels: false
                             },
-                            scales: { y: { ticks: { callback: v => (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } } }
+                            scales: { y: { reverse: false, ticks: { callback: v => (Math.abs(v)>=1000?(v/1000).toFixed(0)+'K':v) } } }
                         }
                     });
                 }
