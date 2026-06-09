@@ -538,7 +538,7 @@ a{color:inherit}
                     <i data-lucide="calendar-days" class="w-4 h-4"></i> שיטת חלוקת ההכנסות לחודשים
                 </h3>
                 <p class="text-xs text-slate-400 mb-3">בחר כיצד לפרוס את ההכנסה השנתית על פני 12 חודשים:</p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
                     <label class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex flex-col gap-1 cursor-pointer hover:bg-slate-700 transition-all">
                         <div class="flex items-center gap-2">
                             <input type="radio" name="seasonality-profile" value="stable" checked onchange="handleSeasonalityChange(this.value)" class="accent-blue-500">
@@ -667,7 +667,7 @@ a{color:inherit}
 
             <div class="flex justify-end mt-6">
                 <button onclick="goToStep(2)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
-                    המשך לשלב הבא <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    המשך: הוצאות אופרטיביות <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
             </div>
         </section>
@@ -745,7 +745,7 @@ a{color:inherit}
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לנתוני בסיס
                 </button>
                 <button onclick="nextFromStep2()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
-                    המשך לשלב הבא <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span id="btn-step2-next-label">המשך: השקעה ומימון</span> <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
             </div>
         </section>
@@ -828,10 +828,10 @@ a{color:inherit}
 
             <div class="flex justify-between mt-8 border-t pt-4">
                 <button onclick="goToStep(2)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להוצאות
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: הוצאות אופרטיביות
                 </button>
                 <button onclick="goToStep(4)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
-                    המשך לשלב הבא <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    המשך: השלמת נתונים לדוחות <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
             </div>
         </section>
@@ -1003,7 +1003,7 @@ a{color:inherit}
             <!-- כפתורי ניווט — מחוץ ל-dashboard-content כדי שתמיד יהיו גלויים -->
             <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <button onclick="backFromStep4()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לתחזית
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> <span id="btn-step4-back-label">חזרה: תחזית הכנסות</span>
                 </button>
                 <div class="flex gap-3 w-full sm:w-auto flex-col sm:flex-row">
                     <button id="btn-save-work" onclick="saveWorkToFile()" class="js-saveload w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
@@ -1014,14 +1014,8 @@ a{color:inherit}
                     </button>
                     <input type="file" id="load-work-input" accept=".json,application/json" class="hidden" onchange="loadWorkFromFile(event)">
                     <span class="report-meta-slot w-full"></span>
-                    <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="download" class="w-4 h-4"></i> ייצוא ל-Excel
-                    </button>
-                    <button onclick="generateProfessionalPdfReport()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="file-text" class="w-4 h-4"></i> הפק דוח PDF מקצועי
-                    </button>
                     <button onclick="nextFromStep4()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
-                        למדדי הביצוע ←
+                        המשך: מדדי ביצוע ←
                     </button>
                 </div>
             </div>
@@ -1172,11 +1166,11 @@ a{color:inherit}
 
                 <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-6">
                     <button onclick="backFromFin()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להוצאות חזויות
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: הוצאות אופרטיביות חזויות
                     </button>
                     <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                     <button onclick="nextFromFin()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
-                        לפחת ומס ←
+                        המשך: פחת ומס ←
                     </button>
                 </div>
             </div>
@@ -1294,14 +1288,17 @@ a{color:inherit}
             <!-- כפתורי ניווט -->
             <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                 <button onclick="backFromStep5()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה להשלמת נתונים
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: השלמת נתונים לדוחות
                 </button>
                 <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
+                <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
+                    <i data-lucide="download" class="w-4 h-4"></i> הורד קובץ אקסל
+                </button>
                 <button onclick="generateProfessionalPdfReport()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="file-text" class="w-4 h-4"></i> הפק דוח PDF מקצועי
                 </button>
                 <button onclick="goToStep(6)" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
-                    לדוחות ←
+                    המשך: דוחות פיננסיים ←
                 </button>
             </div>
 
@@ -1494,15 +1491,18 @@ a{color:inherit}
                 <!-- כפתורי ניווט -->
                 <div class="flex flex-col sm:flex-row justify-between gap-4 items-center bg-white p-4 rounded-xl border border-gray-100 shadow-sm mt-4">
                     <button onclick="goToStep(5)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה למדדי ביצוע
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: מדדי ביצוע
                     </button>
                     <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                     <span class="report-meta-slot w-full"></span>
                     <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                         <i data-lucide="download" class="w-4 h-4"></i> הורד קובץ אקסל
                     </button>
+                    <button onclick="generateProfessionalPdfReport()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> הפק דוח PDF מקצועי
+                    </button>
                     <button onclick="goToStep(7)" class="w-full sm:w-auto text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#0f766e">
-                        ביצוע בפועל מול תחזית <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        המשך: ביצוע בפועל מול תחזית <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
@@ -2730,6 +2730,10 @@ a{color:inherit}
             if(title4) title4.innerHTML = isNew
                 ? '<i data-lucide="calculator" class="text-blue-600 w-5 h-5"></i> פחת, מס ותזרים — להשלמת בדיקת הכדאיות'
                 : '<i data-lucide="calculator" class="text-blue-600 w-5 h-5"></i> שלב 4: השלמת נתונים — לדוחות P&L ותזרים';
+            const btnStep2NextLabel = document.getElementById('btn-step2-next-label');
+            if(btnStep2NextLabel) btnStep2NextLabel.textContent = isNew ? 'המשך: השקעה ומימון' : 'המשך: תחזית הכנסות וכוח אדם';
+            const btnStep4BackLabel = document.getElementById('btn-step4-back-label');
+            if(btnStep4BackLabel) btnStep4BackLabel.textContent = isNew ? 'חזרה: השקעה ומימון' : 'חזרה: תחזית הכנסות';
             const lblPrev = document.getElementById('lbl-rev-prev');
             if(lblPrev) lblPrev.textContent = 'שנה שעברה';
             const lblCurr = document.getElementById('lbl-rev-curr');
@@ -2743,7 +2747,7 @@ a{color:inherit}
                     : 'כל הדוחות מבוססים על נתוני התחזית שהוזנו. שינוי בסליידרי הרגישות ישתקף מיידית בכל הטבלאות.';
             }
             document.querySelectorAll('button[onclick="nextFromStep4()"]').forEach(btn => {
-                btn.innerHTML = isNew ? 'לדף הבא ←' : 'למדדי הביצוע ←';
+                btn.innerHTML = isNew ? 'לדף הבא ←' : 'המשך: מדדי ביצוע ←';
             });
             const annualCompareCard = document.getElementById('lbl-annual-chart-years')?.closest('.bg-white');
             if(annualCompareCard) {
@@ -2751,7 +2755,7 @@ a{color:inherit}
                 const title = annualCompareCard.querySelector('h3');
                 const subtitle = document.getElementById('lbl-annual-chart-years');
                 if(isNew) {
-                    if(title) title.textContent = 'החזר השקעה מצטבר — Payback';
+                    if(title) title.textContent = 'החזר הון עצמי מצטבר — Payback';
                     if(subtitle) subtitle.textContent = 'קו מצטבר של רווח נקי מול ההשקעה הראשונית';
                 } else {
                     if(title) title.textContent = 'השוואה שנתית — הכנסות (אלפי ₪)';
@@ -3947,84 +3951,206 @@ a{color:inherit}
             const investment = getInitialInvestment();
             if(S.appMode !== 'new' || investment <= 0 || !Array.isArray(monthsData)) return null;
 
-            const roiPct = (totalNet / investment) * 100;
-
-            // ── Payback לפי רווח נקי (accrual) — צובר רווח נקי חודשי עד גובה ההשקעה ──
-            let paybackMonths = null;
-            let cum = 0, found = false;
-            for(let i=0; i<monthsData.length; i++){
-                cum += (monthsData[i].netIncome || 0);
-                if(cum >= investment){ paybackMonths = i+1; found = true; break; }
-            }
-            if(!found){
-                if(totalNet > 0){
-                    paybackMonths = Math.round((investment / totalNet) * 12);
-                } else {
-                    paybackMonths = null;
-                }
-            }
-
-            // ── Payback לפי רווח תפעולי (EBITDA) — צובר EBITDA חודשי עד גובה ההשקעה ──
-            // מודד את כדאיות הפרויקט עצמו, לפני מימון ומס (EBITDA קרוב יותר למזומן התפעולי).
+            const requiredRoi = isFinite(S.requiredRoi) ? S.requiredRoi : 15;
             const totalEbitda = monthsData.reduce((s, m) => s + (m.ebitda || 0), 0);
-            let paybackOpMonths = null;
-            let cumOp = 0, foundOp = false;
-            for(let i=0; i<monthsData.length; i++){
-                cumOp += (monthsData[i].ebitda || 0);
-                if(cumOp >= investment){ paybackOpMonths = i+1; foundOp = true; break; }
-            }
-            if(!foundOp){
-                paybackOpMonths = totalEbitda > 0 ? Math.round((investment / totalEbitda) * 12) : null;
-            }
+            const annualOperatingRoiPct = (totalEbitda / investment) * 100; // תשואה תפעולית שנתית לצורך בדיקת רף התשואה
+            const unleveragedRoiPct = annualOperatingRoiPct; // נשמר לתאימות פנימית
+            const roiPct = (totalNet / investment) * 100; // נשמר לתאימות: ROI נקי אחרי מימון ומס
+
+            // ── תקופות החזר השקעה ──
+            // תקופת החזר השקעה = השקעה כוללת ÷ תזרים שנתי מהעסקה.
+            // תקופת החזר הון עצמי מחושבת לאחר מבנה המימון: הון עצמי ÷ תזרים שנתי לבעלים.
+            let paybackMonths = null;      // תקופת החזר הון עצמי
+            let paybackOpMonths = null;    // תקופת החזר השקעה
+            paybackOpMonths = totalEbitda > 0 ? Math.round((investment / totalEbitda) * 12) : null;
 
             const annualCashFlow = monthsData.reduce((s, m) => {
                 const netCF = (m.revenue || 0) - (m.costOfGoods || 0) - (m.mktCost || 0) - (m.payrollCost || 0) - (m.fixedCost || 0) - (m.financing || 0) - (m.taxCash || 0) - (m.loanPrincipal || 0);
                 return s + netCF;
             }, 0);
-            const irrRate = calculateIRR([-investment, annualCashFlow, annualCashFlow, annualCashFlow, annualCashFlow, annualCashFlow]);
-            const irrPct = irrRate === null ? null : irrRate * 100;
 
             const fin = computeFinancing();
             const annualDebtService = (fin.year1Interest || 0) + (fin.year1Principal || 0);
-            // DSCR = תזרים זמין לשירות חוב (CFADS) ÷ שירות חוב.
-            // annualCashFlow כבר מנכה ריבית וקרן, לכן מחזירים אותם למונה כדי לקבל את התזרים *לפני* שירות החוב.
             const cfads = annualCashFlow + annualDebtService;
             const dscr = annualDebtService > 0 ? cfads / annualDebtService : null;
 
+            // IRR ללא מימון = בדיקת הפרויקט עצמו. IRR על ההון העצמי = בדיקת התוצאה לבעלים לאחר שירות חוב.
+            // ברירת המחדל היא אופק 5 שנים. אם נבחרה הלוואת בוליט לתקופה ארוכה יותר, האופק מוארך עד שנת פירעון הקרן כדי לא להסתיר את החזר הקרן.
+            const isBulletLoan = fin.loan > 0 && fin.repay === 'bullet' && fin.years > 0;
+            const bulletMaturityYear = isBulletLoan ? Math.max(1, Math.ceil(fin.years)) : null;
+            const analysisHorizonYears = isBulletLoan ? Math.max(5, bulletMaturityYear) : 5;
+            const horizonNote = isBulletLoan && analysisHorizonYears > 5
+                ? `הבדיקה הוארכה ל־${analysisHorizonYears} שנים בגלל הלוואת בוליט שמועד פירעון הקרן שלה מאוחר משנה 5.`
+                : 'הבדיקה נערכה לאופק של 5 שנים.';
+
+            const terminalMultiple = 3;
+            const terminalValue = totalEbitda > 0 ? totalEbitda * terminalMultiple : 0;
+
+            function loanPositionAtYear(yearsAhead) {
+                if(!fin.loan || fin.loan <= 0) return { balance:0, yearlyDebtService:new Array(Math.max(analysisHorizonYears, 1)).fill(0) };
+                const totalMonths = Math.max(0, Math.round((fin.years || 0) * 12));
+                const horizonMonths = Math.max(0, Math.round(yearsAhead * 12));
+                const yearlyDebtService = new Array(Math.max(analysisHorizonYears, 1)).fill(0);
+                if(totalMonths <= 0) return { balance:fin.loan, yearlyDebtService };
+                const mr = (fin.rate || 0) / 100 / 12;
+                let bal = fin.loan;
+                const graceMonths = fin.repay === 'grace' ? Math.max(0, Math.min(Math.round(fin.grace || 0), totalMonths - 1)) : 0;
+                const amortMonths = Math.max(1, totalMonths - graceMonths);
+                const amortPayment = mr > 0 ? fin.loan * mr / (1 - Math.pow(1 + mr, -amortMonths)) : fin.loan / amortMonths;
+                for(let i = 0; i < Math.min(horizonMonths, totalMonths); i++) {
+                    const interest = bal * mr;
+                    let principal = 0;
+                    if(fin.repay === 'bullet') {
+                        principal = (i === totalMonths - 1) ? bal : 0;
+                    } else if(fin.repay === 'grace' && i < graceMonths) {
+                        principal = 0;
+                    } else {
+                        principal = amortPayment - interest;
+                    }
+                    if(principal > bal) principal = bal;
+                    if(principal < 0) principal = 0;
+                    const yearIdx = Math.floor(i / 12);
+                    if(yearIdx < yearlyDebtService.length) yearlyDebtService[yearIdx] += interest + principal;
+                    bal -= principal;
+                    if(bal < 0.01) { bal = 0; break; }
+                }
+                return { balance:bal, yearlyDebtService };
+            }
+
+            function loanDebtServiceByMonth(monthCount) {
+                const months = Math.max(0, Math.round(monthCount || 0));
+                const debt = new Array(months).fill(0);
+                if(!fin.loan || fin.loan <= 0 || months <= 0) return debt;
+                const totalMonths = Math.max(0, Math.round((fin.years || 0) * 12));
+                if(totalMonths <= 0) return debt;
+                const mr = (fin.rate || 0) / 100 / 12;
+                let bal = fin.loan;
+                const graceMonths = fin.repay === 'grace' ? Math.max(0, Math.min(Math.round(fin.grace || 0), totalMonths - 1)) : 0;
+                const amortMonths = Math.max(1, totalMonths - graceMonths);
+                const amortPayment = mr > 0 ? fin.loan * mr / (1 - Math.pow(1 + mr, -amortMonths)) : fin.loan / amortMonths;
+                for(let i = 0; i < Math.min(months, totalMonths); i++) {
+                    const interest = bal * mr;
+                    let principal = 0;
+                    if(fin.repay === 'bullet') {
+                        principal = (i === totalMonths - 1) ? bal : 0;
+                    } else if(fin.repay === 'grace' && i < graceMonths) {
+                        principal = 0;
+                    } else {
+                        principal = amortPayment - interest;
+                    }
+                    if(principal > bal) principal = bal;
+                    if(principal < 0) principal = 0;
+                    debt[i] = interest + principal;
+                    bal -= principal;
+                    if(bal < 0.01) { bal = 0; break; }
+                }
+                return debt;
+            }
+
+            // IRR העסקה: בודק את העסק/הפרויקט עצמו ללא מימון. כולל ערך סופי שמרני: EBITDA שנה 5 × 3.
+            const unleveragedFlows = [-investment];
+            for(let y = 1; y <= analysisHorizonYears; y++) {
+                const cf = totalEbitda + (y === analysisHorizonYears ? terminalValue : 0);
+                unleveragedFlows.push(cf);
+            }
+            const unleveragedIrrRate = calculateIRR(unleveragedFlows);
+            const unleveragedIrrPct = unleveragedIrrRate === null ? null : unleveragedIrrRate * 100;
+
+            // IRR על ההון העצמי: בודק את תשואת המשקיע על ההון שהוזרם.
+            // כדי שב-100% הון עצמי שני מדדי ה-IRR יהיו זהים, בסיס התזרים הוא EBITDA בניכוי שירות חוב בלבד.
+            const equityInvestment = Math.max(0, fin.equity || 0);
+            const loanPosition = loanPositionAtYear(analysisHorizonYears);
+            const equityTerminalValue = Math.max(0, terminalValue - loanPosition.balance);
+            const equityFlows = [-equityInvestment];
+            for(let y = 1; y <= analysisHorizonYears; y++) {
+                const debtServiceForYear = loanPosition.yearlyDebtService[y - 1] || 0;
+                let cf = totalEbitda - debtServiceForYear;
+                if(y === analysisHorizonYears) cf += equityTerminalValue;
+                equityFlows.push(cf);
+            }
+
+            // תקופת החזר הון עצמי = הון עצמי ÷ תזרים שנתי לבעלים.
+            // תזרים שנתי לבעלים לצורך מדד זה הוא תזרים תפעולי שנתי פחות שירות חוב שנתי.
+            const annualEquityCashFlowForPayback = totalEbitda - annualDebtService;
+            if(equityInvestment > 0) {
+                paybackMonths = annualEquityCashFlowForPayback > 0 ? Math.round((equityInvestment / annualEquityCashFlowForPayback) * 12) : null;
+            }
+
+            const irrRate = equityInvestment > 0 ? calculateIRR(equityFlows) : null;
+            const irrPct = irrRate === null ? null : irrRate * 100;
+            const projectRoiPct = investment > 0 ? (((totalEbitda * analysisHorizonYears) + terminalValue - investment) / investment) * 100 : null;
+            const equityOwnerCashFlows = equityFlows.slice(1).reduce((sum, cf) => sum + (isFinite(cf) ? cf : 0), 0);
+            const equityRoiPct = equityInvestment > 0 ? ((equityOwnerCashFlows - equityInvestment) / equityInvestment) * 100 : null;
+            const leverageEffectPct = (irrPct === null || unleveragedIrrPct === null) ? null : irrPct - unleveragedIrrPct;
+
+            // ── החלטה 1: כדאיות העסקה עצמה, ללא השפעת מימון חיצוני ──
+            // Payback מוצג כמדד מידע בלבד ואינו מפיל עסקה טובה ל-GO/NO-GO,
+            // משום שהמודל כולל ערך סופי שמרני והחזר השקעה עשוי להיות מעבר לאופק 5 השנים.
+            let dealLevel = 'caution';
+            const projectIrrOk = unleveragedIrrPct === null || unleveragedIrrPct > 0;
+            if(totalEbitda <= 0 || projectRoiPct <= 0 || !projectIrrOk) dealLevel = 'nogo';
+            else if(projectRoiPct >= requiredRoi && projectIrrOk) dealLevel = 'go';
+            else dealLevel = 'caution';
+
+            const dealCfg = {
+                go:      { emoji:'🟢', title:'העסקה עצמה כדאית', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'בדיקה לפני מימון: ROI העסקה ו-IRR העסקה חיוביים ועומדים ברף התשואה שהוגדר. תקופות ההחזר מוצגות כמידע בלבד.' },
+                caution: { emoji:'🟡', title:'כדאיות העסקה גבולית', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה חיובית אך ROI/IRR אינם עומדים באופן מלא ברף התשואה שהוגדר. תקופות ההחזר אינן משמשות כקריטריון פסילה.' },
+                nogo:    { emoji:'🔴', title:'העסקה עצמה אינה כדאית', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'גם לפני מימון קיימת חולשה ברווח התפעולי, ROI העסקה או IRR העסקה.' }
+            }[dealLevel];
+
+            // ── החלטה 2: איכות מבנה המימון בלבד ──
+            let financingLevel = 'safe';
+            if(annualDebtService > 0) {
+                if(annualCashFlow < 0 || (dscr !== null && dscr < 1)) financingLevel = 'risky';
+                else if((dscr !== null && dscr < 1.2) || annualCashFlow < cfads * 0.15) financingLevel = 'watch';
+            }
+            const financingCfg = {
+                safe:  { emoji:'🟢', title: annualDebtService > 0 ? 'מבנה המימון תקין' : 'ללא חוב חיצוני', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub: annualDebtService > 0 ? 'התזרים לאחר שירות חוב חיובי ויחס הכיסוי סביר.' : 'אין עומס שירות חוב ולכן סיכון המימון נמוך.' },
+                watch: { emoji:'🟡', title:'מבנה מימון גבולי', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה יכולה לשרת את החוב, אך מרווח הביטחון נמוך. מומלץ לבדוק פריסה ארוכה/הפחתת ריבית/הון עצמי נוסף.' },
+                risky: { emoji:'🔴', title:'מבנה המימון מסוכן', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'שירות החוב יוצר תזרים שלילי או DSCR נמוך מ-1. מבנה המימון דורש שינוי.' }
+            }[financingLevel];
+
+            // סטטוס מסכם: לא מפיל עסקה טובה בגלל מימון; מפריד את האבחנה.
             let decisionLevel = 'caution';
-            if(totalNet < 0 || roiPct <= 0 || (irrPct !== null && irrPct <= 0)) decisionLevel = 'nogo';
-            else if(totalNet > 0 && roiPct > 0 && irrPct !== null && irrPct > 0) decisionLevel = 'go';
+            let conclusion = '';
+            if(dealLevel === 'go' && financingLevel === 'safe') {
+                decisionLevel = 'go';
+                conclusion = 'העסקה עצמה כדאית ומבנה המימון שנבחר תקין. לפי הנתונים שהוזנו, ניתן להתקדם לבחינה עסקית ומשפטית מלאה.';
+            } else if(dealLevel === 'go' && financingLevel !== 'safe') {
+                decisionLevel = 'finance_risk';
+                conclusion = 'העסקה עצמה כדאית, אך מבנה המימון שנבחר יוצר סיכון. אין להסיק שהעסקה אינה טובה — יש לבחון מימון נמוך יותר, פריסת הלוואה ארוכה יותר, ריבית נמוכה יותר או הון עצמי נוסף.';
+            } else if(dealLevel === 'caution' && financingLevel === 'risky') {
+                decisionLevel = 'caution';
+                conclusion = 'הכדאיות העסקית גבולית ובנוסף מבנה המימון מסוכן. מומלץ לשפר את תנאי העסקה או את מבנה המימון לפני החלטה.';
+            } else if(dealLevel === 'nogo') {
+                decisionLevel = 'nogo';
+                conclusion = 'העסקה עצמה אינה מספקת לפי הנתונים גם לפני השפעת המימון. מומלץ לבחון מחדש מחיר רכישה, הכנסות, עלויות או רף תשואה.';
+            } else {
+                decisionLevel = 'caution';
+                conclusion = 'העסקה דורשת בדיקה נוספת. חלק ממדדי ROI/IRR חיוביים אך לא מספיק חזקים לקבלת החלטת GO מלאה.';
+            }
 
             const decisionCfg = {
-                go:      { emoji:'🟢', title:'כדאי להשקיע', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'ROI חיובי, IRR חיובי והרווחיות לאחר כלל ההוצאות חיובית.' },
-                caution: { emoji:'🟡', title:'כדאי לבדוק לעומק', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד המדדים חסר או גבולי. מומלץ לבדוק הנחות, תמחור ומבנה מימון.' },
-                nogo:    { emoji:'🔴', title:'לא כדאי להשקיע לפי הנתונים', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'ROI / IRR / רווחיות מצביעים על סיכון מהותי או הפסד.' }
+                go:           { emoji:'🟢', title:'GO', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'העסקה כדאית ומבנה המימון תקין.' },
+                finance_risk: { emoji:'🟡', title:'GO מותנה — סיכון מימון', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה טובה, אך מבנה המימון שנבחר דורש התאמה.' },
+                caution:      { emoji:'🟡', title:'בדיקה נוספת נדרשת', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'קיימים מדדי ROI/IRR גבוליים או מימון שאינו מספיק בטוח.' },
+                nogo:         { emoji:'🔴', title:'NO GO לעסקה עצמה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'הבעיה אינה רק במימון — העסקה עצמה חלשה לפי הנתונים.' }
             }[decisionLevel];
 
-            let riskLevel = 'medium';
-            if(roiPct <= 0 || (irrPct !== null && irrPct <= 0) || (dscr !== null && dscr < 1)) riskLevel = 'high';
-            else if(roiPct > 0 && irrPct !== null && irrPct > 0 && (dscr === null || dscr > 1.1) && paybackMonths !== null && paybackMonths < 60) riskLevel = 'low';
-            else if((dscr !== null && dscr >= 1 && dscr <= 1.1) || (paybackMonths !== null && paybackMonths >= 60 && paybackMonths <= 84)) riskLevel = 'medium';
-
+            const riskLevel = financingLevel === 'risky' ? 'high' : (financingLevel === 'watch' || dealLevel === 'caution' ? 'medium' : (dealLevel === 'nogo' ? 'high' : 'low'));
             const riskCfg = {
-                low:    { emoji:'🟢', title:'סיכון נמוך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'ROI ו-IRR חיוביים, יכולת שירות חוב תקינה ותקופת החזר סבירה.' },
-                medium: { emoji:'🟡', title:'סיכון בינוני', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד המדדים גבולי. מומלץ לבדוק תרחישים והנחות לפני החלטה סופית.' },
-                high:   { emoji:'🔴', title:'סיכון גבוה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'קיימת אינדיקציה ל-ROI/IRR שלילי או DSCR נמוך מ-1.' }
+                low:    { emoji:'🟢', title:'סיכון נמוך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'כדאיות העסקה והמימון נראים תקינים לפי ROI/IRR/DSCR.' },
+                medium: { emoji:'🟡', title:'סיכון בינוני', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד ממדדי הכדאיות או המימון גבולי ודורש בדיקת תרחישים.' },
+                high:   { emoji:'🔴', title:'סיכון גבוה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'קיימת חולשה מהותית בכדאיות העסקה או במבנה המימון.' }
             }[riskLevel];
 
             const fmtPayback = pm => pm === null
                 ? 'לא מוחזר'
                 : (pm <= 12 ? pm + ' חודשים'
-                    : (pm > 120 ? 'מעל 10 שנים'   // מעבר לאופק סביר — רווח חיובי אך זעיר ביחס להשקעה
+                    : (pm > 120 ? 'מעל 10 שנים'
                         : (pm/12).toFixed(1) + ' שנים'));
-            const paybackTxt   = fmtPayback(paybackMonths);   // רווח נקי (אחרי מימון ומס)
-            const paybackOpTxt = fmtPayback(paybackOpMonths); // רווח תפעולי (EBITDA — לפני מימון ומס)
-
-            const conclusion = decisionLevel === 'go' && riskLevel === 'low'
-                ? 'הפרויקט מציג רווחיות חיובית, תשואה חיובית ויכולת החזר חוב מספקת. בהתאם לנתונים שהוזנו, ההשקעה נראית כדאית.'
-                : (decisionLevel === 'nogo' || riskLevel === 'high'
-                    ? 'הפרויקט מציג סיכון גבוה או רווחיות לא מספקת. מומלץ לבחון מחדש את ההשקעה, את מבנה המימון או את הנחות ההכנסות וההוצאות.'
-                    : 'הפרויקט מציג כדאיות חלקית. מומלץ לבצע בדיקה נוספת של ההנחות והתרחישים לפני קבלת החלטה.');
+            const paybackTxt   = fmtPayback(paybackMonths);
+            const paybackOpTxt = fmtPayback(paybackOpMonths);
 
             return {
                 investment,
@@ -4033,10 +4159,25 @@ a{color:inherit}
                 fundingRequired: fin.fundingRequired || 0,
                 loanRequired: fin.loan || 0,
                 annualDebtService,
+                annualEquityCashFlowForPayback,
+                annualNetProfit: totalNet,
                 totalNet,
+                totalEbitda,
+                terminalMultiple,
+                terminalValue,
+                equityTerminalValue,
+                leverageEffectPct,
                 annualCashFlow,
                 roiPct,
+                annualOperatingRoiPct,
+                projectRoiPct,
+                equityRoiPct,
+                unleveragedRoiPct,
                 irrPct,
+                unleveragedIrrPct,
+                equityInvestment,
+                analysisHorizonYears,
+                horizonNote,
                 paybackMonths,
                 paybackTxt,
                 paybackOpMonths,
@@ -4044,6 +4185,10 @@ a{color:inherit}
                 dscr,
                 dscrTxt: dscr === null ? 'ללא חוב' : dscr.toFixed(2),
                 breakEvenPoint: cachedOutput ? cachedOutput.breakEvenPoint : 0,
+                dealLevel,
+                dealCfg,
+                financingLevel,
+                financingCfg,
                 decisionLevel,
                 decisionCfg,
                 riskLevel,
@@ -4134,13 +4279,17 @@ a{color:inherit}
                             </div>
                             <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                                 <h4 class="text-sm font-bold text-slate-700 mb-2">מדדי כדאיות וסיכון</h4>
-                                ${row('ROI', formatPctValue(summary.roiPct))}
-                                ${row('IRR חזוי ל־5 שנים', formatPctValue(summary.irrPct))}
-                                ${row('Payback תפעולי (EBITDA)', summary.paybackOpTxt)}
-                                ${row('Payback נקי', summary.paybackTxt)}
+                                ${row('ROI העסקה', formatPctValue(summary.projectRoiPct))}
+                                ${row('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct))}
+                                ${row(`IRR העסקה (ללא מימון)`, formatPctValue(summary.unleveragedIrrPct))}
+                                ${row('IRR על ההון העצמי', formatPctValue(summary.irrPct))}
+                                ${row('השפעת המינוף', formatPctValue(summary.leverageEffectPct))}
+                                ${row('תקופת החזר השקעה', summary.paybackOpTxt)}
+                                ${row('תקופת החזר הון עצמי', summary.paybackTxt)}
                                 ${row('DSCR', summary.dscrTxt)}
-                                ${row('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`)}
-                                ${row('החלטת השקעה', `${summary.decisionCfg.emoji} ${summary.decisionCfg.title}`)}
+                                ${row('כדאיות העסקה', `${summary.dealCfg.emoji} ${summary.dealCfg.title}`)}
+                                ${row('מבנה המימון', `${summary.financingCfg.emoji} ${summary.financingCfg.title}`)}
+                                ${row('החלטה מסכמת', `${summary.decisionCfg.emoji} ${summary.decisionCfg.title}`)}
                             </div>
                         </div>
 
@@ -4155,7 +4304,7 @@ a{color:inherit}
                         </div>
 
                         <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 rounded-lg p-3">
-                            <strong>הערה:</strong> IRR מחושב על תחזית ל־5 שנים המבוססת על ביצועי שנת התחזית הנוכחית. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.
+                            <strong>הערה:</strong> ${summary.horizonNote} חישובי ה־ROI וה־IRR כוללים ערך סופי שמרני המבוסס על EBITDA שנתי כפול ${summary.terminalMultiple}. מוצגים מדדים נפרדים לעסקה עצמה ולתשואת ההון העצמי של המשקיע. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.
                         </p>
                     </div>`;
                 initLucideIcons();
@@ -4250,14 +4399,14 @@ a{color:inherit}
             const negativeCashMonths = monthlyCash.filter(v => v < 0).length;
 
             if(S.appMode === 'new') {
-                if((summary.roiPct || 0) > 0) strengths.push('הפרויקט מציג ROI חיובי לפי הנתונים שהוזנו.');
-                if(summary.irrPct !== null && summary.irrPct > 0) strengths.push('IRR חיובי תומך בכדאיות ההשקעה.');
+                if((summary.projectRoiPct || 0) > 0) strengths.push('הפרויקט מציג ROI עסקה חיובי לפי הנתונים שהוזנו.');
+                if(summary.irrPct !== null && summary.irrPct > 0) strengths.push('IRR על ההון העצמי חיובי ותומך בכדאיות ההשקעה למשקיע.');
                 if(summary.paybackOpMonths !== null && summary.paybackOpMonths <= 36) strengths.push('החזר השקעה תפעולי צפוי בטווח זמן קצר יחסית.');
                 if(summary.dscr === null || summary.dscr > 1.1) strengths.push('יכולת שירות החוב נראית תקינה לפי מבנה המימון שהוזן.');
 
-                if((summary.roiPct || 0) <= 0) risks.push('ה-ROI אינו חיובי ולכן קיימת חולשה במדד הכדאיות המרכזי.');
-                if(summary.irrPct !== null && summary.irrPct <= 0) risks.push('IRR לא חיובי מצביע על רגישות גבוהה או חוסר כדאיות.');
-                if(summary.paybackOpMonths === null || summary.paybackOpMonths > 60) risks.push('תקופת החזר ההשקעה ארוכה או שאינה מושגת בטווח התחזית.');
+                if((summary.projectRoiPct || 0) <= 0) risks.push('ROI העסקה אינו חיובי ולכן קיימת חולשה במדד הכדאיות המרכזי.');
+                if(summary.irrPct !== null && summary.irrPct <= 0) risks.push('IRR על ההון העצמי אינו חיובי ומצביע על רגישות גבוהה או חוסר כדאיות למשקיע.');
+                if(summary.paybackOpMonths === null || summary.paybackOpMonths > 60) risks.push('תקופת החזר ההשקעה ארוכה או שאינה מושגת בטווח התחזית. המדד מוצג כאינדיקציה בלבד ואינו קובע לבדו GO/NO-GO.');
                 if(summary.dscr !== null && summary.dscr < 1.1) risks.push('יחס כיסוי החוב גבולי ודורש בחינת מבנה המימון.');
 
                 recommendations.push('לבצע ניתוח רגישות להכנסות, מרווח גולמי והיקף ההשקעה לפני החלטה סופית.');
@@ -4287,11 +4436,14 @@ a{color:inherit}
         function buildPdfKpiCards(summary) {
             const cards = S.appMode === 'new' ? [
                 ['השקעה ראשונית', moneyPdf(summary.investment)],
-                ['ROI', pctPdf(summary.roiPct)],
-                ['Payback', summary.paybackOpTxt || 'לא זמין'],
-                ['IRR', pctPdf(summary.irrPct)],
-                ['DSCR', summary.dscrTxt || 'ללא חוב'],
-                ['מימון נדרש', moneyPdf(summary.fundingRequired || summary.loanRequired || 0)]
+                ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)],
+                ['ROI העסקה', pctPdf(summary.projectRoiPct)],
+                ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)],
+                ['IRR העסקה', pctPdf(summary.unleveragedIrrPct)],
+                ['IRR על ההון העצמי', pctPdf(summary.irrPct)],
+                ['תקופת החזר השקעה', summary.paybackOpTxt],
+                ['תקופת החזר הון עצמי', summary.paybackTxt],
+                ['DSCR', summary.dscrTxt || 'ללא חוב']
             ] : [
                 ['הכנסות', moneyPdf(summary.totalRev)],
                 ['רווח גולמי', moneyPdf(summary.totalGross)],
@@ -4301,6 +4453,25 @@ a{color:inherit}
                 ['Break Even', moneyPdf(summary.breakEvenPoint)]
             ];
             return cards.map(([label, value]) => `<div class="kpi-card"><div class="kpi-label">${htmlEscapePdfReport(label)}</div><div class="kpi-value">${htmlEscapePdfReport(value)}</div></div>`).join('');
+        }
+
+
+        function buildPdfRiskAnalysisTable(summary, monthsData) {
+            const annualNetProfitForRisk = Number.isFinite(summary.annualNetProfit) ? summary.annualNetProfit : (Number.isFinite(summary.totalNet) ? summary.totalNet : 0);
+            const rows = [];
+            rows.push({ label:'רווח נקי שנתי', value:moneyPdf(annualNetProfitForRisk), status: annualNetProfitForRisk > 0 ? 'תקין' : 'סיכון', note: annualNetProfitForRisk > 0 ? 'הרווח הנקי השנתי חיובי.' : 'הרווח הנקי השנתי שלילי או אפסי ודורש בדיקה.' });
+            if(S.appMode === 'new') {
+                rows.push({ label:'ROI העסקה', value:pctPdf(summary.projectRoiPct), status:(summary.projectRoiPct || 0) > 0 ? 'תקין' : 'סיכון', note:'בדיקת תשואה על כלל ההשקעה כולל ערך סופי שמרני.' });
+                rows.push({ label:'IRR על ההון העצמי', value:pctPdf(summary.irrPct), status:summary.irrPct === null ? 'אזהרה' : (summary.irrPct > 0 ? 'תקין' : 'סיכון'), note:'בדיקת תשואת המשקיע לאחר מבנה המימון.' });
+                rows.push({ label:'DSCR', value:summary.dscrTxt || 'ללא חוב', status:summary.dscr === null ? 'תקין' : (summary.dscr < 1 ? 'סיכון' : (summary.dscr <= 1.1 ? 'אזהרה' : 'תקין')), note:'יכולת שירות החוב לפי התזרים הזמין.' });
+                rows.push({ label:'תקופת החזר השקעה', value:summary.paybackOpTxt || 'לא זמין', status:'מידע', note:'מדד מידע בלבד — אינו קובע לבדו GO / NO-GO.' });
+                rows.push({ label:'תקופת החזר הון עצמי', value:summary.paybackTxt || 'לא זמין', status:'מידע', note:'הון עצמי ÷ תזרים שנתי לבעלים.' });
+            } else {
+                rows.push({ label:'EBITDA', value:moneyPdf(summary.totalEbitda), status:(summary.totalEbitda || 0) > 0 ? 'תקין' : 'סיכון', note:'יכולת יצירת רווח תפעולי לפני פחת, מימון ומס.' });
+                rows.push({ label:'תזרים מזומנים שנתי', value:moneyPdf(summary.annualCashFlow), status:(summary.annualCashFlow || 0) > 0 ? 'תקין' : 'סיכון', note:'התזרים השנתי החזוי לאחר הוצאות ומימון.' });
+            }
+            const cls = st => st === 'תקין' ? 'style="color:#166534;font-weight:800"' : (st === 'סיכון' ? 'style="color:#991b1b;font-weight:800"' : 'style="color:#92400e;font-weight:800"');
+            return `<table class="report-table"><tr><th>בדיקה</th><th>סטטוס</th><th>ערך</th><th>משמעות</th></tr>${rows.map(r=>`<tr><td>${htmlEscapePdfReport(r.label)}</td><td ${cls(r.status)}>${htmlEscapePdfReport(r.status)}</td><td>${htmlEscapePdfReport(r.value)}</td><td>${htmlEscapePdfReport(r.note)}</td></tr>`).join('')}</table>`;
         }
 
         function buildPdfForecastTable(monthsData) {
@@ -4464,8 +4635,8 @@ a{color:inherit}
             const insights = getPdfInsights(summary, monthsData);
 
             const executiveRows = S.appMode === 'new' ? [
-                ['השקעה ראשונית', moneyPdf(summary.investment)], ['ROI', pctPdf(summary.roiPct)], ['IRR', pctPdf(summary.irrPct)],
-                ['Payback', summary.paybackOpTxt], ['מימון נדרש', moneyPdf(summary.fundingRequired || summary.loanRequired || 0)], ['המלצה', statusTitle]
+                ['השקעה ראשונית', moneyPdf(summary.investment)], ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)], ['ROI העסקה', pctPdf(summary.projectRoiPct)], ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)], ['IRR העסקה (ללא מימון)', pctPdf(summary.unleveragedIrrPct)], ['IRR על ההון העצמי', pctPdf(summary.irrPct)], ['השפעת המינוף', pctPdf(summary.leverageEffectPct)], ['תקופת החזר השקעה', summary.paybackOpTxt], ['תקופת החזר הון עצמי', summary.paybackTxt], ['ערך סופי שמרני (EBITDA × 3)', moneyPdf(summary.terminalValue)],
+                ['מבנה מימון', summary.financingCfg.title], ['DSCR', summary.dscrTxt], ['המלצה', statusTitle]
             ] : [
                 ['הכנסות שנתיות', moneyPdf(summary.totalRev)], ['EBITDA', moneyPdf(summary.totalEbitda)], ['רווח נקי', moneyPdf(summary.totalNet)],
                 ['תזרים מזומנים', moneyPdf(summary.annualCashFlow)], ['נקודת איזון', moneyPdf(summary.breakEvenPoint)], ['סטטוס', statusTitle]
@@ -4479,6 +4650,7 @@ a{color:inherit}
                 <section class="page cover"><div class="brand">BudgetSmart</div><div class="subtitle">מערכת לתכנון פיננסי, תקציב ובדיקת כדאיות</div><div class="report-title">${htmlEscapePdfReport(title)}</div><div class="meta-line"><strong>שם העסק:</strong> ${htmlEscapePdfReport(company)}</div><div class="meta-line"><strong>פרויקט:</strong> ${htmlEscapePdfReport(project)}</div><div class="meta-line"><strong>שנת תחזית:</strong> ${htmlEscapePdfReport(forecast)}</div><div class="meta-line"><strong>תאריך הפקה:</strong> ${htmlEscapePdfReport(today)}</div><div class="prepared">Prepared by<br><strong>${htmlEscapePdfReport(preparedBy)}</strong><br>עזרא אליעזר - ייעוץ פיננסי</div></section>
                 <section class="page"><h1 class="section-title">תקציר מנהלים</h1><div class="status-box"><h2>${htmlEscapePdfReport(statusTitle)}</h2><div>${htmlEscapePdfReport(summary.conclusion || '')}</div></div><div class="summary-grid">${executiveRows.map(([k,v])=>`<div class="summary-item"><span>${htmlEscapePdfReport(k)}</span><strong>${htmlEscapePdfReport(v)}</strong></div>`).join('')}</div><p class="note">התקציר מציג את התוצאות המרכזיות בלבד ומבוסס על הנתונים וההנחות שהוזנו במערכת.</p></section>
                 <section class="page"><h1 class="section-title">KPI מרכזיים</h1><div class="kpi-grid">${buildPdfKpiCards(summary)}</div></section>
+                <section class="page"><h1 class="section-title">ניתוח סיכונים</h1>${buildPdfRiskAnalysisTable(summary, monthsData)}</section>
                 <section class="page"><h1 class="section-title">טבלת תחזית שנתית</h1>${buildPdfForecastTable(monthsData)}</section>
                 <section class="page"><h1 class="section-title">תזרים מזומנים</h1>${buildPdfCashFlowTable(monthsData)}<p class="note">חודשים שליליים מודגשים באדום לצורך זיהוי מוקדם של לחץ תזרימי.</p></section>
                 <section class="page"><h1 class="section-title">הנחות המודל</h1>${buildPdfAssumptions(summary)}</section>
@@ -4504,7 +4676,8 @@ a{color:inherit}
             if(!summary) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
             zone.classList.remove('hidden');
 
-            const roiColor = getInvestmentColor(summary.roiPct, 'roi');
+            const roiColor = getInvestmentColor(summary.projectRoiPct, 'roi');
+            const equityRoiColor = getInvestmentColor(summary.equityRoiPct, 'roi');
             const irrColor = getInvestmentColor(summary.irrPct, 'irr');
             const dscrColor = getInvestmentColor(summary.dscr, 'dscr');
             const netColor = getInvestmentColor(summary.totalNet, 'profit');
@@ -4574,6 +4747,23 @@ a{color:inherit}
                                 </div>
                             </div>
                         </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-white/85">
+                            <div class="rounded-xl border-2 bg-white p-3" style="border-color:${summary.dealCfg.border};background:${summary.dealCfg.bg}">
+                                <div class="text-[11px] font-bold" style="color:${summary.dealCfg.fg}">כדאיות העסקה ללא מימון</div>
+                                <div class="text-base font-extrabold" style="color:${summary.dealCfg.fg}">${summary.dealCfg.emoji} ${summary.dealCfg.title}</div>
+                                <div class="text-[11px] mt-1" style="color:${summary.dealCfg.fg}">${summary.dealCfg.sub}</div>
+                            </div>
+                            <div class="rounded-xl border-2 bg-white p-3" style="border-color:${summary.financingCfg.border};background:${summary.financingCfg.bg}">
+                                <div class="text-[11px] font-bold" style="color:${summary.financingCfg.fg}">סיכון מבנה המימון</div>
+                                <div class="text-base font-extrabold" style="color:${summary.financingCfg.fg}">${summary.financingCfg.emoji} ${summary.financingCfg.title}</div>
+                                <div class="text-[11px] mt-1" style="color:${summary.financingCfg.fg}">${summary.financingCfg.sub}</div>
+                            </div>
+                            <div class="rounded-xl border-2 bg-white p-3" style="border-color:${summary.decisionCfg.border};background:${summary.decisionCfg.bg}">
+                                <div class="text-[11px] font-bold" style="color:${summary.decisionCfg.fg}">החלטה מסכמת</div>
+                                <div class="text-base font-extrabold" style="color:${summary.decisionCfg.fg}">${summary.decisionCfg.emoji} ${summary.decisionCfg.title}</div>
+                                <div class="text-[11px] mt-1" style="color:${summary.decisionCfg.fg}">${summary.decisionCfg.sub}</div>
+                            </div>
+                        </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 bg-white/85">
                             <div class="rounded-xl border border-slate-200 bg-white p-3">
                                 <div class="text-[11px] text-slate-500 font-bold">השקעה ראשונית</div>
@@ -4592,11 +4782,13 @@ a{color:inherit}
 
                     <div>
                         <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-indigo-600"></i> מדדי השקעה מרכזיים</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                            ${kpiCard('ROI', formatPctValue(summary.roiPct), 'רווח נקי שנתי ÷ השקעה', roiColor)}
-                            ${kpiCard('Payback לפי רווח תפעולי', summary.paybackOpTxt, 'תקופת החזר לפי EBITDA מצטבר (לפני מימון ומס)', { border:'#4f46e5', fg:'#312e81' })}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                            ${kpiCard('ROI העסקה', formatPctValue(summary.projectRoiPct), `תזרים EBITDA מצטבר + ערך סופי ÷ השקעה`, roiColor)}
+                            ${kpiCard('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct), 'תזרים לבעלים + שווי לאחר חוב ÷ הון עצמי', equityRoiColor)}
+                            ${kpiCard('IRR העסקה (ללא מימון)', formatPctValue(summary.unleveragedIrrPct), `כולל ערך סופי: EBITDA × ${summary.terminalMultiple}`, getInvestmentColor(summary.unleveragedIrrPct, 'irr'))}
+                            ${kpiCard('IRR על ההון העצמי', formatPctValue(summary.irrPct), `תזרים אחרי שירות חוב + שווי לאחר חוב`, irrColor)}
+                            ${kpiCard('השפעת המינוף', formatPctValue(summary.leverageEffectPct), 'פער בין IRR ההון העצמי ל־IRR העסקה', getInvestmentColor(summary.leverageEffectPct, 'irr'))}
                             ${kpiCard('DSCR', summary.dscrTxt, summary.dscr === null ? 'אין הלוואה נדרשת' : 'תזרים זמין לשירות חוב ÷ שירות חוב', dscrColor)}
-                            ${kpiCard(fundingLabel, '₪' + fmtILS(fundingValue), 'מימון חסר לאחר מזומן קיים והון עצמי', { border:'#4f46e5', fg:'#312e81' })}
                         </div>
                     </div>
 
@@ -4624,14 +4816,15 @@ a{color:inherit}
 
                     <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                         <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="list-checks" class="w-4 h-4 text-slate-600"></i> פירוט פיננסי תומך</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                            ${kpiCard('IRR משוער', formatPctValue(summary.irrPct), 'תחזית 5 שנים לפי התזרים השנתי', irrColor)}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                            ${kpiCard(fundingLabel, '₪' + fmtILS(fundingValue), 'מימון חסר לאחר מזומן קיים והון עצמי', { border:'#4f46e5', fg:'#312e81' })}
                             ${kpiCard('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`, summary.riskCfg.sub, summary.riskCfg)}
-                            ${kpiCard('Payback לפי רווח נקי', summary.paybackTxt, 'תקופת החזר לפי רווח נקי מצטבר (אחרי מימון ומס)', { border:'#cbd5e1', fg:'#0f172a' })}
+                            ${kpiCard('תקופת החזר השקעה', summary.paybackOpTxt, 'השקעה כוללת ÷ תזרים שנתי מהעסקה', { border:'#cbd5e1', fg:'#0f172a' })}
+                            ${kpiCard('תקופת החזר הון עצמי', summary.paybackTxt, 'הון עצמי ÷ תזרים שנתי לבעלים', { border:'#cbd5e1', fg:'#0f172a' })}
                             ${kpiCard('החלטת מודל', summary.decisionCfg.title, summary.conclusion, summary.decisionCfg)}
                         </div>
                         <p class="text-[11px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 mt-3 text-slate-600">
-                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. מדדי ההשקעה למעלה נועדו לתת החלטה מהירה לפני כניסה לפירוט הדוחות.
+                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. ${summary.horizonNote} חישובי ה־ROI וה־IRR כוללים ערך סופי שמרני לפי EBITDA × ${summary.terminalMultiple}. תקופת החזר השקעה = השקעה כוללת ÷ תזרים שנתי מהעסקה. תקופת החזר הון עצמי = הון עצמי ÷ תזרים שנתי לבעלים. שני המדדים מוצגים כמידע בלבד ואינם קובעים לבדם GO/NO-GO. מדדי ההשקעה למעלה מפרידים בין כדאיות העסקה לבין השפעת המימון.
                         </p>
                     </div>
                 </div>`;
@@ -4833,26 +5026,51 @@ a{color:inherit}
                 });
             }
 
-            // ── גרף השוואה שנתית / החזר השקעה מצטבר לפי מסלול ──
+            // ── גרף השוואה שנתית / החזר הון עצמי מצטבר לפי מסלול ──
             const ctx4 = document.getElementById('chart-annual-compare')?.getContext('2d');
             if(ctx4) {
                 if(S.appMode === 'new') {
-                    const investment = Number(S.investment || 0);
+                    const finForPaybackChart = computeFinancing();
+                    const equityBase = Math.max(0, finForPaybackChart.equity || 0);
+                    const monthlyDebtForChart = (() => {
+                        const debt = new Array(cachedOutput.monthsData.length).fill(0);
+                        if(!finForPaybackChart.loan || finForPaybackChart.loan <= 0) return debt;
+                        const totalMonths = Math.max(0, Math.round((finForPaybackChart.years || 0) * 12));
+                        if(totalMonths <= 0) return debt;
+                        const mr = (finForPaybackChart.rate || 0) / 100 / 12;
+                        let bal = finForPaybackChart.loan;
+                        const graceMonths = finForPaybackChart.repay === 'grace' ? Math.max(0, Math.min(Math.round(finForPaybackChart.grace || 0), totalMonths - 1)) : 0;
+                        const amortMonths = Math.max(1, totalMonths - graceMonths);
+                        const amortPayment = mr > 0 ? finForPaybackChart.loan * mr / (1 - Math.pow(1 + mr, -amortMonths)) : finForPaybackChart.loan / amortMonths;
+                        for(let i = 0; i < Math.min(debt.length, totalMonths); i++) {
+                            const interest = bal * mr;
+                            let principal = 0;
+                            if(finForPaybackChart.repay === 'bullet') principal = (i === totalMonths - 1) ? bal : 0;
+                            else if(finForPaybackChart.repay === 'grace' && i < graceMonths) principal = 0;
+                            else principal = amortPayment - interest;
+                            if(principal > bal) principal = bal;
+                            if(principal < 0) principal = 0;
+                            debt[i] = interest + principal;
+                            bal -= principal;
+                            if(bal < 0.01) { bal = 0; break; }
+                        }
+                        return debt;
+                    })();
                     let cumulativeNet = 0;
-                    const cumulativeData = cachedOutput.monthsData.map(m => {
-                        cumulativeNet += (m.netIncome || 0);
+                    const cumulativeData = cachedOutput.monthsData.map((m, idx) => {
+                        cumulativeNet += (m.ebitda || 0) - (monthlyDebtForChart[idx] || 0);
                         return Math.round(cumulativeNet);
                     });
-                    const investmentLine = cachedOutput.monthsData.map(() => Math.round(investment));
-                    const paybackIndex = investment > 0 ? cumulativeData.findIndex(v => v >= investment) : -1;
-                    const paybackLabel = paybackIndex >= 0 ? cachedOutput.monthsData[paybackIndex].monthName : 'טרם הוחזר בשנה הראשונה';
+                    const investmentLine = cachedOutput.monthsData.map(() => Math.round(equityBase));
+                    const paybackIndex = equityBase > 0 ? cumulativeData.findIndex(v => v >= equityBase) : -1;
+                    const paybackLabel = paybackIndex >= 0 ? cachedOutput.monthsData[paybackIndex].monthName : 'ההון העצמי טרם הוחזר בשנה הראשונה';
                     chartAnnualInstance = updateOrCreateChart(chartAnnualInstance, ctx4, {
                         type: 'line',
                         data: {
                             labels,
                             datasets: [
                                 {
-                                    label: 'רווח נקי מצטבר',
+                                    label: 'תזרים לבעלים מצטבר',
                                     data: cumulativeData,
                                     borderColor: '#4f46e5',
                                     backgroundColor: 'rgba(79,70,229,0.12)',
@@ -4861,7 +5079,7 @@ a{color:inherit}
                                     pointRadius: 3
                                 },
                                 {
-                                    label: 'השקעה ראשונית',
+                                    label: 'הון עצמי שהושקע',
                                     data: investmentLine,
                                     borderColor: '#f59e0b',
                                     borderDash: [6, 4],
@@ -4876,7 +5094,7 @@ a{color:inherit}
                             plugins: {
                                 legend: { position: 'bottom' },
                                 tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmtAxisILS(c.raw)}` } },
-                                title: { display: investment > 0, text: paybackIndex >= 0 ? `החזר השקעה צפוי: ${paybackLabel}` : 'ההשקעה אינה מוחזרת בשנה הראשונה לפי התחזית' }
+                                title: { display: equityBase > 0, text: paybackIndex >= 0 ? `החזר הון עצמי צפוי: ${paybackLabel}` : 'ההון העצמי אינו מוחזר בשנה הראשונה לפי התחזית' }
                             },
                             scales: { y: { reverse: false, ticks: { callback: v => fmtAxisILS(v) } } }
                         }
@@ -5309,7 +5527,7 @@ a{color:inherit}
             } else {
                 const d3 = computeActualsDerived(lastIdx3);
                 const fixedDef3 = S.inputs.fixed || 0;
-                const PCT = '0.0"%"';
+                const PCT = '0.0%';
                 const monthCell = (val, fmt, fill, fcol, bold) =>
                     (val===null||val===undefined)
                       ? st(fill||'FFFFFF', fcol||'334155', {})
@@ -5449,26 +5667,27 @@ a{color:inherit}
                 const paybackText = String(summary.paybackTxt || '');
                 const paybackNum = parseFloat(paybackText.replace(/[^0-9.]/g,''));
                 const hasLongPayback = !isFinite(paybackNum) || paybackText.includes('לא') || paybackNum >= 60;
+                const annualNetProfitForRisk = Number.isFinite(summary.annualNetProfit) ? summary.annualNetProfit : (Number.isFinite(summary.totalNet) ? summary.totalNet : 0);
                 const checks = [
                     {
                         check:'רווח נקי שנתי',
-                        status: summary.annualNetProfit > 0 ? 'תקין' : 'סיכון',
-                        value: Math.round(summary.annualNetProfit || 0),
+                        status: annualNetProfitForRisk > 0 ? 'תקין' : 'סיכון',
+                        value: Math.round(annualNetProfitForRisk || 0),
                         format: NUM,
-                        explanation: summary.annualNetProfit > 0 ? 'הרווח הנקי השנתי חיובי.' : 'הרווח הנקי השנתי שלילי או אפסי — לפי המתודולוגיה זה מוביל ל-NO-GO.'
+                        explanation: annualNetProfitForRisk > 0 ? 'הרווח הנקי השנתי חיובי.' : 'הרווח הנקי השנתי שלילי או אפסי — לפי המתודולוגיה זה מוביל ל-NO-GO.'
                     },
                     {
                         check:'ROI',
                         status: summary.roiPct > 0 ? 'תקין' : 'סיכון',
                         value: (summary.roiPct || 0) / 100,
-                        format: '0.0"%"',
+                        format: '0.0%',
                         explanation: summary.roiPct > 0 ? 'התשואה על ההשקעה חיובית.' : 'ROI אפסי או שלילי — נדרש לשפר רווחיות או להפחית השקעה.'
                     },
                     {
                         check:'Investor IRR',
                         status: summary.irrPct === null ? 'אזהרה' : (summary.irrPct > 0 ? 'תקין' : 'סיכון'),
                         value: summary.irrPct === null ? 'לא זמין' : summary.irrPct / 100,
-                        format: summary.irrPct === null ? undefined : '0.0"%"',
+                        format: summary.irrPct === null ? undefined : '0.0%',
                         explanation: summary.irrPct === null ? 'אין שינוי סימן בתזרים ולכן IRR אינו זמין.' : (summary.irrPct > 0 ? 'IRR חיובי על בסיס משקיע לאחר מימון.' : 'IRR אפסי או שלילי — לפי המתודולוגיה זה מוביל ל-NO-GO.')
                     },
                     {
@@ -5479,10 +5698,10 @@ a{color:inherit}
                         explanation: summary.dscr === null ? 'אין שירות חוב ולכן יחס DSCR אינו רלוונטי.' : (summary.dscr < 1 ? 'התזרים התפעולי אינו מכסה את שירות החוב.' : (summary.dscr <= 1.1 ? 'כיסוי החוב גבולי ודורש זהירות.' : 'כיסוי החוב נוח לפי סף המתודולוגיה.'))
                     },
                     {
-                        check:'Net Profit Payback',
+                        check:'תקופת החזר הון עצמי',
                         status: hasLongPayback ? 'אזהרה' : 'תקין',
                         value: summary.paybackTxt || 'לא זמין',
-                        explanation: hasLongPayback ? 'תקופת החזר ארוכה או לא מוחזרת במסגרת החישוב.' : 'תקופת ההחזר סבירה ביחס לספי הסיכון.'
+                        explanation: hasLongPayback ? 'תקופת החזר ההון העצמי ארוכה או אינה מוחזרת לפי התזרים השנתי לבעלים.' : 'תקופת החזר הון עצמי מוצגת כמדד מידע ואינה קובעת לבדה GO/NO-GO.'
                     },
                     {
                         check:'תזרים מזומנים מצטבר',
@@ -5540,7 +5759,7 @@ a{color:inherit}
                 const totalEbitdaAssumption = cachedOutput ? (cachedOutput.totalEbitda || sum('ebitda')) : sum('ebitda');
                 const totalNetAssumption = sum('netIncome');
                 const grossMarginDisplay = S.grossMarginPct == null ? 'לא צוין' : (S.grossMarginPct / 100);
-                const pctFmt = '0.0"%"';
+                const pctFmt = '0.0%';
                 const isFeasibility = S.appMode === 'new';
                 const reportType = isFeasibility ? 'בדיקת כדאיות השקעה' : 'תקציב ותחזית לעסק קיים';
 
@@ -5614,10 +5833,10 @@ a{color:inherit}
                             ['תשלום חודשי מחושב', Math.round(fin.monthlyPayment || 0), NUM]
                         ]},
                         { title:'מתודולוגיית החלטה רשמית', rows:[
-                            ['GO', 'Annual Net Profit > 0 AND ROI > 0 AND Investor IRR > 0'],
-                            ['NO-GO', 'Annual Net Profit < 0 OR ROI ≤ 0 OR Investor IRR ≤ 0'],
-                            ['CAUTION', 'נתון חסר או גבולי — למשל IRR לא זמין'],
-                            ['Risk Rating', 'ציר נפרד מהחלטת GO/NO-GO ומשלב ROI, Investor IRR, DSCR ו-Net Profit Payback'],
+                            ['GO', 'כדאיות העסקה חיובית ומבנה המימון תקין'],
+                            ['GO מותנה — סיכון מימון', 'העסקה עצמה כדאית אך המימון גבולי/מסוכן'],
+                            ['NO-GO', 'העסקה עצמה אינה כדאית גם לפני מימון'],
+                            ['Risk Rating', 'ציר נפרד המשלב כדאיות עסקה, IRR ללא מימון, IRR על ההון העצמי, DSCR ותזרים לאחר חוב'],
                             ['הערה', 'הגיליון מציג את ההנחות שנקלטו במערכת ואינו משנה נוסחאות פיננסיות.']
                         ]}
                     );
@@ -5642,7 +5861,7 @@ a{color:inherit}
             const existingBusinessSummary = computeExistingBusinessSummary(totalNetForSummary, M);
             let wSummary = null, wAssumptions = buildAssumptionsSheet(feasibilitySummary), wFunding = null, wFeas = null, wRisk = null;
             if(S.appMode === 'existing' && existingBusinessSummary) {
-                const pctFmt = '0.0"%"';
+                const pctFmt = '0.0%';
                 wSummary = buildInfoSheet('תקציר מנהלים — תקציב ותחזית לעסק קיים', [
                     { title:'פרטי הדוח', rows:[
                         ['שם העסק / החברה', reportCompany],
@@ -5682,7 +5901,7 @@ a{color:inherit}
             }
             if(S.appMode === 'new' && feasibilitySummary) {
                 const fin = computeFinancing();
-                const pctFmt = '0.0"%"';
+                const pctFmt = '0.0%';
                 const ratioFmt = '0.00';
                 const valOrNA = v => (v === null || v === undefined || !isFinite(v)) ? 'לא זמין' : v;
                 wSummary = buildInfoSheet('תקציר מנהלים — בדיקת כדאיות השקעה', [
@@ -5708,10 +5927,13 @@ a{color:inherit}
                         ['השקעה כוללת', Math.round(feasibilitySummary.investment), NUM],
                         ['מימון נדרש', Math.round(feasibilitySummary.fundingRequired), NUM],
                         ['הלוואה נדרשת', Math.round(feasibilitySummary.loanRequired), NUM],
-                        ['ROI', feasibilitySummary.roiPct / 100, pctFmt],
-                        ['Operational Payback (EBITDA)', feasibilitySummary.paybackOpTxt],
-                        ['Net Profit Payback', feasibilitySummary.paybackTxt],
-                        ['Investor IRR', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['ROI העסקה', (feasibilitySummary.projectRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt], ['ROI על ההון העצמי', (feasibilitySummary.equityRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt],
+                        ['תקופת החזר השקעה', feasibilitySummary.paybackOpTxt],
+                        ['תקופת החזר הון עצמי', feasibilitySummary.paybackTxt],
+                        ['IRR העסקה (ללא מימון)', feasibilitySummary.unleveragedIrrPct === null ? 'לא זמין' : feasibilitySummary.unleveragedIrrPct / 100, feasibilitySummary.unleveragedIrrPct === null ? undefined : pctFmt],
+                        ['IRR על ההון העצמי', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['השפעת המינוף', feasibilitySummary.leverageEffectPct === null ? 'לא זמין' : feasibilitySummary.leverageEffectPct / 100, feasibilitySummary.leverageEffectPct === null ? undefined : pctFmt],
+                        ['ערך סופי שמרני (EBITDA × 3)', Math.round(feasibilitySummary.terminalValue || 0), NUM],
                         ['DSCR', feasibilitySummary.dscr === null ? 'ללא חוב' : feasibilitySummary.dscr, feasibilitySummary.dscr === null ? undefined : ratioFmt]
                     ]}
                 ]);
@@ -5759,10 +5981,13 @@ a{color:inherit}
                     { title:'מדדי מימון וכדאיות', rows:[
                         ['Funding Required', Math.round(feasibilitySummary.fundingRequired), NUM],
                         ['Loan Required', Math.round(feasibilitySummary.loanRequired), NUM],
-                        ['ROI', feasibilitySummary.roiPct / 100, pctFmt],
-                        ['Operational Payback (EBITDA)', feasibilitySummary.paybackOpTxt],
-                        ['Net Profit Payback', feasibilitySummary.paybackTxt],
-                        ['Investor IRR', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['ROI העסקה', (feasibilitySummary.projectRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt], ['ROI על ההון העצמי', (feasibilitySummary.equityRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt],
+                        ['תקופת החזר השקעה', feasibilitySummary.paybackOpTxt],
+                        ['תקופת החזר הון עצמי', feasibilitySummary.paybackTxt],
+                        ['IRR העסקה (ללא מימון)', feasibilitySummary.unleveragedIrrPct === null ? 'לא זמין' : feasibilitySummary.unleveragedIrrPct / 100, feasibilitySummary.unleveragedIrrPct === null ? undefined : pctFmt],
+                        ['IRR על ההון העצמי', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['השפעת המינוף', feasibilitySummary.leverageEffectPct === null ? 'לא זמין' : feasibilitySummary.leverageEffectPct / 100, feasibilitySummary.leverageEffectPct === null ? undefined : pctFmt],
+                        ['ערך סופי שמרני (EBITDA × 3)', Math.round(feasibilitySummary.terminalValue || 0), NUM],
                         ['DSCR', feasibilitySummary.dscr === null ? 'ללא חוב' : feasibilitySummary.dscr, feasibilitySummary.dscr === null ? undefined : ratioFmt]
                     ]},
                     { title:'החלטה וסיכון', rows:[
@@ -5773,10 +5998,13 @@ a{color:inherit}
                 ]);
                 wFeas = buildInfoSheet('מדדי כדאיות השקעה', [
                     { title:'מדדי כדאיות', rows:[
-                        ['ROI', feasibilitySummary.roiPct / 100, pctFmt],
-                        ['Operational Payback (EBITDA)', feasibilitySummary.paybackOpTxt],
-                        ['Net Profit Payback', feasibilitySummary.paybackTxt],
-                        ['Investor IRR', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['ROI העסקה', (feasibilitySummary.projectRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt], ['ROI על ההון העצמי', (feasibilitySummary.equityRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt],
+                        ['תקופת החזר השקעה', feasibilitySummary.paybackOpTxt],
+                        ['תקופת החזר הון עצמי', feasibilitySummary.paybackTxt],
+                        ['IRR העסקה (ללא מימון)', feasibilitySummary.unleveragedIrrPct === null ? 'לא זמין' : feasibilitySummary.unleveragedIrrPct / 100, feasibilitySummary.unleveragedIrrPct === null ? undefined : pctFmt],
+                        ['IRR על ההון העצמי', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
+                        ['השפעת המינוף', feasibilitySummary.leverageEffectPct === null ? 'לא זמין' : feasibilitySummary.leverageEffectPct / 100, feasibilitySummary.leverageEffectPct === null ? undefined : pctFmt],
+                        ['ערך סופי שמרני (EBITDA × 3)', Math.round(feasibilitySummary.terminalValue || 0), NUM],
                         ['DSCR', feasibilitySummary.dscr === null ? 'ללא חוב' : feasibilitySummary.dscr, feasibilitySummary.dscr === null ? undefined : ratioFmt],
                         ['Annual Cash Flow after debt service', Math.round(feasibilitySummary.annualCashFlow), NUM],
                         ['Annual Debt Service', Math.round(feasibilitySummary.annualDebtService || 0), NUM]
