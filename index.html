@@ -505,21 +505,21 @@ a{color:inherit}
 
             <div id="even-revenue-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div id="revenue-prev-wrap" class="mode-only-existing">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">מחזור הכנסות שנתי — <span class="font-bold" id="lbl-rev-prev">שנה שעברה (2024)</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">מחזור הכנסות שנתי — <span class="font-bold" id="lbl-rev-prev">שנה קודמת</span></label>
                     <div class="relative">
                         <input inputmode="decimal" type="text" id="revenue-2024" oninput="formatAndHandleAnnualInput('2024', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right" placeholder="0">
                         <span class="absolute left-3 top-2.5 text-gray-400 text-sm">₪</span>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">מחזור הכנסות שנתי — <span class="font-bold" id="lbl-rev-curr">השנה (2025)</span></label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">מחזור הכנסות שנתי — <span class="font-bold" id="lbl-rev-curr">שנה נוכחית</span></label>
                     <div class="relative">
                         <input inputmode="decimal" type="text" id="revenue-2025" oninput="formatAndHandleAnnualInput('2025', this); reqNote('revenue-2025','revenue-required-note')" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right" placeholder="0">
                         <span class="absolute left-3 top-2.5 text-gray-400 text-sm">₪</span>
                     </div>
                     <p class="text-xs text-blue-600 mt-1.5 hidden" id="new-business-hint">
                         <i data-lucide="lightbulb" class="w-3.5 h-3.5 inline-block align-middle ml-1"></i>
-                        עסק חדש? הכנס כאן את <strong>הערכת המכירות השנתית שלך</strong> לשנת <span id="lbl-hint-forecast">2026</span> — המערכת תבנה עליה את התחזית.
+                        עסק חדש? הכנס כאן את <strong>הערכת המכירות השנתית שלך</strong> <span id="lbl-hint-forecast">לשנה הבאה</span> — המערכת תבנה עליה את התחזית.
                     </p>
                     <p id="revenue-required-note" class="hidden text-[11px] text-red-600 mt-1.5 font-medium">
                         שדה חובה — יש להזין את מחזור המכירות של השנה כדי להמשיך.
@@ -575,8 +575,8 @@ a{color:inherit}
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-sm font-bold text-slate-700">פירוט הכנסות חודשי בפועל</h3>
                     <div class="bg-white p-1 rounded-md border border-slate-300 flex gap-1 text-xs">
-                        <button onclick="setCustomYearToggle('2024')" id="year-toggle-2024" class="px-3 py-1 rounded bg-blue-600 text-white font-medium"><span id="lbl-toggle-prev">שנה שעברה (2024)</span></button>
-                        <button onclick="setCustomYearToggle('2025')" id="year-toggle-2025" class="px-3 py-1 rounded text-slate-600 font-medium"><span id="lbl-toggle-curr">השנה (2025)</span></button>
+                        <button onclick="setCustomYearToggle('2024')" id="year-toggle-2024" class="px-3 py-1 rounded bg-blue-600 text-white font-medium"><span id="lbl-toggle-prev">שנה קודמת</span></button>
+                        <button onclick="setCustomYearToggle('2025')" id="year-toggle-2025" class="px-3 py-1 rounded text-slate-600 font-medium"><span id="lbl-toggle-curr">שנה נוכחית</span></button>
                     </div>
                 </div>
                 <div id="monthly-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3"></div>
@@ -596,7 +596,7 @@ a{color:inherit}
 
                     <!-- עמודת גידול -->
                     <div id="growth-column" class="mode-only-existing">
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">אחוז גידול לתחזית — <span id="lbl-forecast-growth">שנה הבאה (2026)</span></label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">אחוז גידול לתחזית — <span id="lbl-forecast-growth">שנה הבאה (תחזית)</span></label>
 
                         <!-- toggle בחירת מקור הגידול -->
                         <div class="flex rounded-lg border border-slate-300 overflow-hidden text-xs bg-white mb-3 w-fit">
@@ -639,7 +639,7 @@ a{color:inherit}
 
                         <!-- תצוגת בסיס חזוי -->
                         <div id="growth-result-box" class="hidden mt-2 p-2.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800">
-                            <span class="font-semibold">בסיס שנתי חזוי <span id="lbl-result-forecast-year">2026</span>:</span>
+                            <span class="font-semibold">בסיס שנתי חזוי <span id="lbl-result-forecast-year">(שנה הבאה)</span>:</span>
                             <span id="growth-annual-forecast" class="font-bold mr-1">--</span>
                         </div>
                     </div>
@@ -1252,7 +1252,7 @@ a{color:inherit}
                 </div>
                 <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-700 mb-1 text-center">השוואה שנתית — הכנסות (אלפי ₪)</h3>
-                    <p class="text-[11px] text-slate-400 text-center mb-3" id="lbl-annual-chart-years">2024 · 2025 · תחזית שנה הבאה</p>
+                    <p class="text-[11px] text-slate-400 text-center mb-3" id="lbl-annual-chart-years">שנה קודמת · שנה נוכחית · תחזית</p>
                     <div class="w-full h-[240px] relative">
                         <canvas id="chart-annual-compare"></canvas>
                     </div>
@@ -1632,7 +1632,7 @@ a{color:inherit}
             <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
                 <p><strong>מה הכלי עושה:</strong> כלי זה מסייע לך לתכנן תקציב עסקי חזוי על בסיס נתונים שאתה מזין.</p>
                 <p><strong>אילו נתונים נשמרים:</strong> כל הנתונים (הכנסות, הוצאות, תחזיות) נשמרים <strong>בדפדפן שלך בלבד</strong> באמצעות localStorage. הנתונים אינם עוברים לאף שרת חיצוני.</p>
-                <p><strong>Google Analytics:</strong> אנו אוספים נתונים סטטיסטיים אנונימיים בלבד — מספר כניסות, דפדפן, מדינה. לא נאסף שום מידע אישי מזהה.</p>
+                <p><strong>Google Analytics:</strong> השירות אוסף נתוני שימוש מצרפיים — מספר כניסות, סוג דפדפן ומכשיר, ומיקום גאוגרפי משוער (מדינה/אזור) הנגזר מכתובת ה-IP — ולשם כך עושה שימוש בקובצי Cookie ובמזהה אנונימי. לא נשלחים ל-Google שום נתונים פיננסיים מהכלי ולא פרטים אישיים מזהים (שם, טלפון, אימייל). עיבוד הנתונים מתבצע אצל Google בהתאם לתנאי השימוש שלה.</p>
                 <p><strong>טופס יצירת קשר:</strong> אם תמלא את הטופס בתחתית הדף, הפרטים שתזין (שם, טלפון, אימייל) יישלחו ישירות לעזרא אליעזר לצורך יצירת קשר בלבד.</p>
                 <p><strong>ייצוא Excel:</strong> הקובץ נוצר ישירות בדפדפן שלך ומורד למחשבך — אינו עובר דרך שרת.</p>
             </div>
@@ -1694,7 +1694,6 @@ a{color:inherit}
             currentStep: 1,
             appMode: null, // 'new' (עסק חדש — כדאיות ומימון) | 'existing' (עסק קיים) | null (טרם נבחר)
             revMode: 'even',
-            reportBaseYear: 2024,   // שנת הבסיס הראשונה — דינמי
             customYear: '2024',
             rev2024: 0,
             rev2025: 0,
@@ -1848,36 +1847,21 @@ a{color:inherit}
             }
         }
 
-        // ── חישוב שנות דיווח לפי שנת הבסיס ──
-        function getYears() {
-            const base = S.reportBaseYear || 2024;
-            return { prev: base, curr: base + 1, forecast: base + 2 };
-        }
-
-        // ── עדכון כל ה-labels הדינמיים בממשק לפי שנת הבסיס ──
+        // ── עדכון כל ה-labels בממשק — תוויות יחסיות קבועות, ללא שנים קלנדריות ──
         function updateYearLabels() {
-            const { prev, curr, forecast } = getYears();
             const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
-            set('lbl-year-prev',         prev);
-            set('lbl-year-curr',         curr);
-            set('lbl-year-forecast',     forecast);
-            set('lbl-rev-prev',          `שנה שעברה (${prev})`);
-            set('lbl-rev-curr',          `השנה (${curr})`);
-            set('lbl-toggle-prev',       `שנה שעברה (${prev})`);
-            set('lbl-toggle-curr',       `השנה (${curr})`);
-            set('lbl-forecast-growth',   `שנה הבאה (${forecast})`);
-            set('lbl-result-forecast-year', forecast);
-            set('lbl-hint-forecast',     forecast);
-            set('lbl-annual-chart-years', `${prev} · ${curr} · תחזית (${forecast})`);
-            set('lbl-table-forecast-year', forecast);
-        }
-
-        function handleBaseYearChange(input) {
-            const val = parseInt(input.value) || 2024;
-            if(val < 2000 || val > 2099) return;
-            S.reportBaseYear = val;
-            updateYearLabels();
-            saveAndRecalc();
+            set('lbl-year-prev',         'שנה קודמת');
+            set('lbl-year-curr',         'שנה נוכחית');
+            set('lbl-year-forecast',     'שנה הבאה');
+            set('lbl-rev-prev',          'שנה קודמת');
+            set('lbl-rev-curr',          'שנה נוכחית');
+            set('lbl-toggle-prev',       'שנה קודמת');
+            set('lbl-toggle-curr',       'שנה נוכחית');
+            set('lbl-forecast-growth',   'שנה הבאה (תחזית)');
+            set('lbl-result-forecast-year', '(שנה הבאה)');
+            set('lbl-hint-forecast',     'לשנה הבאה');
+            set('lbl-annual-chart-years', 'שנה קודמת · שנה נוכחית · תחזית');
+            set('lbl-table-forecast-year', 'שנה הבאה');
         }
 
         function clearOnFocus(inputElement) {
@@ -1959,7 +1943,6 @@ a{color:inherit}
 
             const dataToSave = {
                 appMode: S.appMode,
-                reportBaseYear: S.reportBaseYear || 2024,
                 revMode: S.revMode,
                 rev2024: S.rev2024,
                 rev2025: S.rev2025,
@@ -2005,9 +1988,6 @@ a{color:inherit}
                 const data = JSON.parse(saved);
                 S.appMode = data.appMode || null;
                 S.revMode = data.revMode || 'even';
-                S.reportBaseYear = data.reportBaseYear || 2024;
-                const baseYearEl = document.getElementById('report-base-year');
-                if(baseYearEl) baseYearEl.value = S.reportBaseYear;
                 S.rev2024 = data.rev2024 || 0;
                 S.rev2025 = data.rev2025 || 0;
                 S.customMonths2024 = data.customMonths2024 || Array(12).fill(0);
@@ -2759,7 +2739,7 @@ a{color:inherit}
                     if(subtitle) subtitle.textContent = 'קו מצטבר של רווח נקי מול ההשקעה הראשונית';
                 } else {
                     if(title) title.textContent = 'השוואה שנתית — הכנסות (אלפי ₪)';
-                    if(subtitle) subtitle.textContent = `${getYears().prev} · ${getYears().curr} · תחזית שנה הבאה`;
+                    if(subtitle) subtitle.textContent = 'שנה קודמת · שנה נוכחית · תחזית';
                 }
             }
             if((parseFloat(String(document.getElementById('input-amortization')?.value || '0').replace(/[^0-9.\-]/g,'')) || 0) > 0) toggleAmortizationAdvanced(true);
@@ -3551,7 +3531,7 @@ a{color:inherit}
             const showSeasonBox = S.revMode === 'even';
             if(seasonBox) seasonBox.classList.toggle('hidden', !showSeasonBox);
 
-            // ── בסיס שנתי חזוי 2026 ──
+            // ── בסיס שנתי חזוי לשנה הבאה ──
             const baseYear = S.appMode === 'new' ? S.rev2025 : (S.rev2025 > 0 ? S.rev2025 : S.rev2024);
 
             // ── בחירת אחוז גידול לפי מצב ──
@@ -3591,16 +3571,14 @@ a{color:inherit}
                             ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
                             : 'bg-rose-50 border-rose-200 text-rose-700');
                 } else {
-                    const { prev, curr } = getYears();
-                    calcGrowthEl.textContent = `הזן נתוני ${prev} ו-${curr} לחישוב אוטומטי`;
+                    calcGrowthEl.textContent = 'הזן נתוני שנה קודמת ושנה נוכחית לחישוב אוטומטי';
                     calcGrowthEl.className = 'w-full px-3 py-2.5 rounded-lg font-bold border bg-slate-100 border-slate-200 text-slate-500';
                 }
             }
             // הסבר מתחת לגידול היסטורי
             const histNote = document.getElementById('growth-hist-note');
             if(histNote) {
-                const { prev, curr, forecast } = getYears();
-                const baseLabel = S.rev2025 > 0 ? `השנה (${curr})` : `שנה שעברה (${prev})`;
+                const baseLabel = S.rev2025 > 0 ? 'השנה הנוכחית' : 'השנה הקודמת';
                 if(hasBothYears) {
                     histNote.innerHTML = `התחזית תחושב על בסיס ${baseLabel} × (1 + ${trendGrowthPct.toFixed(1)}%)<br>
                         <span class="text-amber-600 font-semibold">⚠️ גידול מבוסס על שנה אחת בלבד — שקול לאמת מול ממוצע ענפי או גידול רב-שנתי.</span>`;
@@ -3624,11 +3602,10 @@ a{color:inherit}
             // ── עדכן הסבר שיטה למשתמש ──
             const infoEl = document.getElementById('seasonality-method-info');
             if(infoEl) {
-                const { prev, curr } = getYears();
                 const labels = {
-                    both_years:      `✅ משתמש בממוצע משקלים מ-${prev} ו-${curr} — התחזית הכי מדויקת.`,
-                    year_2025:       `✅ משתמש במשקל חודשי בפועל מ-${curr} — תחזית מדויקת.`,
-                    year_2024:       `⚠️ משתמש במשקל חודשי מ-${prev} (אין נתוני ${curr}).`,
+                    both_years:      '✅ משתמש בממוצע משקלים מהשנה הקודמת והנוכחית — התחזית הכי מדויקת.',
+                    year_2025:       '✅ משתמש במשקל חודשי בפועל מהשנה הנוכחית — תחזית מדויקת.',
+                    year_2024:       '⚠️ משתמש במשקל חודשי מהשנה הקודמת (אין נתוני השנה הנוכחית).',
                     seasonal_profile:'📊 אין נתונים חודשיים — משתמש בפרופיל עונתי נבחר.'
                 };
                 infoEl.textContent = labels[source] || '';
@@ -4624,7 +4601,6 @@ a{color:inherit}
             if(!summary) { alert('לא ניתן להפיק דוח PDF לפני השלמת נתוני הבסיס.'); return; }
 
             const meta = collectReportMeta(true);
-            const { forecast } = getYears();
             const today = new Date().toLocaleDateString('he-IL');
             const title = S.appMode === 'new' ? 'בדיקת כדאיות השקעה' : 'תקציב ותחזית לעסק קיים';
             const company = meta.companyName || 'עסק ללא שם';
@@ -4647,7 +4623,7 @@ a{color:inherit}
 
             const html = `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>${htmlEscapePdfReport(title)} - ${htmlEscapePdfReport(company)}</title><style>${css}</style></head><body>
                 <div class="footer">BudgetSmart Financial Planning Platform | Prepared by: Ezra Eliezer Financial Consulting</div>
-                <section class="page cover"><div class="brand">BudgetSmart</div><div class="subtitle">מערכת לתכנון פיננסי, תקציב ובדיקת כדאיות</div><div class="report-title">${htmlEscapePdfReport(title)}</div><div class="meta-line"><strong>שם העסק:</strong> ${htmlEscapePdfReport(company)}</div><div class="meta-line"><strong>פרויקט:</strong> ${htmlEscapePdfReport(project)}</div><div class="meta-line"><strong>שנת תחזית:</strong> ${htmlEscapePdfReport(forecast)}</div><div class="meta-line"><strong>תאריך הפקה:</strong> ${htmlEscapePdfReport(today)}</div><div class="prepared">Prepared by<br><strong>${htmlEscapePdfReport(preparedBy)}</strong><br>עזרא אליעזר - ייעוץ פיננסי</div></section>
+                <section class="page cover"><div class="brand">BudgetSmart</div><div class="subtitle">מערכת לתכנון פיננסי, תקציב ובדיקת כדאיות</div><div class="report-title">${htmlEscapePdfReport(title)}</div><div class="meta-line"><strong>שם העסק:</strong> ${htmlEscapePdfReport(company)}</div><div class="meta-line"><strong>פרויקט:</strong> ${htmlEscapePdfReport(project)}</div><div class="meta-line"><strong>שנת תחזית:</strong> שנה הבאה</div><div class="meta-line"><strong>תאריך הפקה:</strong> ${htmlEscapePdfReport(today)}</div><div class="prepared">Prepared by<br><strong>${htmlEscapePdfReport(preparedBy)}</strong><br>עזרא אליעזר - ייעוץ פיננסי</div></section>
                 <section class="page"><h1 class="section-title">תקציר מנהלים</h1><div class="status-box"><h2>${htmlEscapePdfReport(statusTitle)}</h2><div>${htmlEscapePdfReport(summary.conclusion || '')}</div></div><div class="summary-grid">${executiveRows.map(([k,v])=>`<div class="summary-item"><span>${htmlEscapePdfReport(k)}</span><strong>${htmlEscapePdfReport(v)}</strong></div>`).join('')}</div><p class="note">התקציר מציג את התוצאות המרכזיות בלבד ומבוסס על הנתונים וההנחות שהוזנו במערכת.</p></section>
                 <section class="page"><h1 class="section-title">KPI מרכזיים</h1><div class="kpi-grid">${buildPdfKpiCards(summary)}</div></section>
                 <section class="page"><h1 class="section-title">ניתוח סיכונים</h1>${buildPdfRiskAnalysisTable(summary, monthsData)}</section>
@@ -5101,11 +5077,10 @@ a{color:inherit}
                     });
                 } else {
                     const forecast = cachedOutput.totalRev;
-                    const { prev, curr, forecast: forecastYear } = getYears();
                     const annualLabels = [], annualData = [], annualColors = [];
-                    if(S.rev2024 > 0){ annualLabels.push('שנה שעברה (' + prev + ')'); annualData.push(Math.round(S.rev2024)); annualColors.push('#94a3b8'); }
-                    if(S.rev2025 > 0){ annualLabels.push('השנה (' + curr + ')');      annualData.push(Math.round(S.rev2025)); annualColors.push('#3b82f6'); }
-                    if(forecast > 0) { annualLabels.push('תחזית (' + forecastYear + ')'); annualData.push(Math.round(forecast)); annualColors.push('#10b981'); }
+                    if(S.rev2024 > 0){ annualLabels.push('שנה קודמת'); annualData.push(Math.round(S.rev2024)); annualColors.push('#94a3b8'); }
+                    if(S.rev2025 > 0){ annualLabels.push('שנה נוכחית');      annualData.push(Math.round(S.rev2025)); annualColors.push('#3b82f6'); }
+                    if(forecast > 0) { annualLabels.push('תחזית'); annualData.push(Math.round(forecast)); annualColors.push('#10b981'); }
                     const annualValueLabels = {
                         id: 'annualValueLabels',
                         afterDatasetsDraw(chart) {
@@ -5342,7 +5317,7 @@ a{color:inherit}
             if(!cachedOutput) { alert('אין נתוני תקציב זמינים לייצוא כרגע.'); return; }
             if(typeof XLSX === 'undefined') { alert('ספריית הייצוא עדיין נטענת — נסה שוב בעוד רגע.'); return; }
 
-            const { forecast: fy } = getYears();
+            const fy = new Date().getFullYear();
             const today = new Date().toLocaleDateString('he-IL');
             const M = cachedOutput.monthsData;
             const MONTHS = M.map(m => m.monthName);
@@ -5473,7 +5448,7 @@ a{color:inherit}
             const gm = (cachedOutput.marginGrossPct||0).toFixed(1);
             const em = (cachedOutput.marginEbitdaPct||0).toFixed(1);
             const ex = tRev>0 ? (tExp/tRev*100).toFixed(1) : '0';
-            put2(1,1,`מדדי ביצוע ומודל תקציב פיננסי חזוי — ${fy}  |  עזרא אליעזר, יועץ עסקי`, st('0F172A','FFFFFF',{bold:true,sz:14,alH:'center'}));
+            put2(1,1,`מדדי ביצוע ומודל תקציב פיננסי חזוי  |  עזרא אליעזר, יועץ עסקי`, st('0F172A','FFFFFF',{bold:true,sz:14,alH:'center'}));
             for(let c=2;c<=14;c++) put2(1,c,'', st('0F172A','FFFFFF',{}));
             const AMB='FFFBEB';
             const cards = [
