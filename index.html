@@ -852,63 +852,63 @@ a{color:inherit}
                 <div class="space-y-5 max-w-2xl">
 
 <!-- 4. פחת והפחתות D+A -->
-                <div class="p-5 bg-slate-900 rounded-xl border border-slate-700">
+                <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
                     <div class="flex items-center gap-2 mb-3">
-                        <i data-lucide="layers" class="w-4 h-4 text-blue-400 flex-shrink-0"></i>
-                        <h3 class="text-sm font-bold text-white">פחת והפחתות — D &amp; A</h3>
+                        <i data-lucide="layers" class="w-4 h-4 text-blue-600 flex-shrink-0"></i>
+                        <h3 class="text-sm font-bold text-slate-800">פחת והפחתות — D &amp; A</h3>
                         <span class="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-medium">משלים את ה-EBITDA</span>
                     </div>
 
                     <!-- הסבר מקור הנתון -->
-                    <div class="mb-4 text-xs text-slate-300 space-y-1.5 bg-slate-800 rounded-lg p-3">
+                    <div class="mb-4 text-xs text-slate-600 space-y-1.5 bg-slate-100 rounded-lg p-3">
                         <p id="da-existing-note" class="flex items-start gap-1.5 mode-only-existing">
-                            <i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0 mt-0.5"></i>
-                            <span><strong class="text-emerald-400">עסק קיים:</strong> קח את סכום הפחת מדוח רווח והפסד (שורת "פחת והפחתות"), או מדוח תזרים מזומנים בסעיף "התאמות לרווח נקי".</span>
+                            <i data-lucide="building-2" class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
+                            <span><strong class="text-emerald-600">עסק קיים:</strong> קח את סכום הפחת מדוח רווח והפסד (שורת "פחת והפחתות"), או מדוח תזרים מזומנים בסעיף "התאמות לרווח נקי".</span>
                         </p>
                         <p id="da-new-note" class="flex items-start gap-1.5 mode-only-new text-sm leading-relaxed">
-                            <i data-lucide="rocket" class="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5"></i>
-                            <span><strong class="text-blue-400">עסק חדש / CapEx:</strong> אם אין עדיין דוחות — הזן את שווי הציוד ואחוז הפחת השנתי, והמערכת תחשב עבורך.</span>
+                            <i data-lucide="rocket" class="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5"></i>
+                            <span><strong class="text-blue-600">עסק חדש / CapEx:</strong> אם אין עדיין דוחות — הזן את שווי הציוד ואחוז הפחת השנתי, והמערכת תחשב עבורך.</span>
                         </p>
-                        <p class="flex items-start gap-1.5 pt-1 border-t border-slate-700">
-                            <i data-lucide="info" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0 mt-0.5"></i>
-                            <span class="text-slate-400">אם לא תזין כלום — המערכת תחשב <strong class="text-slate-300">EBIT = EBITDA</strong> (כלומר תניח פחת אפס, מה שמתאים לעסקי שירות ללא רכוש קבוע משמעותי).</span>
+                        <p class="flex items-start gap-1.5 pt-1 border-t border-slate-200">
+                            <i data-lucide="info" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-slate-500">אם לא תזין כלום — המערכת תחשב <strong class="text-slate-600">EBIT = EBITDA</strong> (כלומר תניח פחת אפס, מה שמתאים לעסקי שירות ללא רכוש קבוע משמעותי).</span>
                         </p>
                     </div>
 
                     <!-- toggle: ישיר / CapEx -->
-                    <div class="flex rounded-md border border-slate-600 overflow-hidden text-[11px] bg-slate-800 mb-4 w-fit">
+                    <div class="flex rounded-md border border-slate-300 overflow-hidden text-[11px] bg-slate-100 mb-4 w-fit">
                         <button onclick="setDAMode('direct')" id="toggle-da-direct" class="px-3 py-1.5 bg-blue-600 text-white font-medium">הזנה ישירה (₪ לשנה)</button>
-                        <button onclick="setDAMode('capex')" id="toggle-da-capex" class="px-3 py-1.5 text-slate-300 font-medium">חישוב מ-CapEx</button>
+                        <button onclick="setDAMode('capex')" id="toggle-da-capex" class="px-3 py-1.5 text-slate-600 font-medium">חישוב מ-CapEx</button>
                     </div>
 
                     <!-- מצב ישיר -->
                     <div id="da-direct-fields" class="space-y-3">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">
                                     פחת שנתי — Depreciation
-                                    <span class="font-normal text-slate-400">(רכוש מוחשי: ציוד, רכב, שיפוצים)</span>
+                                    <span class="font-normal text-slate-500">(רכוש מוחשי: ציוד, רכב, שיפוצים)</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="text" id="input-depreciation" oninput="formatAndHandleDAInput('depreciation', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
-                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                                    <input type="text" id="input-depreciation" oninput="formatAndHandleDAInput('depreciation', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-slate-500 text-sm">₪</span>
                                 </div>
                             </div>
                         </div>
                         <button type="button" id="toggle-amortization-advanced" onclick="toggleAmortizationAdvanced()" class="bs-advanced-toggle">
                             הצג שדה מתקדם: הפחתות שנתיות
                         </button>
-                        <div id="amortization-advanced-wrap" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-700">
+                        <div id="amortization-advanced-wrap" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">
                                     הפחתות שנתיות — Amortization
-                                    <span class="font-normal text-slate-400">(רכוש בלתי מוחשי: מוניטין, פטנטים, תוכנה)</span>
+                                    <span class="font-normal text-slate-500">(רכוש בלתי מוחשי: מוניטין, פטנטים, תוכנה)</span>
                                 </label>
                                 <div class="relative">
-                                    <input type="text" id="input-amortization" oninput="formatAndHandleDAInput('amortization', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
-                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                                    <input type="text" id="input-amortization" oninput="formatAndHandleDAInput('amortization', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-slate-500 text-sm">₪</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mt-1.5">שדה מתקדם בלבד — מתאים בעיקר לנכסים בלתי מוחשיים. ברוב העסקים ניתן להשאיר 0.</p>
+                                <p class="text-[11px] text-slate-500 mt-1.5">שדה מתקדם בלבד — מתאים בעיקר לנכסים בלתי מוחשיים. ברוב העסקים ניתן להשאיר 0.</p>
                             </div>
                         </div>
                     </div>
@@ -917,84 +917,84 @@ a{color:inherit}
                     <div id="da-capex-fields" class="hidden space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">שווי הציוד / ההשקעה (₪)</label>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">שווי הציוד / ההשקעה (₪)</label>
                                 <div class="relative">
-                                    <input type="text" id="input-capex-value" oninput="formatAndHandleDAInput('capexValue', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
-                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                                    <input type="text" id="input-capex-value" oninput="formatAndHandleDAInput('capexValue', this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-blue-500" placeholder="0">
+                                    <span class="absolute left-3 top-2.5 text-slate-500 text-sm">₪</span>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-300 mb-1">אחוז פחת שנתי (%)</label>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">אחוז פחת שנתי (%)</label>
                                 <div class="relative">
-                                    <input type="number" id="input-capex-rate" min="1" max="100" value="15" oninput="saveAndRecalc()" class="w-full pl-8 pr-3 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white outline-none text-right focus:ring-2 focus:ring-blue-500">
-                                    <span class="absolute left-3 top-2.5 text-slate-400 text-sm">%</span>
+                                    <input type="number" id="input-capex-rate" min="1" max="100" value="15" oninput="saveAndRecalc()" class="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-blue-500">
+                                    <span class="absolute left-3 top-2.5 text-slate-500 text-sm">%</span>
                                 </div>
-                                <p class="text-[11px] text-slate-400 mt-1.5">
+                                <p class="text-[11px] text-slate-500 mt-1.5">
                                     דוגמאות: מחשבים 33% · ציוד ומכונות 7–15% · רכב 15–20% · שיפוצים 10%
                                 </p>
                             </div>
                         </div>
                         <!-- תצוגת פחת מחושב -->
-                        <div id="capex-result-display" class="hidden bg-slate-800 rounded-lg px-4 py-2.5 flex items-center justify-between">
-                            <span class="text-xs text-slate-400">פחת שנתי מחושב:</span>
-                            <span id="capex-result-value" class="text-sm font-bold text-blue-400">₪0</span>
+                        <div id="capex-result-display" class="hidden bg-slate-100 rounded-lg px-4 py-2.5 flex items-center justify-between">
+                            <span class="text-xs text-slate-500">פחת שנתי מחושב:</span>
+                            <span id="capex-result-value" class="text-sm font-bold text-blue-600">₪0</span>
                         </div>
                     </div>
 
                     <!-- סיכום D+A -->
-                    <div id="da-summary" class="hidden mt-4 pt-3 border-t border-slate-700 flex items-center justify-between">
-                        <span class="text-xs text-slate-400">סה"כ פחת והפחתות שנתי (D+A):</span>
-                        <span id="da-total-display" class="text-sm font-bold text-blue-400">₪0</span>
+                    <div id="da-summary" class="hidden mt-4 pt-3 border-t border-slate-200 flex items-center justify-between">
+                        <span class="text-xs text-slate-500">סה"כ פחת והפחתות שנתי (D+A):</span>
+                        <span id="da-total-display" class="text-sm font-bold text-blue-600">₪0</span>
                     </div>
                 </div>
 
                 </div>
 
 <!-- ── בלוק מימון ומס ── -->
-            <div class="p-5 bg-slate-900 rounded-xl border border-slate-700 mt-2">
+            <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 mt-2">
                 <div class="flex items-center gap-2 mb-3">
-                    <i data-lucide="landmark" class="w-4 h-4 text-amber-400 flex-shrink-0"></i>
-                    <h3 class="text-sm font-bold text-white">מימון ומס — להשלמת דוח P&L</h3>
+                    <i data-lucide="landmark" class="w-4 h-4 text-amber-600 flex-shrink-0"></i>
+                    <h3 class="text-sm font-bold text-slate-800">מימון ומס — להשלמת דוח P&L</h3>
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded-full font-medium">נדרש לדף 5</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div id="step4-financing-field">
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
                             הוצאות מימון שנתיות (ריבית)
-                            <span class="font-normal text-slate-400"> — ריבית על הלוואות, אוברדראפט</span>
+                            <span class="font-normal text-slate-500"> — ריבית על הלוואות, אוברדראפט</span>
                         </label>
                         <div class="relative">
                             <input type="text" id="input-financing" oninput="formatAndHandleFinanceInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-amber-500" placeholder="0">
-                            <span class="absolute left-3 top-2.5 text-slate-400 text-sm">₪</span>
+                            <span class="absolute left-3 top-2.5 text-slate-500 text-sm">₪</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1.5">ללא הלוואות — השאר 0</p>
+                        <p class="text-[11px] text-slate-500 mt-1.5">ללא הלוואות — השאר 0</p>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">
                             שיעור המס (%)
                         </label>
                         <div class="relative">
                             <input type="number" id="input-tax-rate" min="0" max="100" value="23" oninput="saveAndRecalc()" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-amber-500">
-                            <span class="absolute left-3 top-2.5 text-slate-400 text-sm">%</span>
+                            <span class="absolute left-3 top-2.5 text-slate-500 text-sm">%</span>
                         </div>
-                        <p class="text-[11px] text-slate-400 mt-1.5">ברירת המחדל 23% — מס חברות בישראל. ניתן לשנות לפי הסדר המס שלך.</p>
+                        <p class="text-[11px] text-slate-500 mt-1.5">ברירת המחדל 23% — מס חברות בישראל. ניתן לשנות לפי הסדר המס שלך.</p>
                     </div>
                 </div>
 
                 <!-- ── תזמון תשלום המס בתזרים ── -->
-                <div class="mt-4 pt-3 border-t border-slate-700">
-                    <label class="block text-xs font-semibold text-slate-300 mb-2">
+                <div class="mt-4 pt-3 border-t border-slate-200">
+                    <label class="block text-xs font-semibold text-slate-600 mb-2">
                         אופן תשלום המס בתזרים המזומנים
                     </label>
-                    <div class="flex flex-wrap rounded-lg border border-slate-600 overflow-hidden text-[11px] bg-slate-800 w-fit">
+                    <div class="flex flex-wrap rounded-lg border border-slate-300 overflow-hidden text-[11px] bg-slate-100 w-fit">
                         <button onclick="setTaxTiming('monthly')" id="toggle-taxtiming-monthly" class="min-w-[120px] px-3 py-1.5 bg-blue-600 text-white font-medium transition-all">מקדמות חודשיות / ניכוי במקור</button>
-                        <button onclick="setTaxTiming('quarterly')" id="toggle-taxtiming-quarterly" class="min-w-[95px] px-3 py-1.5 text-slate-300 font-medium transition-all hover:bg-slate-700">רבעוני</button>
-                        <button onclick="setTaxTiming('annual')" id="toggle-taxtiming-annual" class="min-w-[120px] px-3 py-1.5 text-slate-300 font-medium transition-all hover:bg-slate-700">תשלום שנתי לפי דוח</button>
+                        <button onclick="setTaxTiming('quarterly')" id="toggle-taxtiming-quarterly" class="min-w-[95px] px-3 py-1.5 text-slate-600 font-medium transition-all hover:bg-slate-100">רבעוני</button>
+                        <button onclick="setTaxTiming('annual')" id="toggle-taxtiming-annual" class="min-w-[120px] px-3 py-1.5 text-slate-600 font-medium transition-all hover:bg-slate-100">תשלום שנתי לפי דוח</button>
                     </div>
-                    <p id="tax-timing-note" class="text-[11px] text-slate-400 mt-2"></p>
+                    <p id="tax-timing-note" class="text-[11px] text-slate-500 mt-2"></p>
                 </div>
 
-                <p class="text-[11px] text-amber-400/80 mt-3 flex items-start gap-1.5 border-t border-slate-700 pt-2">
+                <p class="text-[11px] text-amber-600/80 mt-3 flex items-start gap-1.5 border-t border-slate-200 pt-2">
                     <i data-lucide="alert-circle" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5"></i>
                     סכום המס מחושב על הרווח השנתי (כולל קיזוז חודשים מפסידים). לתכנון מס מדויק יש להיוועץ ברו"ח.
                 </p>
@@ -1013,7 +1013,6 @@ a{color:inherit}
                         <i data-lucide="folder-open" class="w-4 h-4"></i> טען עבודה
                     </button>
                     <input type="file" id="load-work-input" accept=".json,application/json" class="hidden" onchange="loadWorkFromFile(event)">
-                    <span class="report-meta-slot w-full"></span>
                     <button onclick="nextFromStep4()" class="w-full sm:w-auto font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer" style="background:#4f46e5;color:#ffffff">
                         המשך: מדדי ביצוע ←
                     </button>
@@ -1076,7 +1075,25 @@ a{color:inherit}
                                     class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="15">
                                 <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
                             </div>
-                            <p class="text-[11px] text-indigo-400 mt-1.5">הרף שמתחתיו ההשקעה אינה כדאית בעיניך (ברירת מחדל 15%)</p>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">קו ייחוס אישי בלבד — מושווה ל-IRR ואינו פוסל את העסקה (ברירת מחדל 15%)</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">ריבית היוון לחישוב NPV</label>
+                            <div class="relative max-w-[160px]">
+                                <input type="number" id="input-discount-rate" value="5" step="0.1" oninput="saveAndRecalc()"
+                                    class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="5">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">הריבית שבה מהוונים את התזרים העתידי. בדרך כלל ~חסרת סיכון (ברירת מחדל 5%). זהו הרף האובייקטיבי הקובע GO/NO-GO לפי NPV.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">מכפיל ערך שיורי (שווי מכירה)</label>
+                            <div class="relative max-w-[160px]">
+                                <input type="number" id="input-terminal-multiple" value="3" step="0.5" min="0" oninput="saveAndRecalc()"
+                                    class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="3">
+                                <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">×</span>
+                            </div>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">שווי המכירה המשוער בתום התקופה = מכפיל × EBITDA חזוי. ברירת מחדל 3 (שמרני). ניתן לשנות לפי הענף (למשל 2–5).</p>
                         </div>
                     </div>
                 </div>
@@ -1291,6 +1308,7 @@ a{color:inherit}
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: השלמת נתונים לדוחות
                 </button>
                 <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
+                <span class="report-meta-slot w-full"></span>
                 <button onclick="exportToExcel()" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2 rounded-lg transition-all shadow flex items-center justify-center gap-2 cursor-pointer">
                     <i data-lucide="download" class="w-4 h-4"></i> הורד קובץ אקסל
                 </button>
@@ -1734,7 +1752,9 @@ a{color:inherit}
                 workingCapital: 0,
                 other: 0
             },
-            requiredRoi: 15, // תשואה שנתית מינימלית נדרשת (%) — hurdle rate
+            requiredRoi: 15, // תשואה שנתית מינימלית נדרשת (%) — hurdle rate (רף אישי, לא פוסל)
+            discountRate: 5, // ריבית היוון ל-NPV (%) — ברירת מחדל ~חסרת סיכון. נפרד מהרף.
+            terminalMultiple: 3, // מכפיל EBITDA לחישוב שווי מכירה בתום התקופה (ניתן לעריכה)
             mktGrowth: 0,
             mktElasticity: 5, 
             manpower: [],
@@ -1914,6 +1934,10 @@ a{color:inherit}
             S.investment     = getInitialInvestment();
             S.requiredRoi    = parseFloat(document.getElementById('input-required-roi')?.value);
             if(isNaN(S.requiredRoi)) S.requiredRoi = 15;
+            S.discountRate   = parseFloat(document.getElementById('input-discount-rate')?.value);
+            if(isNaN(S.discountRate)) S.discountRate = 5;
+            S.terminalMultiple = parseFloat(document.getElementById('input-terminal-multiple')?.value);
+            if(isNaN(S.terminalMultiple) || S.terminalMultiple < 0) S.terminalMultiple = 3;
             // D+A
             if(S.daMode === 'direct') {
                 S.inputs.depreciation  = readInput('input-depreciation');
@@ -1973,6 +1997,8 @@ a{color:inherit}
                 investmentInputMode: S.investmentInputMode,
                 investmentBreakdown: S.investmentBreakdown,
                 requiredRoi:    S.requiredRoi,
+                discountRate:   S.discountRate,
+                terminalMultiple: S.terminalMultiple,
                 mktGrowth: S.mktGrowth,
                 mktElasticity: parseFloat(document.getElementById('input-mkt-elasticity')?.value) || 5,
                 manpower: S.manpower,
@@ -2021,6 +2047,8 @@ a{color:inherit}
                     launchMarketing: 0, licenses: 0, systems: 0, workingCapital: 0, other: 0
                 }, data.investmentBreakdown || {});
                 S.requiredRoi = (data.requiredRoi !== undefined && data.requiredRoi !== null) ? data.requiredRoi : 15;
+                S.discountRate = (data.discountRate !== undefined && data.discountRate !== null) ? data.discountRate : 5;
+                S.terminalMultiple = (data.terminalMultiple !== undefined && data.terminalMultiple !== null) ? data.terminalMultiple : 3;
                 S.mktGrowth = data.mktGrowth || 0;
                 S.manpower = data.manpower || [];
 
@@ -2063,6 +2091,10 @@ a{color:inherit}
                 updateInvestmentBreakdownUI(false);
                 const rrEl = document.getElementById('input-required-roi');
                 if(rrEl) rrEl.value = S.requiredRoi;
+                const drEl = document.getElementById('input-discount-rate');
+                if(drEl) drEl.value = S.discountRate;
+                const tmEl = document.getElementById('input-terminal-multiple');
+                if(tmEl) tmEl.value = S.terminalMultiple;
                 // שחזור שדות מימון ההשקעה (עסק חדש)
                 const ecEl = document.getElementById('input-equity-contribution');
                 if(ecEl) ecEl.value = S.equityContribution > 0 ? Math.round(S.equityContribution).toLocaleString('en-US') : '';
@@ -3960,7 +3992,7 @@ a{color:inherit}
                 ? `הבדיקה הוארכה ל־${analysisHorizonYears} שנים בגלל הלוואת בוליט שמועד פירעון הקרן שלה מאוחר משנה 5.`
                 : 'הבדיקה נערכה לאופק של 5 שנים.';
 
-            const terminalMultiple = 3;
+            const terminalMultiple = (isFinite(S.terminalMultiple) && S.terminalMultiple >= 0) ? S.terminalMultiple : 3;
             const terminalValue = totalEbitda > 0 ? totalEbitda * terminalMultiple : 0;
 
             function loanPositionAtYear(yearsAhead) {
@@ -4060,20 +4092,45 @@ a{color:inherit}
             const equityRoiPct = equityInvestment > 0 ? ((equityOwnerCashFlows - equityInvestment) / equityInvestment) * 100 : null;
             const leverageEffectPct = (irrPct === null || unleveragedIrrPct === null) ? null : irrPct - unleveragedIrrPct;
 
-            // ── החלטה 1: כדאיות העסקה עצמה, ללא השפעת מימון חיצוני ──
-            // Payback מוצג כמדד מידע בלבד ואינו מפיל עסקה טובה ל-GO/NO-GO,
-            // משום שהמודל כולל ערך סופי שמרני והחזר השקעה עשוי להיות מעבר לאופק 5 השנים.
+            // ── NPV ו-IRR של העסקה — כולל ערך שיורי (שווי מכירה בתום התקופה) ──
+            // ריבית ההיוון (אובייקטיבית, ~חסרת סיכון) נפרדת מהרף האישי (requiredRoi).
+            // מודל "ללא ערך שיורי" בוטל: הוא הניח שווי אפס לעסק חי בתום 5 שנים — הנחה לא ריאלית שמעוותת עסקה רווחית.
+            const discountRatePct = isFinite(S.discountRate) ? S.discountRate : 5;
+            const dr = discountRatePct / 100;
+            const npvAt = (flows, rate) => flows.reduce((s, cf, i) => s + (isFinite(cf) ? cf : 0) / Math.pow(1 + rate, i), 0);
+
+            // תזרימי העסקה כוללים ערך שיורי (EBITDA × מכפיל בשנה האחרונה) — זהים ל-unleveragedFlows
+            const dealFlows = unleveragedFlows;
+            const selectedIrrPct = unleveragedIrrPct;        // IRR כולל ערך שיורי
+            const selectedNpv = investment > 0 ? npvAt(dealFlows, dr) : null; // NPV בריבית ההיוון
+            const irrMeetsHurdle = selectedIrrPct !== null && selectedIrrPct >= requiredRoi;
+            const feasModelLabel = `שווי מכירה בתום התקופה = EBITDA × ${terminalMultiple}`;
+
+            // הסבר דינמי לפי תוצאת ה-NPV
+            let npvCompareNote;
+            if(selectedNpv === null) npvCompareNote = 'לא הוזנה השקעה — מדדי ה-NPV אינם זמינים.';
+            else if(selectedNpv >= 0) npvCompareNote = `העסקה יוצרת ערך כלכלי חיובי בריבית היוון ${discountRatePct}%, בהנחת שווי מכירה של EBITDA × ${terminalMultiple} בתום התקופה.`;
+            else npvCompareNote = `גם בהנחת שווי מכירה (EBITDA × ${terminalMultiple}) העסקה אינה יוצרת ערך מעל ריבית ההיוון — נדרשת בחינה מחדש של ההנחות.`;
+
+            // ── החלטה 1: כדאיות העסקה — מדרג: NPV (אובייקטיבי) ראשי, IRR מול הרף האישי משני ──
+            // ריבית ההיוון היא הרף האובייקטיבי. הרף האישי (requiredRoi) אינו פוסל — רק מושווה ל-IRR.
             let dealLevel = 'caution';
-            const projectIrrOk = unleveragedIrrPct === null || unleveragedIrrPct > 0;
-            if(totalEbitda <= 0 || projectRoiPct <= 0 || !projectIrrOk) dealLevel = 'nogo';
-            else if(projectRoiPct >= requiredRoi && projectIrrOk) dealLevel = 'go';
-            else dealLevel = 'caution';
+            let dealHurdleNote = '';
+            if(totalEbitda <= 0 || selectedNpv === null || selectedNpv < 0) {
+                dealLevel = 'nogo';
+            } else {
+                dealLevel = 'go';
+                dealHurdleNote = irrMeetsHurdle
+                    ? `ה-IRR (${formatPctValue(selectedIrrPct)}) עומד גם ברף האישי שהגדרת (${requiredRoi}%).`
+                    : `שים לב: ה-IRR (${formatPctValue(selectedIrrPct)}) נמוך מהרף האישי שהגדרת (${requiredRoi}%). העסקה יוצרת ערך מעל ריבית ההיוון, אך אינה עומדת בציפיית התשואה האישית — הרף האישי אינו פוסל את העסקה.`;
+            }
 
             const dealCfg = {
-                go:      { emoji:'🟢', title:'העסקה עצמה כדאית', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'בדיקה לפני מימון: ROI העסקה ו-IRR העסקה חיוביים ועומדים ברף התשואה שהוגדר. תקופות ההחזר מוצגות כמידע בלבד.' },
-                caution: { emoji:'🟡', title:'כדאיות העסקה גבולית', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה חיובית אך ROI/IRR אינם עומדים באופן מלא ברף התשואה שהוגדר. תקופות ההחזר אינן משמשות כקריטריון פסילה.' },
-                nogo:    { emoji:'🔴', title:'העסקה עצמה אינה כדאית', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'גם לפני מימון קיימת חולשה ברווח התפעולי, ROI העסקה או IRR העסקה.' }
+                go:      { emoji:'🟢', title:'העסקה עצמה כדאית', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:`NPV חיובי בריבית היוון ${discountRatePct}% (${feasModelLabel}) — העסקה יוצרת ערך כלכלי. ${dealHurdleNote}` },
+                caution: { emoji:'🟡', title:'כדאיות העסקה גבולית', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'ה-NPV סביב האיזון — מומלץ לבדוק תרחישים ואת הנחות הבסיס.' },
+                nogo:    { emoji:'🔴', title:'העסקה עצמה אינה כדאית', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:`NPV שלילי בריבית היוון ${discountRatePct}% (${feasModelLabel}) — העסקה אינה יוצרת ערך מעל החלופה. תקופות ההחזר והרף האישי אינם משנים זאת.` }
             }[dealLevel];
+
 
             // ── החלטה 2: איכות מבנה המימון בלבד ──
             let financingLevel = 'safe';
@@ -4106,6 +4163,7 @@ a{color:inherit}
                 decisionLevel = 'caution';
                 conclusion = 'העסקה דורשת בדיקה נוספת. חלק ממדדי ROI/IRR חיוביים אך לא מספיק חזקים לקבלת החלטת GO מלאה.';
             }
+            if(dealLevel === 'go' && dealHurdleNote) conclusion += ' ' + dealHurdleNote;
 
             const decisionCfg = {
                 go:           { emoji:'🟢', title:'GO', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'העסקה כדאית ומבנה המימון תקין.' },
@@ -4152,6 +4210,14 @@ a{color:inherit}
                 unleveragedRoiPct,
                 irrPct,
                 unleveragedIrrPct,
+                discountRatePct,
+                feasModelLabel,
+                selectedNpv,
+                selectedIrrPct,
+                irrMeetsHurdle,
+                requiredRoi,
+                dealHurdleNote,
+                npvCompareNote,
                 equityInvestment,
                 analysisHorizonYears,
                 horizonNote,
@@ -4256,9 +4322,10 @@ a{color:inherit}
                             </div>
                             <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                                 <h4 class="text-sm font-bold text-slate-700 mb-2">מדדי כדאיות וסיכון</h4>
-                                ${row('ROI העסקה', formatPctValue(summary.projectRoiPct))}
+                                ${row(`NPV העסקה (היוון ${summary.discountRatePct}%)`, summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : '₪' + fmtILS(summary.selectedNpv))}
+                                ${row(`IRR העסקה`, formatPctValue(summary.selectedIrrPct))}
+                                ${row('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct))}
                                 ${row('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct))}
-                                ${row(`IRR העסקה (ללא מימון)`, formatPctValue(summary.unleveragedIrrPct))}
                                 ${row('IRR על ההון העצמי', formatPctValue(summary.irrPct))}
                                 ${row('השפעת המינוף', formatPctValue(summary.leverageEffectPct))}
                                 ${row('תקופת החזר השקעה', summary.paybackOpTxt)}
@@ -4414,9 +4481,10 @@ a{color:inherit}
             const cards = S.appMode === 'new' ? [
                 ['השקעה ראשונית', moneyPdf(summary.investment)],
                 ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)],
-                ['ROI העסקה', pctPdf(summary.projectRoiPct)],
+                ['NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)],
+                ['IRR העסקה', pctPdf(summary.selectedIrrPct)],
+                ['ROI מצטבר (לא מהוון)', pctPdf(summary.projectRoiPct)],
                 ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)],
-                ['IRR העסקה', pctPdf(summary.unleveragedIrrPct)],
                 ['IRR על ההון העצמי', pctPdf(summary.irrPct)],
                 ['תקופת החזר השקעה', summary.paybackOpTxt],
                 ['תקופת החזר הון עצמי', summary.paybackTxt],
@@ -4438,7 +4506,8 @@ a{color:inherit}
             const rows = [];
             rows.push({ label:'רווח נקי שנתי', value:moneyPdf(annualNetProfitForRisk), status: annualNetProfitForRisk > 0 ? 'תקין' : 'סיכון', note: annualNetProfitForRisk > 0 ? 'הרווח הנקי השנתי חיובי.' : 'הרווח הנקי השנתי שלילי או אפסי ודורש בדיקה.' });
             if(S.appMode === 'new') {
-                rows.push({ label:'ROI העסקה', value:pctPdf(summary.projectRoiPct), status:(summary.projectRoiPct || 0) > 0 ? 'תקין' : 'סיכון', note:'בדיקת תשואה על כלל ההשקעה כולל ערך סופי שמרני.' });
+                rows.push({ label:'NPV העסקה', value: summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv), status: summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון'), note:`ערך נוכחי נקי בריבית היוון ${summary.discountRatePct}% (${summary.feasModelLabel}) — הקריטריון הקובע GO/NO-GO.` });
+                rows.push({ label:'ROI מצטבר (לא מהוון)', value:pctPdf(summary.projectRoiPct), status:'מידע', note:'מדד מידע בלבד — אינו מהוון ואינו קובע GO/NO-GO.' });
                 rows.push({ label:'IRR על ההון העצמי', value:pctPdf(summary.irrPct), status:summary.irrPct === null ? 'אזהרה' : (summary.irrPct > 0 ? 'תקין' : 'סיכון'), note:'בדיקת תשואת המשקיע לאחר מבנה המימון.' });
                 rows.push({ label:'DSCR', value:summary.dscrTxt || 'ללא חוב', status:summary.dscr === null ? 'תקין' : (summary.dscr < 1 ? 'סיכון' : (summary.dscr <= 1.1 ? 'אזהרה' : 'תקין')), note:'יכולת שירות החוב לפי התזרים הזמין.' });
                 rows.push({ label:'תקופת החזר השקעה', value:summary.paybackOpTxt || 'לא זמין', status:'מידע', note:'מדד מידע בלבד — אינו קובע לבדו GO / NO-GO.' });
@@ -4493,6 +4562,9 @@ a{color:inherit}
             if(S.appMode === 'new') {
                 items.push(['השקעה ראשונית', moneyPdf(summary.investment || 0)]);
                 items.push(['מימון נדרש', moneyPdf(summary.fundingRequired || summary.loanRequired || 0)]);
+                items.push(['ריבית היוון (NPV)', pctPdf(summary.discountRatePct ?? 5)]);
+                items.push(['מכפיל ערך שיורי', '×' + (S.terminalMultiple ?? 3)]);
+                items.push(['רף אישי (קו ייחוס)', pctPdf(summary.requiredRoi ?? 15)]);
             }
             return `<div class="assumption-grid">${items.map(([k,v])=>`<div><span>${htmlEscapePdfReport(k)}</span><strong>${htmlEscapePdfReport(v)}</strong></div>`).join('')}</div>`;
         }
@@ -4611,7 +4683,7 @@ a{color:inherit}
             const insights = getPdfInsights(summary, monthsData);
 
             const executiveRows = S.appMode === 'new' ? [
-                ['השקעה ראשונית', moneyPdf(summary.investment)], ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)], ['ROI העסקה', pctPdf(summary.projectRoiPct)], ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)], ['IRR העסקה (ללא מימון)', pctPdf(summary.unleveragedIrrPct)], ['IRR על ההון העצמי', pctPdf(summary.irrPct)], ['השפעת המינוף', pctPdf(summary.leverageEffectPct)], ['תקופת החזר השקעה', summary.paybackOpTxt], ['תקופת החזר הון עצמי', summary.paybackTxt], ['ערך סופי שמרני (EBITDA × 3)', moneyPdf(summary.terminalValue)],
+                ['השקעה ראשונית', moneyPdf(summary.investment)], ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)], ['NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)], ['IRR העסקה', pctPdf(summary.selectedIrrPct)], ['ROI מצטבר (לא מהוון)', pctPdf(summary.projectRoiPct)], ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)], ['IRR על ההון העצמי', pctPdf(summary.irrPct)], ['השפעת המינוף', pctPdf(summary.leverageEffectPct)], ['תקופת החזר השקעה', summary.paybackOpTxt], ['תקופת החזר הון עצמי', summary.paybackTxt], ['ערך שיורי (EBITDA × ' + (S.terminalMultiple ?? 3) + ')', moneyPdf(summary.terminalValue)],
                 ['מבנה מימון', summary.financingCfg.title], ['DSCR', summary.dscrTxt], ['המלצה', statusTitle]
             ] : [
                 ['הכנסות שנתיות', moneyPdf(summary.totalRev)], ['EBITDA', moneyPdf(summary.totalEbitda)], ['רווח נקי', moneyPdf(summary.totalNet)],
@@ -4757,11 +4829,25 @@ a{color:inherit}
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-indigo-600"></i> מדדי השקעה מרכזיים</h3>
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> כדאיות מהוונת — NPV ו-IRR (ריבית היוון ${summary.discountRatePct}%)</h3>
+
+                        <div class="rounded-lg border-2 p-3 mb-3 text-[12px] leading-relaxed" style="border-color:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#10b981' : '#f43f5e'};background:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#ecfdf5' : '#fff1f2'};color:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#065f46' : '#9f1239'}">
+                            <strong>ההכרעה חושבה בריבית היוון ${summary.discountRatePct}%, בהנחת ${summary.feasModelLabel}.</strong>
+                            ${summary.npvCompareNote}
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            ${kpiCard('NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : '₪' + fmtILS(summary.selectedNpv), `ערך נוכחי נקי בריבית ${summary.discountRatePct}% — קובע GO/NO-GO`, getInvestmentColor(summary.selectedNpv, 'profit'))}
+                            ${kpiCard('IRR העסקה', formatPctValue(summary.selectedIrrPct), `כולל שווי מכירה (EBITDA × ${summary.terminalMultiple})`, getInvestmentColor(summary.selectedIrrPct, 'irr'))}
+                        </div>
+                        <p class="text-[11px] text-slate-500 mt-2">הרף האישי שהגדרת (${summary.requiredRoi}%) אינו פוסל את העסקה — הוא קו ייחוס בלבד המושווה ל-IRR. ${summary.dealHurdleNote || ''}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-indigo-600"></i> מדדי השקעה נוספים</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                            ${kpiCard('ROI העסקה', formatPctValue(summary.projectRoiPct), `תזרים EBITDA מצטבר + ערך סופי ÷ השקעה`, roiColor)}
+                            ${kpiCard('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct), `מידע בלבד — תזרים מצטבר + ערך סופי ÷ השקעה`, roiColor)}
                             ${kpiCard('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct), 'תזרים לבעלים + שווי לאחר חוב ÷ הון עצמי', equityRoiColor)}
-                            ${kpiCard('IRR העסקה (ללא מימון)', formatPctValue(summary.unleveragedIrrPct), `כולל ערך סופי: EBITDA × ${summary.terminalMultiple}`, getInvestmentColor(summary.unleveragedIrrPct, 'irr'))}
                             ${kpiCard('IRR על ההון העצמי', formatPctValue(summary.irrPct), `תזרים אחרי שירות חוב + שווי לאחר חוב`, irrColor)}
                             ${kpiCard('השפעת המינוף', formatPctValue(summary.leverageEffectPct), 'פער בין IRR ההון העצמי ל־IRR העסקה', getInvestmentColor(summary.leverageEffectPct, 'irr'))}
                             ${kpiCard('DSCR', summary.dscrTxt, summary.dscr === null ? 'אין הלוואה נדרשת' : 'תזרים זמין לשירות חוב ÷ שירות חוב', dscrColor)}
@@ -4800,7 +4886,7 @@ a{color:inherit}
                             ${kpiCard('החלטת מודל', summary.decisionCfg.title, summary.conclusion, summary.decisionCfg)}
                         </div>
                         <p class="text-[11px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 mt-3 text-slate-600">
-                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. ${summary.horizonNote} חישובי ה־ROI וה־IRR כוללים ערך סופי שמרני לפי EBITDA × ${summary.terminalMultiple}. תקופת החזר השקעה = השקעה כוללת ÷ תזרים שנתי מהעסקה. תקופת החזר הון עצמי = הון עצמי ÷ תזרים שנתי לבעלים. שני המדדים מוצגים כמידע בלבד ואינם קובעים לבדם GO/NO-GO. מדדי ההשקעה למעלה מפרידים בין כדאיות העסקה לבין השפעת המימון.
+                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. ${summary.horizonNote} <strong>ההכרעה (GO/NO-GO) נקבעת לפי NPV בריבית היוון ${summary.discountRatePct}%, בהנחת ${summary.feasModelLabel}.</strong> ה-IRR משמש כשכבת מידע מול הרף האישי (${summary.requiredRoi}%), והרף האישי אינו פוסל עסקה. ROI מצטבר ותקופות ההחזר מוצגים כמידע בלבד ואינם קובעים GO/NO-GO. מדדי ההשקעה מפרידים בין כדאיות העסקה לבין השפעת המימון.
                         </p>
                     </div>
                 </div>`;
@@ -5808,10 +5894,12 @@ a{color:inherit}
                             ['תשלום חודשי מחושב', Math.round(fin.monthlyPayment || 0), NUM]
                         ]},
                         { title:'מתודולוגיית החלטה רשמית', rows:[
-                            ['GO', 'כדאיות העסקה חיובית ומבנה המימון תקין'],
-                            ['GO מותנה — סיכון מימון', 'העסקה עצמה כדאית אך המימון גבולי/מסוכן'],
-                            ['NO-GO', 'העסקה עצמה אינה כדאית גם לפני מימון'],
-                            ['Risk Rating', 'ציר נפרד המשלב כדאיות עסקה, IRR ללא מימון, IRR על ההון העצמי, DSCR ותזרים לאחר חוב'],
+                            ['GO', 'NPV חיובי בריבית ההיוון (לפי המודל הנבחר) ומבנה המימון תקין'],
+                            ['GO מותנה — סיכון מימון', 'NPV חיובי אך מבנה המימון גבולי/מסוכן'],
+                            ['NO-GO', 'NPV שלילי בריבית ההיוון — העסקה אינה יוצרת ערך מעל החלופה'],
+                            ['מדרג ההכרעה', 'ראשי: NPV (אובייקטיבי, בריבית היוון). משני: IRR מול הרף האישי — קו ייחוס שאינו פוסל.'],
+                            ['ROI מצטבר / תקופות החזר', 'מדדי מידע בלבד — אינם קובעים GO/NO-GO'],
+                            ['Risk Rating', 'ציר נפרד המשלב כדאיות עסקה (NPV), IRR, DSCR ותזרים לאחר חוב'],
                             ['הערה', 'הגיליון מציג את ההנחות שנקלטו במערכת ואינו משנה נוסחאות פיננסיות.']
                         ]}
                     );
@@ -5894,6 +5982,15 @@ a{color:inherit}
                         ['סיכום מילולי', feasibilitySummary.conclusion],
                         ['בסיס החלטה', 'Investor Basis — לאחר מימון']
                     ]},
+                    { title:'כדאיות מהוונת — NPV ו-IRR', rows:[
+                        ['ריבית היוון', (feasibilitySummary.discountRatePct ?? 5) / 100, pctFmt],
+                        ['מכפיל ערך שיורי', '×' + (S.terminalMultiple ?? 3)],
+                        ['ערך שיורי (שווי מכירה)', Math.round(feasibilitySummary.terminalValue || 0), NUM],
+                        ['NPV העסקה (קובע GO/NO-GO)', feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? 'לא זמין' : Math.round(feasibilitySummary.selectedNpv), feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? undefined : NUM],
+                        ['IRR העסקה', feasibilitySummary.selectedIrrPct === null ? 'לא זמין' : feasibilitySummary.selectedIrrPct / 100, feasibilitySummary.selectedIrrPct === null ? undefined : pctFmt],
+                        ['רף אישי (קו ייחוס, אינו פוסל)', (feasibilitySummary.requiredRoi ?? 15) / 100, pctFmt],
+                        ['הערה', 'ההכרעה נקבעת לפי NPV בריבית ההיוון, בהנחת שווי מכירה של EBITDA × המכפיל בתום התקופה. הרף האישי מושווה ל-IRR ואינו פוסל.']
+                    ]},
                     { title:'מדדי מפתח', rows:[
                         ['הכנסות שנתיות', Math.round(cachedOutput.totalRev || sum('revenue')), NUM],
                         ['EBITDA שנתי', Math.round(cachedOutput.totalEbitda || sum('ebitda')), NUM],
@@ -5902,10 +5999,9 @@ a{color:inherit}
                         ['השקעה כוללת', Math.round(feasibilitySummary.investment), NUM],
                         ['מימון נדרש', Math.round(feasibilitySummary.fundingRequired), NUM],
                         ['הלוואה נדרשת', Math.round(feasibilitySummary.loanRequired), NUM],
-                        ['ROI העסקה', (feasibilitySummary.projectRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt], ['ROI על ההון העצמי', (feasibilitySummary.equityRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt],
+                        ['ROI מצטבר (לא מהוון)', (feasibilitySummary.projectRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt], ['ROI על ההון העצמי', (feasibilitySummary.equityRoiPct ?? feasibilitySummary.roiPct) / 100, pctFmt],
                         ['תקופת החזר השקעה', feasibilitySummary.paybackOpTxt],
                         ['תקופת החזר הון עצמי', feasibilitySummary.paybackTxt],
-                        ['IRR העסקה (ללא מימון)', feasibilitySummary.unleveragedIrrPct === null ? 'לא זמין' : feasibilitySummary.unleveragedIrrPct / 100, feasibilitySummary.unleveragedIrrPct === null ? undefined : pctFmt],
                         ['IRR על ההון העצמי', feasibilitySummary.irrPct === null ? 'לא זמין' : feasibilitySummary.irrPct / 100, feasibilitySummary.irrPct === null ? undefined : pctFmt],
                         ['השפעת המינוף', feasibilitySummary.leverageEffectPct === null ? 'לא זמין' : feasibilitySummary.leverageEffectPct / 100, feasibilitySummary.leverageEffectPct === null ? undefined : pctFmt],
                         ['ערך סופי שמרני (EBITDA × 3)', Math.round(feasibilitySummary.terminalValue || 0), NUM],
