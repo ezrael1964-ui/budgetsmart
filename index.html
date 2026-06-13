@@ -1446,10 +1446,12 @@ a{color:inherit}
                                 <span id="ui-sens-payroll" class="font-bold text-blue-400">0%</span>
                             </div>
                             <input type="range" id="sens-payroll-slider" min="-20" max="40" value="0" step="5"
-                                oninput="handleSensitivityChange()"
+                                oninput="handleSensitivityChange()" dir="ltr"
                                 class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
-                            <div class="flex justify-between text-[10px] text-slate-500 mt-1">
-                                <span>−20%</span><span>0</span><span>+40%</span>
+                            <div class="relative h-4 text-[10px] text-slate-500 mt-1" dir="ltr">
+                                <span class="absolute left-0">−20%</span>
+                                <span class="absolute" style="left:33.333%;transform:translateX(-50%)">0</span>
+                                <span class="absolute right-0">+40%</span>
                             </div>
                             <p class="text-[10px] text-slate-400 mt-1.5 leading-relaxed">ההורדה או ההעלאה באחוזים חלה על <strong>כלל הוצאות השכר</strong> — למשל הורדה/העלאה אחידה של השכר בכל החברה באחוז קבוע.</p>
                         </div>
@@ -1554,7 +1556,7 @@ a{color:inherit}
                     <span id="actual-missing-text"></span>
                 </div>
 
-                <!-- תוצרים: השוואה, EAC/VAC, דגלים, פירוש -->
+                <!-- תוצרים: השוואה, EAC/VAC, דגלים, פירוש — מוצג בשני המסלולים מתחת לטבלת הבקרה בפועל -->
                 <div id="actual-results" class="mt-6 hidden"></div>
 
                 <div class="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3 justify-between">
@@ -5608,7 +5610,10 @@ a{color:inherit}
                     for(let m=0;m<12;m++){
                         const v = (m<=lastIdx3) ? valuesFn(m) : null;
                         if(v===null||v===undefined) put3(r,2+m,'', st(fill||'FFFFFF',fcol,{}));
-                        else put3(r,2+m, Math.round(v*(fmt===PCT?10:1))/(fmt===PCT?10:1), st(fill||'FFFFFF',fcol,{bold}), fmt);
+                        else {
+                            const cellValue = (fmt===PCT) ? (Math.round(v*10)/1000) : Math.round(v);
+                            put3(r,2+m, cellValue, st(fill||'FFFFFF',fcol,{bold}), fmt);
+                        }
                     }
                     put3(r,14,'', st(fill||'FFFFFF',fcol,{}));
                 };
@@ -5658,7 +5663,7 @@ a{color:inherit}
                     const good = hg?(a>=pv):(a<=pv);
                     const vac = eac-fAnn; const vacGood = hg?(vac>=0):(vac<=0);
                     const fmtV = isPct?PCT:NUM;
-                    const rnd = x => isPct?(Math.round(x*10)/10):Math.round(x);
+                    const rnd = x => isPct ? (Math.round(x*10)/1000) : Math.round(x);
                     put3(rr,1,label, st('F8FAFC','0F172A',{bold:true,sz:10,alH:'right'}));
                     put3(rr,2, rnd(a), st('FFFFFF','0F172A',{sz:10}), fmtV);
                     put3(rr,3, rnd(pv), st('FFFFFF','0F172A',{sz:10}), fmtV);
