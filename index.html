@@ -990,10 +990,10 @@ a{color:inherit}
                     <label class="block text-xs font-semibold text-slate-600 mb-2">
                         אופן תשלום המס בתזרים המזומנים
                     </label>
-                    <div class="flex flex-wrap rounded-lg border border-slate-300 overflow-hidden text-[11px] bg-slate-100 w-fit">
-                        <button onclick="setTaxTiming('monthly')" id="toggle-taxtiming-monthly" class="min-w-[120px] px-3 py-1.5 bg-blue-600 text-white font-medium transition-all">מקדמות חודשיות / ניכוי במקור</button>
-                        <button onclick="setTaxTiming('quarterly')" id="toggle-taxtiming-quarterly" class="min-w-[95px] px-3 py-1.5 text-slate-600 font-medium transition-all hover:bg-slate-100">רבעוני</button>
-                        <button onclick="setTaxTiming('annual')" id="toggle-taxtiming-annual" class="min-w-[120px] px-3 py-1.5 text-slate-600 font-medium transition-all hover:bg-slate-100">תשלום שנתי לפי דוח</button>
+                    <div class="flex flex-wrap rounded-lg border border-slate-300 overflow-hidden text-[11px] divide-x divide-slate-200 w-fit">
+                        <button onclick="setTaxTiming('monthly')" id="toggle-taxtiming-monthly" class="min-w-[120px] px-3 py-1.5 bg-blue-600 text-white font-semibold transition-all">מקדמות חודשיות / ניכוי במקור</button>
+                        <button onclick="setTaxTiming('quarterly')" id="toggle-taxtiming-quarterly" class="min-w-[95px] px-3 py-1.5 bg-white text-slate-700 font-medium transition-all hover:bg-blue-50 active:bg-blue-100">רבעוני</button>
+                        <button onclick="setTaxTiming('annual')" id="toggle-taxtiming-annual" class="min-w-[120px] px-3 py-1.5 bg-white text-slate-700 font-medium transition-all hover:bg-blue-50 active:bg-blue-100">תשלום שנתי לפי דוח</button>
                     </div>
                     <p id="tax-timing-note" class="text-[11px] text-slate-500 mt-2"></p>
                 </div>
@@ -1073,22 +1073,22 @@ a{color:inherit}
                             <p class="text-[11px] text-indigo-400 mt-1.5">הון בעלים/משקיעים מעבר למזומן הקיים בבנק. אם אין — השאר 0.</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-indigo-300 mb-1">תשואה שנתית מינימלית שתדרוש מההשקעה</label>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">תשואה שנתית נדרשת (הרדל) — מהוונת את הערך השיורי ב-DCF</label>
                             <div class="relative max-w-[160px]">
                                 <input type="number" id="input-required-roi" value="15" oninput="saveAndRecalc()"
                                     class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="15">
                                 <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
                             </div>
-                            <p class="text-[11px] text-indigo-400 mt-1.5">קו ייחוס אישי בלבד — מושווה ל-IRR ואינו פוסל את העסקה (ברירת מחדל 15%)</p>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">התשואה שאתה דורש תמורת סיכון העסק. ברירת מחדל 15% (שמרני). משקפת מכפיל משתמע של ~${(100/15).toFixed(1)} (1÷הרדל). העלה ככל שהעסק מסוכן יותר (תלות בבעלים, ריכוזיות לקוחות). משמשת לבניית הערך השיורי ב-DCF ומושווית ל-IRR.</p>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-indigo-300 mb-1">ריבית היוון לחישוב NPV</label>
+                            <label class="block text-xs font-semibold text-indigo-300 mb-1">ריבית חסרת סיכון — להיוון חמש השנים הראשונות ב-DCF</label>
                             <div class="relative max-w-[160px]">
                                 <input type="number" id="input-discount-rate" value="5" step="0.1" oninput="saveAndRecalc()"
                                     class="w-full pr-3 pl-8 py-2 border border-indigo-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-indigo-500 font-semibold" placeholder="5">
                                 <span class="absolute left-3 top-2.5 text-indigo-400 text-sm">%</span>
                             </div>
-                            <p class="text-[11px] text-indigo-400 mt-1.5">הריבית שבה מהוונים את התזרים העתידי. בדרך כלל ~חסרת סיכון (ברירת מחדל 5%). זהו הרף האובייקטיבי הקובע GO/NO-GO לפי NPV.</p>
+                            <p class="text-[11px] text-indigo-400 mt-1.5">ריבית חסרת סיכון לפי אג"ח ממשלתי ל-5 שנים ~5% (יוני 2026) — עדכן ידנית לפי השוק. מהוונת את חמש השנים הקרובות (אופק קצר וודאי) ומביאה את הערך השיורי להיום.</p>
                         </div>
                     </div>
                 </div>
@@ -1237,7 +1237,7 @@ a{color:inherit}
             <div id="alert-flags-zone" class="space-y-2"></div>
 
             <!-- ── גרפים ── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div id="charts-row-budget" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-700 mb-3 text-center">הכנסות מול הוצאות אופרטיביות (חודשי)</h3>
                     <div class="w-full h-[300px] md:h-[350px] relative">
@@ -1580,8 +1580,8 @@ a{color:inherit}
             <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg p-5" dir="rtl">
                 <div class="flex items-start justify-between gap-3 border-b border-slate-200 pb-3 mb-4">
                     <div>
-                        <h3 class="text-lg font-bold text-slate-900">הפקת דוח PDF מקצועי</h3>
-                        <p class="text-xs text-slate-500 mt-1">לצורך קבלת הדוח יש להשאיר פרטים. לאחר אימות תקין הדוח ייפתח להדפסה/שמירה כ-PDF.</p>
+                        <h3 id="pdf-lead-title" class="text-lg font-bold text-slate-900">הפקת דוח PDF מקצועי</h3>
+                        <p id="pdf-lead-subtitle" class="text-xs text-slate-500 mt-1">לצורך קבלת הדוח יש להשאיר פרטים. לאחר אימות תקין הדוח ייפתח להדפסה/שמירה כ-PDF.</p>
                     </div>
                     <button type="button" onclick="closePdfLeadModal()" class="text-slate-400 hover:text-slate-700 text-xl leading-none cursor-pointer" aria-label="סגור">×</button>
                 </div>
@@ -2751,15 +2751,19 @@ a{color:inherit}
             document.querySelectorAll('button[onclick="nextFromStep4()"]').forEach(btn => {
                 btn.innerHTML = isNew ? 'לדף הבא ←' : 'המשך: מדדי ביצוע ←';
             });
+            // ── תצוגת גרפים מודעת-מצב ──
+            // מצב כדאיות (new): מסתירים גרפים תקציביים 1 (הכנסות/הוצאות), 2 (מגמת EBITDA) ו-4 (השוואה שנתית/Payback);
+            // משאירים 3 (פילוח הוצאות) ו-5 (תזרים) שהם רלוונטיים להחלטה. מצב תקציב (existing): מציגים הכל.
+            const budgetChartsRow = document.getElementById('charts-row-budget');
+            if(budgetChartsRow) budgetChartsRow.classList.toggle('hidden', isNew);
             const annualCompareCard = document.getElementById('lbl-annual-chart-years')?.closest('.bg-white');
             if(annualCompareCard) {
-                annualCompareCard.classList.remove('hidden');
-                const title = annualCompareCard.querySelector('h3');
-                const subtitle = document.getElementById('lbl-annual-chart-years');
                 if(isNew) {
-                    if(title) title.textContent = 'החזר הון עצמי מצטבר — Payback';
-                    if(subtitle) subtitle.textContent = 'קו מצטבר של רווח נקי מול ההשקעה הראשונית';
+                    annualCompareCard.classList.add('hidden');
                 } else {
+                    annualCompareCard.classList.remove('hidden');
+                    const title = annualCompareCard.querySelector('h3');
+                    const subtitle = document.getElementById('lbl-annual-chart-years');
                     if(title) title.textContent = 'השוואה שנתית — הכנסות (אלפי ₪)';
                     if(subtitle) subtitle.textContent = 'שנה קודמת · שנה נוכחית · תחזית';
                 }
@@ -3492,8 +3496,8 @@ a{color:inherit}
                 const active = key === mode;
                 const minW = btn.className.match(/min-w-\[\d+px\]/)?.[0] || 'min-w-[95px]';
                 btn.className = active
-                    ? `${minW} px-3 py-1.5 bg-blue-600 text-white font-medium transition-all`
-                    : `${minW} px-3 py-1.5 text-slate-300 font-medium transition-all hover:bg-slate-700`;
+                    ? `${minW} px-3 py-1.5 bg-blue-600 text-white font-semibold transition-all`
+                    : `${minW} px-3 py-1.5 bg-white text-slate-700 font-medium transition-all hover:bg-blue-50 active:bg-blue-100`;
             });
             const note = document.getElementById('tax-timing-note');
             if(note) {
@@ -3952,6 +3956,7 @@ a{color:inherit}
 
             const requiredRoi = isFinite(S.requiredRoi) ? S.requiredRoi : 15;
             const totalEbitda = monthsData.reduce((s, m) => s + (m.ebitda || 0), 0);
+            const totalEbit   = monthsData.reduce((s, m) => s + (m.ebit || 0), 0); // רווח תפעולי — בסיס ההערכה (מכפיל ו-DCF)
             const annualOperatingRoiPct = (totalEbitda / investment) * 100; // תשואה תפעולית שנתית לצורך בדיקת רף התשואה
             const unleveragedRoiPct = annualOperatingRoiPct; // נשמר לתאימות פנימית
             const roiPct = (totalNet / investment) * 100; // נשמר לתאימות: ROI נקי אחרי מימון ומס
@@ -4084,76 +4089,128 @@ a{color:inherit}
             const dr = discountRatePct / 100;
             const npvAt = (flows, rate) => flows.reduce((s, cf, i) => s + (isFinite(cf) ? cf : 0) / Math.pow(1 + rate, i), 0);
 
-            // ── מודל הערכה: שלושה מודלים, כל אחד עונה על שאלה אחרת ──
-            // 1) שמרני: תזרים 5 שנים בלבד (חסר סיכון) — בדיקת רגישות להחזר.
-            // 2) אג"ח: תזרים 5 שנים (חסר סיכון) + שווי העסק החי כ"קרן" בשנה 5, מהוון בתשואה הנדרשת — קובע GO/NO-GO.
-            // 3) זרם אינסופי: היוון הזרם לנצח בתשואה הנדרשת (גישה אקדמית) — הצגה.
-            // שני צדדים: סך העסקה (רווח בלי חוב ÷ סך השקעה) והמשקיע (רווח עם חוב ÷ הון עצמי).
+            // ── מתודולוגיית הערכת שווי — שתי שיטות מקבילות, שתיהן על בסיס הרווח התפעולי (EBIT) ──
+            // שיטה א' (מכפיל שוק): EBIT × 4/5/6. מכפיל 4 = שמרני, קובע את מדד "ערך העסקה".
+            // שיטה ב' (DCF), שלוש הערכות:
+            //   הערכה 1 — מבוססת מכפיל: 5 שנים @ הרדל + שיורי לפי מכפיל 4 מובא להיום @ הרדל.
+            //   הערכה 2 — מסורתית ללא צמיחה (גורדון g=0): היוון הזרם לנצח @ הרדל.
+            //   הערכה 3 — שווי בחסר (פרויקט עם סיום): 5 שנים @ חסר סיכון בלבד, ללא שיורי.
+            // שני צדדים בכל הערכה: סך העסקה (בלי חוב ÷ השקעה) והמשקיע (אחרי חוב ÷ הון עצמי).
             const valHorizon = 5;
-            const riskFree = dr;                                              // ריבית חסרת סיכון
-            const reqRate = (isFinite(requiredRoi) && requiredRoi > 0) ? requiredRoi / 100 : 0.15; // תשואה נדרשת
+            const riskFree = dr;                                              // ריבית חסרת סיכון (~5%)
+            const reqRate = (isFinite(requiredRoi) && requiredRoi > 0) ? requiredRoi / 100 : 0.15; // הרדל — תשואה נדרשת
             const reqPctTxt = Math.round(reqRate * 100);
-            const annualDealFlow = totalEbitda;                              // רווח בלי חוב
-            const annualInvestorFlow = totalEbitda - annualDebtService;      // רווח עם חוב (אחרי שירות חוב)
+            const annualDealFlow = totalEbit;                                // רווח תפעולי, צד העסקה (בלי חוב)
+            const annualInvestorFlow = totalEbit - annualDebtService;        // רווח תפעולי אחרי שירות חוב (צד המשקיע)
             const equityBase = Math.max(0, equityInvestment);
             const pvAnnuity = (flow, rate, n) => rate === 0 ? flow * n : flow * (1 - Math.pow(1 + rate, -n)) / rate;
 
-            function valThreeModels(flow, base) {
-                if(!(base > 0)) return { m1: null, m2: null, m3: null };
-                const pvFlows5 = pvAnnuity(flow, riskFree, valHorizon);       // תזרים 5 שנים @ חסר סיכון
-                const exitVal  = reqRate > 0 ? flow / reqRate : 0;            // שווי עסק חי בשנה 5 @ תשואה נדרשת
-                const pvExit   = exitVal / Math.pow(1 + reqRate, valHorizon); // מהוון להיום @ תשואה נדרשת
-                return {
-                    m1: pvFlows5 - base,                                      // שמרני
-                    m2: pvFlows5 + pvExit - base,                             // אג"ח (יציאה בשנה 5)
-                    m3: (reqRate > 0 ? flow / reqRate : Infinity) - base      // אינסוף @ תשואה נדרשת
-                };
-            }
-            const vDeal = valThreeModels(annualDealFlow, investment);
-            const vInv  = valThreeModels(annualInvestorFlow, equityBase);
+            // ── שיטה א': מכפיל שוק על EBIT ──
+            const MULT_PRIMARY = 4;
+            const multDeal = {
+                m4: annualDealFlow > 0 ? annualDealFlow * 4 : 0,
+                m5: annualDealFlow > 0 ? annualDealFlow * 5 : 0,
+                m6: annualDealFlow > 0 ? annualDealFlow * 6 : 0
+            };
+            // מדד "ערך העסקה" — שווי שמרני (מכפיל 4) מול ההשקעה. מאיר ואינו פוסל.
+            const dealValueNpv4 = (investment > 0 && annualDealFlow > 0) ? multDeal.m4 - investment : null;
+            const dealValuePositive = dealValueNpv4 !== null && dealValueNpv4 >= 0;
 
-            // ההכרעה נופלת על מודל האג"ח, צד סך העסקה (כפוף למגבלות בריאות תפעולית ומימונית)
-            const selectedNpv = vDeal.m2;
+            // ── שיטה ב': DCF — שלוש הערכות, על אותו בסיס EBIT ──
+            function dcfThree(flow, base) {
+                if(!(base > 0) || !(flow > 0)) return { g1:null, g2:null, g3:null, e1:null, e2:null, e3:null };
+                const pv5_hurdle  = pvAnnuity(flow, reqRate, valHorizon);            // הערכה 1: 5 שנים @ הרדל
+                const terminalMult = flow * MULT_PRIMARY;                            // שיורי לפי מכפיל (EBIT × 4)
+                const pvTerm_hur  = terminalMult / Math.pow(1 + reqRate, valHorizon); // מובא להיום @ הרדל
+                const g1 = pv5_hurdle + pvTerm_hur;                                  // הערכה 1 (ברוטו)
+                const g2 = reqRate > 0 ? flow / reqRate : Infinity;                  // הערכה 2 — גורדון (ברוטו)
+                const g3 = pvAnnuity(flow, riskFree, valHorizon);                    // הערכה 3 — 5 שנים @ חסר סיכון (ברוטו)
+                return { g1, g2, g3, e1: g1 - base, e2: g2 - base, e3: g3 - base };
+            }
+            const dDeal = dcfThree(annualDealFlow, investment);
+            const dInv  = dcfThree(annualInvestorFlow, equityBase);
+
+            // ההכרעה הכוללת נשארת על רווחיות תפעולית + מימון. מדדי השווי מאירים ואינם פוסלים.
+            const selectedNpv = dDeal.e1;                                    // הערכה 1, צד העסקה — הנגזרת הראשית
             const selectedIrrPct = unleveragedIrrPct;
             const irrMeetsHurdle = selectedIrrPct !== null && selectedIrrPct >= requiredRoi;
-            const feasModelLabel = `מודל האג"ח: תזרים ${valHorizon} שנים בריבית ${discountRatePct}% (חסרת סיכון) + שווי עסק חי מהוון בתשואה הנדרשת (${reqPctTxt}%)`;
+            const feasModelLabel = `הערכה 1 (DCF): ${valHorizon} שנים @ הרדל ${reqPctTxt}% + ערך שיורי לפי מכפיל ${MULT_PRIMARY} מובא להיום @ הרדל ${reqPctTxt}%`;
 
             let npvCompareNote;
-            if(selectedNpv === null) npvCompareNote = 'לא הוזנה השקעה — מדדי ההערכה אינם זמינים.';
-            else if(selectedNpv >= 0) npvCompareNote = `לפי מודל האג"ח (תזרים ${valHorizon} שנים + שווי העסק כקרן ששרדה) העסקה יוצרת ערך חיובי. ההכרעה כפופה לבריאות תפעולית ומימונית.`;
-            else npvCompareNote = `לפי מודל האג"ח (תזרים ${valHorizon} שנים + שווי העסק כקרן) העסקה אינה יוצרת ערך חיובי — גם בהכרה בשווי העסק החי, ההשקעה אינה מוחזרת בתשואה הנדרשת.`;
+            if(dealValueNpv4 === null) npvCompareNote = 'לא הוזנה השקעה — שווי העסקה אינו זמין (נדרשת השקעה כדי לחשב שווי עסק פחות השקעה).';
+            else if(dealValueNpv4 >= 0) npvCompareNote = `שווי העסקה לפי מכפיל ${MULT_PRIMARY} (שמרני) חיובי — השווי השמרני של העסק גבוה מההשקעה. ההכרעה כפופה לבריאות תפעולית ומימונית.`;
+            else npvCompareNote = `שווי העסקה לפי מכפיל ${MULT_PRIMARY} (שמרני) שלילי — המחיר/ההשקעה (₪${fmtILS(Math.round(investment))}) גבוהים מהשווי השמרני (₪${fmtILS(Math.round(multDeal.m4))}). אין זה אומר שהעסק אינו רווחי, אך במחיר זה ההשקעה אינה חוזרת בתשואה שדרשת. שקול לנהל את המחיר לכיוון ₪${fmtILS(Math.round(multDeal.m4))}, או מכפיל גבוה (5–6) אם יציבות העסק מצדיקה זאת.`;
 
-            // טבלת ההערכה: שלושה מודלים × שני צדדים
+            // עיצוב ערכים: ברוטו (שווי) וחתום (NPV מול ההשקעה)
+            const _grossFmt = (v) => (v === null || !isFinite(v)) ? 'לא זמין' : '₪' + fmtILS(Math.round(v));
             const _valFmt = (v) => (v === null || !isFinite(v)) ? 'לא זמין' : (v >= 0 ? '+' : '−') + '₪' + fmtILS(Math.abs(Math.round(v)));
             const _valCol = (v) => (v === null || !isFinite(v)) ? 'color:#64748b' : (v >= 0 ? 'color:#065f46' : 'color:#991b1b');
-            const valuationHtml = `
+            const _dealBadgeBg  = dealValueNpv4 === null ? '#f1f5f9' : (dealValuePositive ? '#ecfdf5' : '#fff1f2');
+            const _dealBadgeBd  = dealValueNpv4 === null ? '#cbd5e1' : (dealValuePositive ? '#10b981' : '#f43f5e');
+            const _dealBadgeFg  = dealValueNpv4 === null ? '#475569' : (dealValuePositive ? '#065f46' : '#9f1239');
+
+            const multiplierHtml = `
                 <div class="rounded-xl border border-slate-200 p-4 bg-white">
-                    <h4 class="text-sm font-bold text-slate-700 mb-1">טווח שווי העסק — מידע (רלוונטי במיוחד לרכישת עסק קיים/זכיינות)</h4>
-                    <p class="text-[11px] text-slate-500 mb-3">מוצג כמידע בלבד — אינו קובע GO/NO-GO. השווי הכלכלי של זרם ההכנסות מול ההשקעה שלך. רלוונטי במיוחד למי שרוכש עסק קיים ורוצה לדעת אם המחיר הוגן: שווי גבוה מההשקעה = קנייה משתלמת. תזרים 5 השנים מהוון ב-${discountRatePct}% (חסר סיכון); שווי העסק החי והזרם האינסופי בתשואה שדרשת (${reqPctTxt}%).</p>
+                    <h4 class="text-sm font-bold text-slate-700 mb-1" title="שווי העסקה = שווי העסק המניב פחות ההשקעה (הערך הנקי שהעסקה יוצרת לך). שווי העסק המניב = השווי הכלכלי של זרם התקבולים העתידי (ברוטו, לפני השקעה).">שווי העסקה — לפי מכפיל (הקובעת) <span class="text-[11px] font-normal text-slate-400">(ⓘ ריחוף לפירוט)</span></h4>
+                    <p class="text-[11px] text-slate-500 mb-3">שווי העסקה = שווי העסק המניב במכפיל 4 פחות ההשקעה — זה הערך הנקי שהעסקה יוצרת והמדד הקובע. נמדד על רווח תפעולי שנתי (EBIT) של ${_grossFmt(annualDealFlow)}.</p>
+
+                    <div class="rounded-lg border p-3 mb-3" style="background:${_dealBadgeBg};border-color:${_dealBadgeBd}">
+                        <div class="text-xs font-bold" style="color:${_dealBadgeFg}">שווי העסקה (מכפיל 4 − השקעה)</div>
+                        <div class="font-extrabold" style="color:${_dealBadgeFg};font-size:1.9rem;line-height:1.15">${_valFmt(dealValueNpv4)}</div>
+                        <p class="text-[11px] mt-1" style="color:${_dealBadgeFg}">${npvCompareNote}</p>
+                    </div>
+
+                    <div class="text-[11px] font-bold text-slate-500 mb-1">שווי העסק המניב (ברוטו, לפני השקעה)</div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="rounded-lg border-2 p-3 text-center" style="border-color:#4f46e5;background:#eef2ff">
+                            <div class="text-[11px] font-bold text-indigo-600">מכפיל 4 · קובע</div>
+                            <div class="font-bold text-indigo-900" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m4)}</div>
+                            <div class="text-[10px] text-slate-500 mt-1">שמרני — הרף התחתון. תלות גבוהה בבעלים / לקוח מרכזי / תנודתיות.</div>
+                            <div class="text-[10px] text-indigo-500 mt-1 font-medium">נבחר מתוך שמרנות — התאם לפי סוג החברה</div>
+                        </div>
+                        <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
+                            <div class="text-[11px] font-bold text-slate-500">מכפיל 5 · טיפוסי</div>
+                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m5)}</div>
+                            <div class="text-[10px] text-slate-400 mt-1">עסק יציב יחסית, פיזור לקוחות סביר.</div>
+                        </div>
+                        <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
+                            <div class="text-[11px] font-bold text-slate-500">מכפיל 6 · יציב/צומח</div>
+                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m6)}</div>
+                            <div class="text-[10px] text-slate-400 mt-1">הכנסה חוזרת, מותג, תלות נמוכה בבעלים.</div>
+                        </div>
+                    </div>
+                </div>`;
+
+            const dcfHtml = `
+                <div class="rounded-xl border border-slate-200 bg-white p-4 mt-3">
+                    <h4 class="text-sm font-bold text-slate-700 mb-1">שווי העסקה — לפי DCF (הצלבה)</h4>
+                    <p class="text-[11px] text-slate-500 mb-3">הצלבה לשיטת המכפיל בלבד — אינה קובעת. הטבלה מציגה שווי העסקה (נטו) = שווי העסק המניב המהוון פחות ההשקעה. הבדיקה מניחה עסק <strong>ללא שינוי</strong> לאורך התקופה. שלוש ההערכות משתמשות בריביות שונות (הרדל מול חסר סיכון), ולכן נותנות טווח.</p>
                     <table class="w-full text-sm" style="border-collapse:collapse">
                         <tr class="text-slate-500 text-xs" style="border-bottom:1px solid #e2e8f0">
                             <td class="py-1"></td>
-                            <td class="py-1 font-medium">סך העסקה<br><span class="font-normal text-[10px]">בלי חוב ÷ סך השקעה</span></td>
+                            <td class="py-1 font-medium">סך העסקה<br><span class="font-normal text-[10px]">בלי חוב ÷ השקעה</span></td>
                             <td class="py-1 font-medium">המשקיע<br><span class="font-normal text-[10px]">עם חוב ÷ הון עצמי</span></td>
                         </tr>
-                        <tr style="border-bottom:1px solid #f1f5f9">
-                            <td class="py-1.5 text-slate-700"><span class="font-semibold">שמרני</span><br><span class="text-[10px] text-slate-400">5 שנים, תזרים בלבד</span></td>
-                            <td class="py-1.5" style="${_valCol(vDeal.m1)}">${_valFmt(vDeal.m1)}</td>
-                            <td class="py-1.5" style="${_valCol(vInv.m1)}">${_valFmt(vInv.m1)}</td>
+                        <tr style="border-bottom:1px solid #f1f5f9;background:#f8fafc">
+                            <td class="py-1.5 text-slate-700"><span class="font-bold">הערכה 1 · מבוססת מכפיל (5 שנים + שיורי)</span><br><span class="text-[10px] text-slate-400">5 שנים @ הרדל ${reqPctTxt}% + שיורי לפי מכפיל ${MULT_PRIMARY} מובא @ הרדל ${reqPctTxt}%</span></td>
+                            <td class="py-1.5 font-bold" style="${_valCol(dDeal.e1)}">${_valFmt(dDeal.e1)}</td>
+                            <td class="py-1.5" style="${_valCol(dInv.e1)}">${_valFmt(dInv.e1)}</td>
                         </tr>
-                        <tr style="border-bottom:1px solid #f1f5f9;background:#eef2ff">
-                            <td class="py-1.5 text-slate-700"><span class="font-bold">אג"ח</span> <span class="text-[10px] text-slate-400">(יציאה בשנה 5)</span><br><span class="text-[10px] text-slate-400">5 שנים + שווי העסק</span></td>
-                            <td class="py-1.5 font-bold" style="${_valCol(vDeal.m2)}">${_valFmt(vDeal.m2)}</td>
-                            <td class="py-1.5" style="${_valCol(vInv.m2)}">${_valFmt(vInv.m2)}</td>
+                        <tr style="border-bottom:1px solid #f1f5f9">
+                            <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 2 · מסורתית ללא צמיחה</span><br><span class="text-[10px] text-slate-400">היוון לנצח @ הרדל ${reqPctTxt}% (גורדון)</span></td>
+                            <td class="py-1.5" style="${_valCol(dDeal.e2)}">${_valFmt(dDeal.e2)}</td>
+                            <td class="py-1.5" style="${_valCol(dInv.e2)}">${_valFmt(dInv.e2)}</td>
                         </tr>
                         <tr>
-                            <td class="py-1.5 text-slate-700"><span class="font-semibold">זרם אינסופי</span><br><span class="text-[10px] text-slate-400">החזקה לנצח (תאורטי)</span></td>
-                            <td class="py-1.5" style="${_valCol(vDeal.m3)}">${_valFmt(vDeal.m3)}</td>
-                            <td class="py-1.5" style="${_valCol(vInv.m3)}">${_valFmt(vInv.m3)}</td>
+                            <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 3 · שווי בחסר</span><br><span class="text-[10px] text-slate-400">5 שנים @ ${discountRatePct}% בלבד, ללא שיורי — לפרויקט עם מועד סיום</span></td>
+                            <td class="py-1.5" style="${_valCol(dDeal.e3)}">${_valFmt(dDeal.e3)}</td>
+                            <td class="py-1.5" style="${_valCol(dInv.e3)}">${_valFmt(dInv.e3)}</td>
                         </tr>
                     </table>
-                    <p class="text-[11px] text-slate-500 mt-2">NPV (ערך נוכחי נקי): חיובי = יוצר ערך מעל ההשקעה. <strong>שמרני</strong> רגיש לתקופת ההחזר (מעל 5 שנים אופק רחב לעסק קטן-בינוני). <strong>אג"ח</strong> מכיר בשווי העסק החי כקרן ששרדה ביציאה בשנה 5. <strong>אינסוף</strong> הוא הקצה התאורטי בהנחת המשכיות לנצח. ההפרש בין הצדדים משקף את אפקט המינוף.</p>
+                    <p class="text-[11px] text-slate-500 mt-2"><strong>הערכה 1</strong> מבוססת מכפיל: 5 שנים מהוונות בהרדל ושיורי לפי מכפיל ${MULT_PRIMARY} (גם הוא בהרדל) — קרובה ביותר למכפיל. <strong>הערכה 2</strong> (גורדון) מהוונת את הזרם לנצח בהרדל, ולכן יוצאת הגבוהה ביותר. <strong>הערכה 3</strong> היא הרצפה — 5 שנים בחסר סיכון בלבד, ללא שיורי, לפרויקט עם מועד סיום. ההפרש בין הצדדים משקף את אפקט המינוף.</p>
                 </div>`;
+
+            const valuationHtml = multiplierHtml + dcfHtml; // תאימות לאחור
 
             // ── החלטה 1: כדאיות העסקה — רק אירוע ודאי (הפסד תפעולי) פוסל ──
             // תקופת החזר ו-IRR מול הרף מאירים בצבע ובהערה אך אינם פוסלים. השווי הוא מידע, לא הכרעה.
@@ -4178,31 +4235,37 @@ a{color:inherit}
                 risky: { emoji:'🔴', title:'מבנה המימון מסוכן', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'שירות החוב יוצר תזרים שלילי או DSCR נמוך מ-1. מבנה המימון דורש שינוי.' }
             }[financingLevel];
 
-            // סטטוס מסכם: רק הפסד תפעולי פוסל; השאר מאיר בצבע ובהערה.
+            // סטטוס מסכם: סף איתנות (רווחיות → מימון) קודם; אחריו סף מחיר צהוב כשערך העסקה (מכפיל 4) שלילי.
             let decisionLevel;
             let conclusion = '';
+            const priceTooHigh = dealValueNpv4 !== null && isFinite(dealValueNpv4) && dealValueNpv4 < 0;
+            const fairPriceTxt = (multDeal && isFinite(multDeal.m4)) ? '₪' + fmtILS(Math.round(multDeal.m4)) : 'לא זמין';
             if(dealLevel === 'nogo') {
                 decisionLevel = 'nogo';
                 conclusion = 'העסק אינו רווחי תפעולית לפי הנתונים — אינו כדאי כהשקעה. מומלץ לבחון מחדש הכנסות, עלויות, מחיר רכישה או מבנה העסק.';
             } else if(financingLevel === 'risky') {
                 decisionLevel = 'finance_risk';
                 conclusion = 'העסק עצמו רווחי, אך מבנה המימון שנבחר יוצר סיכון (תזרים שלילי או DSCR נמוך מ-1). אין להסיק שהעסקה אינה טובה — בחן מימון נמוך יותר, פריסה ארוכה יותר, ריבית נמוכה יותר או הון עצמי נוסף.';
+            } else if(priceTooHigh) {
+                decisionLevel = 'price_high';
+                conclusion = `העסק איתן ורווחי, אך שווי העסקה שלילי: במחיר/השקעה הנוכחיים (₪${fmtILS(Math.round(investment))}) ההשקעה אינה חוזרת בתשואה שדרשת. המחיר ההוגן לפי מכפיל 4 (שמרני) הוא ${fairPriceTxt}. שקול לנהל את המחיר לכיוון זה, או מכפיל גבוה יותר (5–6) אם יציבות העסק וההכנסה החוזרת מצדיקות זאת. זו אינה פסילה של העסק — זו אזהרת מחיר.`;
             } else if(financingLevel === 'watch') {
                 decisionLevel = 'caution';
                 conclusion = 'העסק רווחי, אך מרווח הביטחון של שירות החוב נמוך — שווה לבדוק את תנאי המימון. מדדי ההחזר והתשואה מוצגים כתמונת מצב ואינם פוסלים את העסקה.';
             } else {
                 decisionLevel = 'go';
-                conclusion = 'העסק רווחי ומבנה המימון תקין. לפי הנתונים, ניתן להתקדם לבחינה עסקית ומשפטית מלאה. מדדי ההחזר וה-IRR מוצגים בכרטיסים מול הרף שהגדרת.';
+                conclusion = 'העסק רווחי, מבנה המימון תקין ושווי העסקה חיובי (המחיר נמוך מהשווי השמרני). לפי הנתונים, ניתן להתקדם לבחינה עסקית ומשפטית מלאה. מדדי ההחזר וה-IRR מוצגים בכרטיסים מול הרף שהגדרת.';
             }
 
             const decisionCfg = {
-                go:           { emoji:'🟢', title:'GO', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'העסקה כדאית ומבנה המימון תקין.' },
+                go:           { emoji:'🟢', title:'GO', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'העסקה כדאית, המימון תקין והמחיר נמוך מהשווי השמרני.' },
                 finance_risk: { emoji:'🟡', title:'GO מותנה — סיכון מימון', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה טובה, אך מבנה המימון שנבחר דורש התאמה.' },
+                price_high:   { emoji:'🟡', title:'GO מותנה — מחיר גבוה', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:`שווי העסקה שלילי — ההשקעה אינה חוזרת. מחיר הוגן לפי מכפיל 4: ${fairPriceTxt}.` },
                 caution:      { emoji:'🟡', title:'בדיקה נוספת נדרשת', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'קיימים מדדי ROI/IRR גבוליים או מימון שאינו מספיק בטוח.' },
                 nogo:         { emoji:'🔴', title:'NO GO לעסקה עצמה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'הבעיה אינה רק במימון — העסקה עצמה חלשה לפי הנתונים.' }
             }[decisionLevel];
 
-            const riskLevel = financingLevel === 'risky' ? 'high' : (financingLevel === 'watch' || dealLevel === 'caution' ? 'medium' : (dealLevel === 'nogo' ? 'high' : 'low'));
+            const riskLevel = financingLevel === 'risky' ? 'high' : (financingLevel === 'watch' || dealLevel === 'caution' || priceTooHigh ? 'medium' : (dealLevel === 'nogo' ? 'high' : 'low'));
             const riskCfg = {
                 low:    { emoji:'🟢', title:'סיכון נמוך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'כדאיות העסקה והמימון נראים תקינים לפי ROI/IRR/DSCR.' },
                 medium: { emoji:'🟡', title:'סיכון בינוני', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד ממדדי הכדאיות או המימון גבולי ודורש בדיקת תרחישים.' },
@@ -4243,9 +4306,13 @@ a{color:inherit}
                 discountRatePct,
                 feasModelLabel,
                 selectedNpv,
+                dealValueNpv4,
+                multDeal,
                 valHorizon,
                 reqPctTxt,
                 valuationHtml,
+                multiplierHtml,
+                dcfHtml,
                 selectedIrrPct,
                 irrMeetsHurdle,
                 requiredRoi,
@@ -4361,8 +4428,6 @@ a{color:inherit}
                             </div>`;
                         })()}
 
-                        ${summary.valuationHtml || ''}
-
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                                 <h4 class="text-sm font-bold text-slate-700 mb-2">נתוני השקעה ומימון</h4>
@@ -4374,18 +4439,19 @@ a{color:inherit}
                             </div>
                             <div class="rounded-xl border border-slate-200 p-4 bg-slate-50">
                                 <h4 class="text-sm font-bold text-slate-700 mb-2">מדדי כדאיות וסיכון</h4>
-                                ${row(`NPV העסקה (היוון ${summary.discountRatePct}%)`, summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : '₪' + fmtILS(summary.selectedNpv))}
+                                ${row('החלטה מסכמת', `${summary.decisionCfg.emoji} ${summary.decisionCfg.title}`)}
+                                ${row('כדאיות העסקה', `${summary.dealCfg.emoji} ${summary.dealCfg.title}`)}
+                                ${row('מבנה המימון', `${summary.financingCfg.emoji} ${summary.financingCfg.title}`)}
+                                ${row('שווי העסק (מכפיל 4)', summary.multDeal && isFinite(summary.multDeal.m4) ? '₪' + fmtILS(Math.round(summary.multDeal.m4)) : 'לא זמין')}
+                                ${row(`שווי העסקה (מכפיל 4 − השקעה)`, summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : (summary.dealValueNpv4 >= 0 ? '+' : '−') + '₪' + fmtILS(Math.abs(Math.round(summary.dealValueNpv4))))}
                                 ${row(`IRR העסקה`, formatPctValue(summary.selectedIrrPct))}
+                                ${row('תקופת החזר השקעה', summary.paybackOpTxt)}
                                 ${row('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct))}
                                 ${row('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct))}
                                 ${row('IRR על ההון העצמי', formatPctValue(summary.irrPct))}
                                 ${row('השפעת המינוף', formatPctValue(summary.leverageEffectPct))}
-                                ${row('תקופת החזר השקעה', summary.paybackOpTxt)}
                                 ${row('תקופת החזר הון עצמי', summary.paybackTxt)}
                                 ${row('DSCR', summary.dscrTxt)}
-                                ${row('כדאיות העסקה', `${summary.dealCfg.emoji} ${summary.dealCfg.title}`)}
-                                ${row('מבנה המימון', `${summary.financingCfg.emoji} ${summary.financingCfg.title}`)}
-                                ${row('החלטה מסכמת', `${summary.decisionCfg.emoji} ${summary.decisionCfg.title}`)}
                             </div>
                         </div>
 
@@ -4400,15 +4466,11 @@ a{color:inherit}
                         </div>
 
                         <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 rounded-lg p-3">
-                            <strong>הערה:</strong> ${summary.horizonNote} ההכרעה מבוססת על מודל האג"ח — היוון תזרים ${summary.valHorizon} שנים בריבית ${summary.discountRatePct}% (חסרת סיכון) בתוספת שווי העסק החי כקרן ששרדה, מהוון בתשואה הנדרשת — כפופה לבריאות תפעולית ומימונית. מוצגים מדדים נפרדים לעסקה עצמה ולתשואת ההון העצמי של המשקיע. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.
+                            <strong>הערה:</strong> ${summary.horizonNote} השווי מוערך בשתי שיטות: <strong>שווי העסק</strong> לפי מכפיל על הרווח התפעולי (EBIT) — מכפיל 4 שמרני — ומתוכו <strong>שווי העסקה</strong> = שווי העסק פחות ההשקעה. כהצלבה מוצג DCF (הערכה 1: חמש שנים מהוונות בהרדל ${summary.requiredRoi}% + ערך שיורי לפי מכפיל 4 מובא להיום בהרדל). ההכרעה הכוללת כפופה לבריאות תפעולית ומימונית, ואז סף מחיר צהוב כששווי העסקה (מכפיל 4) שלילי. מוצגים מדדים נפרדים לעסקה עצמה ולתשואת ההון העצמי של המשקיע. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.
                         </p>
 
                         <div class="text-[12px] text-slate-600 leading-relaxed border-r-4 border-amber-400 bg-amber-50 rounded-lg p-3">
-                            הבדיקה מבוססת על ההלוואה הנוכחית בלבד ואינה כוללת את תמונת האובליגו המלאה ומבנה ההון.
-                            <details class="mt-1.5">
-                                <summary class="cursor-pointer text-amber-700 font-semibold text-[11px] select-none">מה לא נכלל בבדיקה</summary>
-                                <p class="mt-1.5 text-[11px] text-slate-500 leading-relaxed">הבדיקה אינה כוללת את סך ההתחייבויות הקיימות של הלקוח (אובליגו מלא), התחייבויות לזמן קצר, ומבנה הון מאזני. רוב בעלי העסק מכירים את התמונה המלאה רק חלקית, ומיפויה דורש ראייה חיצונית לפני קבלת החלטה.</p>
-                            </details>
+                            הבדיקה מבוססת על ההלוואה הנוכחית בלבד ואינה כוללת את האובליגו המלא, התחייבויות לזמן קצר ומבנה ההון המאזני — נדרשת השלמה חיצונית לפני קבלת החלטה.
                         </div>
                     </div>`;
                 initLucideIcons();
@@ -4503,6 +4565,10 @@ a{color:inherit}
             const negativeCashMonths = monthlyCash.filter(v => v < 0).length;
 
             if(S.appMode === 'new') {
+                const dv = summary.dealValueNpv4;
+                const m4 = summary.multDeal && isFinite(summary.multDeal.m4) ? summary.multDeal.m4 : null;
+                if(dv !== null && isFinite(dv) && dv >= 0) strengths.push('שווי העסקה חיובי — המחיר נמוך מהשווי השמרני של העסק (מכפיל 4).');
+                if(dv !== null && isFinite(dv) && dv < 0) risks.push(`שווי העסקה שלילי — המחיר גבוה מהשווי השמרני; מחיר הוגן לפי מכפיל 4: ${m4 === null ? 'לא זמין' : moneyPdf(m4)}. זו אזהרת מחיר ולא פסילת העסק.`);
                 if((summary.projectRoiPct || 0) > 0) strengths.push('הפרויקט מציג ROI עסקה חיובי לפי הנתונים שהוזנו.');
                 if(summary.irrPct !== null && summary.irrPct > 0) strengths.push('IRR על ההון העצמי חיובי ותומך בכדאיות ההשקעה למשקיע.');
                 if(summary.paybackOpMonths !== null && summary.paybackOpMonths <= 36) strengths.push('החזר השקעה תפעולי צפוי בטווח זמן קצר יחסית.');
@@ -4534,17 +4600,40 @@ a{color:inherit}
             return { strengths: strengths.slice(0,3), risks: risks.slice(0,3), recommendations: recommendations.slice(0,3) };
         }
 
+        function buildPdfValuation(summary) {
+            const m = summary.multDeal || {};
+            const g = v => (v === null || v === undefined || !isFinite(v)) ? 'לא זמין' : moneyPdf(v);
+            const dealTxt = (summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4)) ? 'לא זמין'
+                : (summary.dealValueNpv4 >= 0 ? '+' : '−') + moneyPdf(Math.abs(summary.dealValueNpv4)).replace('-', '');
+            const dealStatus = (summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4)) ? 'אזהרה' : (summary.dealValueNpv4 >= 0 ? 'תקין' : 'סיכון');
+            const cls = st => st === 'תקין' ? 'style="color:#166534;font-weight:800"' : (st === 'סיכון' ? 'style="color:#991b1b;font-weight:800"' : 'style="color:#92400e;font-weight:800"');
+            return `
+                <p class="note" style="margin-bottom:10px"><strong>שיטה ראשית — מכפיל שוק על הרווח התפעולי (EBIT).</strong> שווי העסק = זרם התקבולים העתידי (ברוטו). שווי העסקה = שווי העסק פחות ההשקעה (נטו) — זה הנבדק. מכפיל 4 שמרני קובע את ההכרעה. רווח תפעולי שנתי (EBIT): ${moneyPdf(summary.totalEbit || 0)}.</p>
+                <table class="report-table">
+                    <tr><th>שיטת מכפיל</th><th>מכפיל</th><th>שווי העסק</th><th>אופי</th></tr>
+                    <tr><td>שמרני — קובע</td><td>×4</td><td class="total-cell">${g(m.m4)}</td><td>הרף התחתון; תלות גבוהה בבעלים/לקוח מרכזי</td></tr>
+                    <tr><td>טיפוסי</td><td>×5</td><td>${g(m.m5)}</td><td>עסק יציב יחסית, פיזור לקוחות סביר</td></tr>
+                    <tr><td>יציב/צומח</td><td>×6</td><td>${g(m.m6)}</td><td>הכנסה חוזרת, מותג, תלות נמוכה</td></tr>
+                </table>
+                <table class="report-table" style="margin-top:12px">
+                    <tr><th>בדיקה</th><th>סטטוס</th><th>ערך</th><th>משמעות</th></tr>
+                    <tr><td>שווי העסקה (מכפיל 4 − השקעה)</td><td ${cls(dealStatus)}>${dealStatus}</td><td>${dealTxt}</td><td>הערך הנקי שהעסקה יוצרת. שלילי = המחיר גבוה מהשווי השמרני; המחיר ההוגן לפי מכפיל 4 הוא ${g(m.m4)}.</td></tr>
+                    <tr><td>שווי העסקה — הצלבת DCF (הערכה 1)</td><td ${cls(summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון'))}>${summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון')}</td><td>${summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)}</td><td>הצלבה: חמש שנים מהוונות בהרדל + ערך שיורי לפי מכפיל 4 מובא בהרדל. מאיר ואינו קובע.</td></tr>
+                </table>
+                <p class="note" style="margin-top:10px">כל ההערכות מניחות עסק ללא שינוי (ללא צמיחה או ירידה) לאורך התקופה — זרם תקבולים קבוע.</p>`;
+        }
+
         function buildPdfKpiCards(summary) {
             const cards = S.appMode === 'new' ? [
-                ['השקעה ראשונית', moneyPdf(summary.investment)],
-                ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)],
-                ['NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)],
+                ['השקעה (מחיר נדרש)', moneyPdf(summary.investment)],
+                ['רווח תפעולי שנתי (EBIT)', moneyPdf(summary.totalEbit || 0)],
+                ['שווי העסק (מכפיל 4)', summary.multDeal && isFinite(summary.multDeal.m4) ? moneyPdf(summary.multDeal.m4) : 'לא זמין'],
+                ['שווי העסק (מכפיל 5)', summary.multDeal && isFinite(summary.multDeal.m5) ? moneyPdf(summary.multDeal.m5) : 'לא זמין'],
+                ['שווי העסק (מכפיל 6)', summary.multDeal && isFinite(summary.multDeal.m6) ? moneyPdf(summary.multDeal.m6) : 'לא זמין'],
+                ['שווי העסקה (מכפיל 4 − השקעה)', summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : moneyPdf(summary.dealValueNpv4)],
                 ['IRR העסקה', pctPdf(summary.selectedIrrPct)],
-                ['ROI מצטבר (לא מהוון)', pctPdf(summary.projectRoiPct)],
                 ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)],
-                ['IRR על ההון העצמי', pctPdf(summary.irrPct)],
                 ['תקופת החזר השקעה', summary.paybackOpTxt],
-                ['תקופת החזר הון עצמי', summary.paybackTxt],
                 ['DSCR', summary.dscrTxt || 'ללא חוב']
             ] : [
                 ['הכנסות', moneyPdf(summary.totalRev)],
@@ -4563,12 +4652,16 @@ a{color:inherit}
             const rows = [];
             rows.push({ label:'רווח נקי שנתי', value:moneyPdf(annualNetProfitForRisk), status: annualNetProfitForRisk > 0 ? 'תקין' : 'סיכון', note: annualNetProfitForRisk > 0 ? 'הרווח הנקי השנתי חיובי.' : 'הרווח הנקי השנתי שלילי או אפסי ודורש בדיקה.' });
             if(S.appMode === 'new') {
-                rows.push({ label:'NPV העסקה', value: summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv), status: summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון'), note:`ערך נוכחי נקי בריבית היוון ${summary.discountRatePct}% (${summary.feasModelLabel}) — הקריטריון הקובע GO/NO-GO.` });
+                const m4 = summary.multDeal && isFinite(summary.multDeal.m4) ? summary.multDeal.m4 : null;
+                rows.push({ label:'שווי העסק (מכפיל 4)', value: m4 === null ? 'לא זמין' : moneyPdf(m4), status:'מידע', note:'שווי העסק לפי מכפיל 4 (שמרני) על הרווח התפעולי — ברוטו, לפני השקעה.' });
+                rows.push({ label:'שווי העסקה (מכפיל 4 − השקעה)', value: summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : moneyPdf(summary.dealValueNpv4), status: summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'אזהרה' : (summary.dealValueNpv4 >= 0 ? 'תקין' : 'סיכון'), note: summary.dealValueNpv4 !== null && isFinite(summary.dealValueNpv4) && summary.dealValueNpv4 < 0 ? `המדד הקובע. שלילי — המחיר גבוה מהשווי השמרני; מחיר הוגן לפי מכפיל 4: ${m4 === null ? 'לא זמין' : moneyPdf(m4)}.` : 'המדד הקובע (שמרני). חיובי — המחיר נמוך מהשווי השמרני.' });
+                rows.push({ label:'IRR העסקה', value:pctPdf(summary.selectedIrrPct), status: summary.selectedIrrPct === null ? 'אזהרה' : (summary.selectedIrrPct >= (summary.requiredRoi ?? 15) ? 'תקין' : 'אזהרה'), note:'תשואה פנימית על זרם תפעולי 5 שנים מול הרף האישי (קו ייחוס שאינו פוסל).' });
+                rows.push({ label:'תקופת החזר השקעה', value:summary.paybackOpTxt || 'לא זמין', status:'מידע', note:'מדד מידע בלבד — אינו קובע לבדו GO / NO-GO.' });
                 rows.push({ label:'ROI מצטבר (לא מהוון)', value:pctPdf(summary.projectRoiPct), status:'מידע', note:'מדד מידע בלבד — אינו מהוון ואינו קובע GO/NO-GO.' });
                 rows.push({ label:'IRR על ההון העצמי', value:pctPdf(summary.irrPct), status:summary.irrPct === null ? 'אזהרה' : (summary.irrPct > 0 ? 'תקין' : 'סיכון'), note:'בדיקת תשואת המשקיע לאחר מבנה המימון.' });
-                rows.push({ label:'DSCR', value:summary.dscrTxt || 'ללא חוב', status:summary.dscr === null ? 'תקין' : (summary.dscr < 1 ? 'סיכון' : (summary.dscr <= 1.1 ? 'אזהרה' : 'תקין')), note:'יכולת שירות החוב לפי התזרים הזמין.' });
-                rows.push({ label:'תקופת החזר השקעה', value:summary.paybackOpTxt || 'לא זמין', status:'מידע', note:'מדד מידע בלבד — אינו קובע לבדו GO / NO-GO.' });
+                rows.push({ label:'השפעת המינוף', value:pctPdf(summary.leverageEffectPct), status:'מידע', note:'פער בין IRR ההון העצמי ל-IRR העסקה.' });
                 rows.push({ label:'תקופת החזר הון עצמי', value:summary.paybackTxt || 'לא זמין', status:'מידע', note:'הון עצמי ÷ תזרים שנתי לבעלים.' });
+                rows.push({ label:'DSCR', value:summary.dscrTxt || 'ללא חוב', status:summary.dscr === null ? 'תקין' : (summary.dscr < 1 ? 'סיכון' : (summary.dscr <= 1.1 ? 'אזהרה' : 'תקין')), note:'יכולת שירות החוב לפי התזרים הזמין.' });
             } else {
                 rows.push({ label:'EBITDA', value:moneyPdf(summary.totalEbitda), status:(summary.totalEbitda || 0) > 0 ? 'תקין' : 'סיכון', note:'יכולת יצירת רווח תפעולי לפני פחת, מימון ומס.' });
                 rows.push({ label:'תזרים מזומנים שנתי', value:moneyPdf(summary.annualCashFlow), status:(summary.annualCashFlow || 0) > 0 ? 'תקין' : 'סיכון', note:'התזרים השנתי החזוי לאחר הוצאות ומימון.' });
@@ -4644,10 +4737,22 @@ a{color:inherit}
             };
         }
 
-        function openPdfLeadModal() {
-            if(!cachedOutput || !Array.isArray(cachedOutput.monthsData)) { alert('אין נתונים זמינים להפקת PDF.'); return; }
+        let leadTarget = 'pdf';
+        function runLeadTarget() {
+            if(leadTarget === 'excel') exportToExcelDirect();
+            else generateProfessionalPdfReportDirect();
+        }
+        function openPdfLeadModal(target) {
+            leadTarget = (target === 'excel') ? 'excel' : 'pdf';
+            if(!cachedOutput || !Array.isArray(cachedOutput.monthsData)) { alert('אין נתונים זמינים להפקת הדוח.'); return; }
             const modal = document.getElementById('pdf-lead-modal');
-            if(!modal) { generateProfessionalPdfReportDirect(); return; }
+            if(!modal) { runLeadTarget(); return; }
+            const titleEl = document.getElementById('pdf-lead-title');
+            const subEl = document.getElementById('pdf-lead-subtitle');
+            if(titleEl) titleEl.textContent = leadTarget === 'excel' ? 'הורדת גיליון Excel מקצועי' : 'הפקת דוח PDF מקצועי';
+            if(subEl) subEl.textContent = leadTarget === 'excel'
+                ? 'לצורך קבלת הגיליון יש להשאיר פרטים. לאחר אימות תקין הקובץ יורד למחשב כ-Excel.'
+                : 'לצורך קבלת הדוח יש להשאיר פרטים. לאחר אימות תקין הדוח ייפתח להדפסה/שמירה כ-PDF.';
             const lead = getPdfLeadDefaults();
             const nameEl = document.getElementById('pdf-lead-name');
             const phoneEl = document.getElementById('pdf-lead-phone');
@@ -4717,8 +4822,26 @@ a{color:inherit}
                 localStorage.setItem('budgetsmart_pdf_lead', JSON.stringify(result.lead));
                 localStorage.setItem('cfo_budget_app_report_meta', JSON.stringify(S.reportMeta));
             } catch(e) {}
+
+            // שליחת הליד למייל דרך Formspree (אותו מנגנון כמו טופס צור הקשר). ההורדה מתבצעת בכל מקרה.
+            try {
+                const sourceLabel = leadTarget === 'excel' ? 'הורדת Excel' : 'הורדת PDF';
+                fetch('https://formspree.io/f/xkoelzoo', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        שם: result.lead.fullName,
+                        טלפון: result.lead.phone,
+                        אימייל: result.lead.email || '',
+                        עסק: result.lead.companyName || '',
+                        מקור: sourceLabel,
+                        _subject: 'ליד חדש מ-BudgetSmart — ' + sourceLabel + (result.lead.companyName ? ' · ' + result.lead.companyName : '')
+                    })
+                }).catch(function(){ /* גם אם השליחה נכשלה — לא חוסמים את ההורדה */ });
+            } catch(e) {}
+
             closePdfLeadModal();
-            generateProfessionalPdfReportDirect();
+            runLeadTarget();
         }
         function generateProfessionalPdfReportDirect() {
             if(!cachedOutput || !Array.isArray(cachedOutput.monthsData)) { alert('אין נתונים זמינים להפקת PDF.'); return; }
@@ -4739,7 +4862,7 @@ a{color:inherit}
             const insights = getPdfInsights(summary, monthsData);
 
             const executiveRows = S.appMode === 'new' ? [
-                ['השקעה ראשונית', moneyPdf(summary.investment)], ['רווח נקי שנתי', moneyPdf(summary.annualNetProfit ?? summary.totalNet)], ['NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)], ['IRR העסקה', pctPdf(summary.selectedIrrPct)], ['ROI מצטבר (לא מהוון)', pctPdf(summary.projectRoiPct)], ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)], ['IRR על ההון העצמי', pctPdf(summary.irrPct)], ['השפעת המינוף', pctPdf(summary.leverageEffectPct)], ['תקופת החזר השקעה', summary.paybackOpTxt], ['תקופת החזר הון עצמי', summary.paybackTxt],
+                ['השקעה (מחיר נדרש)', moneyPdf(summary.investment)], ['רווח תפעולי שנתי (EBIT)', moneyPdf(summary.totalEbit || 0)], ['שווי העסק (מכפיל 4)', summary.multDeal && isFinite(summary.multDeal.m4) ? moneyPdf(summary.multDeal.m4) : 'לא זמין'], ['שווי העסקה (מכפיל 4 − השקעה)', summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : moneyPdf(summary.dealValueNpv4)], ['IRR העסקה', pctPdf(summary.selectedIrrPct)], ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)], ['תקופת החזר השקעה', summary.paybackOpTxt],
                 ['מבנה מימון', summary.financingCfg.title], ['DSCR', summary.dscrTxt], ['המלצה', statusTitle]
             ] : [
                 ['הכנסות שנתיות', moneyPdf(summary.totalRev)], ['EBITDA', moneyPdf(summary.totalEbitda)], ['רווח נקי', moneyPdf(summary.totalNet)],
@@ -4750,15 +4873,16 @@ a{color:inherit}
                 @page{size:A4;margin:16mm}*{box-sizing:border-box}body{direction:rtl;font-family:Arial,'Assistant',sans-serif;color:#0f172a;margin:0;background:#fff}.page{min-height:265mm;page-break-after:always;padding:0}.page:last-child{page-break-after:auto}.cover{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;border:2px solid #e2e8f0;border-radius:18px;min-height:260mm;background:linear-gradient(180deg,#f8fafc,#fff)}.brand{font-size:34px;font-weight:800;color:#0f172a;letter-spacing:.5px}.subtitle{font-size:15px;color:#475569;margin-top:8px}.report-title{font-size:28px;font-weight:800;color:#1e3a8a;margin:35px 0 14px}.meta-line{font-size:14px;color:#334155;margin:6px}.prepared{margin-top:36px;color:#475569}.section-title{font-size:22px;font-weight:800;color:#0f172a;border-bottom:3px solid #1e3a8a;padding-bottom:8px;margin:0 0 18px}.footer{position:fixed;bottom:7mm;left:16mm;right:16mm;text-align:center;font-size:9px;color:#64748b;border-top:1px solid #e2e8f0;padding-top:5px}.status-box{border:2px solid ${statusCfg.border || '#2563eb'};background:${statusCfg.bg || '#eff6ff'};color:${statusCfg.fg || '#1e3a8a'};border-radius:14px;padding:16px;margin:16px 0}.status-box h2{margin:0 0 6px;font-size:20px}.summary-grid,.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.summary-item,.kpi-card{border:1px solid #e2e8f0;background:#f8fafc;border-radius:12px;padding:12px;text-align:center}.summary-item span,.kpi-label{display:block;color:#64748b;font-size:11px;font-weight:700;margin-bottom:6px}.summary-item strong,.kpi-value{font-size:16px;font-weight:800;color:#0f172a}.kpi-card{background:#fff;box-shadow:0 1px 4px rgba(15,23,42,.08)}.report-table{width:100%;border-collapse:collapse;font-size:9.2px;margin-top:10px}.report-table th{background:#0f172a;color:#fff;font-weight:700;padding:7px;border:1px solid #cbd5e1}.report-table td{padding:6px;border:1px solid #cbd5e1;text-align:center}.report-table td:first-child{font-weight:700;text-align:right;background:#f8fafc}.total-cell{font-weight:800;background:#e2e8f0!important}.negative-row td{background:#fff1f2;color:#9f1239;font-weight:700}.compact{max-width:560px}.assumption-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.assumption-grid div{border:1px solid #e2e8f0;border-radius:10px;padding:10px;background:#f8fafc}.assumption-grid span{display:block;font-size:11px;color:#64748b}.assumption-grid strong{font-size:13px;color:#0f172a}.insights{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.insight-box{border:1px solid #e2e8f0;border-radius:12px;padding:12px;background:#fff}.insight-box h3{margin:0 0 8px;color:#1e3a8a;font-size:15px}.insight-box ul{margin:0;padding-right:18px;font-size:12px;line-height:1.6}.disclaimer{margin-top:18px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:12px;font-size:11px;line-height:1.6;color:#475569}.note{font-size:12px;line-height:1.7;color:#475569}`;
 
             const html = `<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><title>${htmlEscapePdfReport(title)} - ${htmlEscapePdfReport(company)}</title><style>${css}</style></head><body>
-                <div class="footer">BudgetSmart Financial Planning Platform | Prepared by: Ezra Eliezer Financial Consulting</div>
-                <section class="page cover"><div class="brand">BudgetSmart</div><div class="subtitle">מערכת לתכנון פיננסי, תקציב ובדיקת כדאיות</div><div class="report-title">${htmlEscapePdfReport(title)}</div><div class="meta-line"><strong>שם העסק:</strong> ${htmlEscapePdfReport(company)}</div><div class="meta-line"><strong>פרויקט:</strong> ${htmlEscapePdfReport(project)}</div><div class="meta-line"><strong>שנת תחזית:</strong> שנה הבאה</div><div class="meta-line"><strong>תאריך הפקה:</strong> ${htmlEscapePdfReport(today)}</div><div class="prepared">Prepared by<br><strong>${htmlEscapePdfReport(preparedBy)}</strong><br>עזרא אליעזר - ייעוץ פיננסי</div></section>
+                <div class="footer">BudgetSmart · עזרא אליעזר — מנהל כספים חיצוני (CFO) ויועץ פיננסי · 050-2900102 · ezra@ezraeliezer.com · ezraeliezer.com</div>
+                <section class="page cover"><div class="brand">BudgetSmart</div><div class="subtitle">מערכת לתכנון פיננסי, תקציב ובדיקת כדאיות</div><div class="report-title">${htmlEscapePdfReport(title)}</div><div class="meta-line"><strong>שם העסק:</strong> ${htmlEscapePdfReport(company)}</div><div class="meta-line"><strong>פרויקט:</strong> ${htmlEscapePdfReport(project)}</div><div class="meta-line"><strong>שנת תחזית:</strong> שנה הבאה</div><div class="meta-line"><strong>תאריך הפקה:</strong> ${htmlEscapePdfReport(today)}</div><div class="prepared">הופק על ידי<br><strong>${htmlEscapePdfReport(preparedBy)}</strong><br>מנהל כספים חיצוני (CFO) ויועץ פיננסי<br>050-2900102 · ezra@ezraeliezer.com · ezraeliezer.com</div></section>
                 <section class="page"><h1 class="section-title">תקציר מנהלים</h1><div class="status-box"><h2>${htmlEscapePdfReport(statusTitle)}</h2><div>${htmlEscapePdfReport(summary.conclusion || '')}</div></div><div class="summary-grid">${executiveRows.map(([k,v])=>`<div class="summary-item"><span>${htmlEscapePdfReport(k)}</span><strong>${htmlEscapePdfReport(v)}</strong></div>`).join('')}</div><p class="note">התקציר מציג את התוצאות המרכזיות בלבד ומבוסס על הנתונים וההנחות שהוזנו במערכת.</p></section>
+                ${S.appMode === 'new' ? `<section class="page"><h1 class="section-title">הערכת שווי</h1>${buildPdfValuation(summary)}</section>` : ''}
                 <section class="page"><h1 class="section-title">KPI מרכזיים</h1><div class="kpi-grid">${buildPdfKpiCards(summary)}</div></section>
                 <section class="page"><h1 class="section-title">ניתוח סיכונים</h1>${buildPdfRiskAnalysisTable(summary, monthsData)}</section>
                 <section class="page"><h1 class="section-title">טבלת תחזית שנתית</h1>${buildPdfForecastTable(monthsData)}</section>
                 <section class="page"><h1 class="section-title">תזרים מזומנים</h1>${buildPdfCashFlowTable(monthsData)}<p class="note">חודשים שליליים מודגשים באדום לצורך זיהוי מוקדם של לחץ תזרימי.</p></section>
                 <section class="page"><h1 class="section-title">הנחות המודל</h1>${buildPdfAssumptions(summary)}</section>
-                <section class="page"><h1 class="section-title">מסקנות ואזהרות</h1><div class="insights"><div class="insight-box"><h3>חוזקות</h3><ul>${insights.strengths.map(x=>`<li>${htmlEscapePdfReport(x)}</li>`).join('')}</ul></div><div class="insight-box"><h3>סיכונים</h3><ul>${insights.risks.map(x=>`<li>${htmlEscapePdfReport(x)}</li>`).join('')}</ul></div><div class="insight-box"><h3>המלצות פעולה</h3><ul>${insights.recommendations.map(x=>`<li>${htmlEscapePdfReport(x)}</li>`).join('')}</ul></div></div><div class="disclaimer"><strong>הערת הסתייגות מקצועית:</strong> דוח זה מבוסס על הנתונים וההנחות שהוזנו למערכת BudgetSmart ואינו מהווה ייעוץ פיננסי, עסקי, משפטי או השקעות. תוצאות בפועל עשויות להיות שונות מהתחזית המוצגת. מומלץ לבחון את הנתונים מול גורם מקצועי מוסמך לפני קבלת החלטות עסקיות או פיננסיות.</div></section>
+                <section class="page"><h1 class="section-title">מסקנות והמשך</h1><div class="insights"><div class="insight-box"><h3>חוזקות</h3><p class="note">זוהו ${insights.strengths.length} חוזקות בעסק לפי הנתונים שהוזנו.</p></div><div class="insight-box"><h3>נקודות לתשומת לב</h3><p class="note">זוהו ${insights.risks.length} נקודות הדורשות בחינה מעמיקה.</p></div><div class="insight-box"><h3>המלצות פעולה</h3><p class="note">${insights.recommendations.length} המלצות ליישום, הנבחנות בייעוץ אישי.</p></div></div><div class="status-box" style="border-color:#1e3a8a;background:#eff6ff;color:#1e3a8a;margin-top:18px"><h2>רוצה להבין מה המספרים אומרים על העסק שלך?</h2><div>הפרשנות המעמיקה — זיהוי הסיכונים, מינוף החוזקות והדרכים לשפר — נבחנת יחד בשיחת ייעוץ ראשונית ללא עלות.<br><strong>עזרא אליעזר — מנהל כספים חיצוני (CFO) ויועץ פיננסי</strong><br>050-2900102 · ezra@ezraeliezer.com · ezraeliezer.com</div></div><div class="disclaimer"><strong>הערת הסתייגות מקצועית:</strong> דוח זה מבוסס על הנתונים וההנחות שהוזנו למערכת BudgetSmart ואינו מהווה ייעוץ פיננסי, עסקי, משפטי או השקעות. תוצאות בפועל עשויות להיות שונות מהתחזית המוצגת. מומלץ לבחון את הנתונים מול גורם מקצועי מוסמך לפני קבלת החלטות עסקיות או פיננסיות.</div></section>
             </body></html>`;
 
             const win = window.open('', '_blank');
@@ -4885,23 +5009,16 @@ a{color:inherit}
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> כדאיות מהוונת — NPV ו-IRR (ריבית היוון ${summary.discountRatePct}%)</h3>
-
-                        <div class="rounded-lg border-2 p-3 mb-3 text-[12px] leading-relaxed" style="border-color:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#10b981' : '#f43f5e'};background:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#ecfdf5' : '#fff1f2'};color:${summary.selectedNpv !== null && summary.selectedNpv >= 0 ? '#065f46' : '#9f1239'}">
-                            <strong>ההכרעה חושבה בריבית היוון ${summary.discountRatePct}%, בהנחת ${summary.feasModelLabel}.</strong>
-                            ${summary.npvCompareNote}
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            ${kpiCard('NPV העסקה', summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : '₪' + fmtILS(summary.selectedNpv), `מידע — שווי הזרם (אג"ח, 5 שנים + שווי עסק) פחות ההשקעה. אינו קובע GO/NO-GO`, getInvestmentColor(summary.selectedNpv, 'profit'))}
-                            ${kpiCard('IRR העסקה', formatPctValue(summary.selectedIrrPct), (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct)) ? `מול הרף שהגדרת (${summary.requiredRoi ?? 15}%): ${summary.selectedIrrPct >= (summary.requiredRoi ?? 15) ? 'עומד בציפיית התשואה שלך' : 'מתחת לרף — שקול אם מספק אותך (אינו פוסל)'}` : 'תשואה פנימית על זרם תפעולי 5 שנים', (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct) && summary.selectedIrrPct < (summary.requiredRoi ?? 15)) ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' })}
-                        </div>
-                        <p class="text-[11px] text-slate-500 mt-2">הרף האישי שהגדרת (${summary.requiredRoi}%) אינו פוסל את העסקה — הוא קו ייחוס בלבד המושווה ל-IRR.</p>
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> הערכת שווי — שיטת מכפיל (ראשי) והצלבת DCF</h3>
+                        ${summary.multiplierHtml || ''}
+                        ${summary.dcfHtml || ''}
+                        <p class="text-[11px] text-slate-500 mt-2">שיטת המכפיל היא הקובעת; טבלת ה-DCF שמתחתיה היא הצלבה בלבד. המסקנה המסכמת מופיעה בתקציר המנהלים בהמשך הדף.</p>
                     </div>
 
                     <div>
                         <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-indigo-600"></i> מדדי השקעה נוספים</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                            ${kpiCard('IRR העסקה', formatPctValue(summary.selectedIrrPct), (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct)) ? `מול הרף שהגדרת (${summary.requiredRoi ?? 15}%) — קו ייחוס שאינו פוסל` : 'תשואה פנימית על זרם תפעולי 5 שנים', (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct) && summary.selectedIrrPct < (summary.requiredRoi ?? 15)) ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' })}
                             ${kpiCard('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct), `מידע בלבד — (תזרים תפעולי מצטבר − השקעה) ÷ השקעה, ללא ערך סופי`, roiColor)}
                             ${kpiCard('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct), 'תזרים לבעלים (אחרי שירות חוב) ÷ הון עצמי, ללא ערך סופי', equityRoiColor)}
                             ${kpiCard('IRR על ההון העצמי', formatPctValue(summary.irrPct), `תשואה פנימית על התזרים אחרי שירות חוב, ללא ערך סופי`, irrColor)}
@@ -4939,10 +5056,9 @@ a{color:inherit}
                             ${kpiCard('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`, summary.riskCfg.sub, summary.riskCfg)}
                             ${kpiCard('תקופת החזר השקעה', summary.paybackOpTxt, (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? 'מעל 10 שנים — אופק רחב מדי לעסק קטן-בינוני (אינו פוסל)' : (summary.paybackOpMonths > 60 ? 'מעל 5 שנים — אופק רחב, שקול בזהירות (אינו פוסל)' : 'החזר תוך 5 שנים — סביר'), (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? { border:'#f43f5e', fg:'#9f1239' } : (summary.paybackOpMonths > 60 ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' }))}
                             ${kpiCard('תקופת החזר הון עצמי', summary.paybackTxt, 'הון עצמי ÷ תזרים שנתי לבעלים', { border:'#cbd5e1', fg:'#0f172a' })}
-                            ${kpiCard('החלטת מודל', summary.decisionCfg.title, summary.conclusion, summary.decisionCfg)}
                         </div>
                         <p class="text-[11px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 mt-3 text-slate-600">
-                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. ${summary.horizonNote} <strong>ההכרעה (GO/NO-GO) נקבעת לפי NPV בריבית היוון ${summary.discountRatePct}%, בהנחת ${summary.feasModelLabel}.</strong> ה-IRR משמש כשכבת מידע מול הרף האישי (${summary.requiredRoi}%), והרף האישי אינו פוסל עסקה. ROI מצטבר ותקופות ההחזר מוצגים כמידע בלבד ואינם קובעים GO/NO-GO. מדדי ההשקעה מפרידים בין כדאיות העסקה לבין השפעת המימון.
+                            הגרפים והטבלאות החודשיות נשארים בהמשך הדף כמידע תומך. ${summary.horizonNote} <strong>ההכרעה נקבעת קודם לפי איתנות העסק (רווחיות תפעולית ומבנה מימון), ואז סף מחיר צהוב כששווי העסקה לפי מכפיל 4 שלילי.</strong> ה-IRR וה-DCF משמשים כשכבת מידע/הצלבה ואינם פוסלים. ROI מצטבר ותקופות ההחזר מוצגים כמידע בלבד. המסקנה המסכמת מופיעה בתקציר המנהלים בהמשך הדף.
                         </p>
                     </div>
                 </div>`;
@@ -5455,7 +5571,8 @@ a{color:inherit}
             });
         }
 
-                function exportToExcel() {
+                function exportToExcel() { openPdfLeadModal('excel'); }
+                function exportToExcelDirect() {
             if(!cachedOutput) { alert('אין נתוני תקציב זמינים לייצוא כרגע.'); return; }
             if(typeof XLSX === 'undefined') { alert('ספריית הייצוא עדיין נטענת — נסה שוב בעוד רגע.'); return; }
 
@@ -5953,14 +6070,16 @@ a{color:inherit}
                             ['תשלום חודשי מחושב', Math.round(fin.monthlyPayment || 0), NUM]
                         ]},
                         { title:'מתודולוגיית החלטה רשמית', rows:[
-                            ['GO', 'NPV חיובי בריבית ההיוון (לפי המודל הנבחר) ומבנה המימון תקין'],
-                            ['GO מותנה — סיכון מימון', 'NPV חיובי אך מבנה המימון גבולי/מסוכן'],
-                            ['NO-GO', 'NPV שלילי בריבית ההיוון — העסקה אינה יוצרת ערך מעל החלופה'],
-                            ['מדרג ההכרעה', 'ראשי: NPV (אובייקטיבי, בריבית היוון). משני: IRR מול הרף האישי — קו ייחוס שאינו פוסל.'],
+                            ['GO', 'העסק רווחי תפעולית, מבנה המימון תקין, ושווי העסקה (מכפיל 4) חיובי — המחיר נמוך מהשווי השמרני'],
+                            ['GO מותנה — סיכון מימון', 'העסק רווחי אך מבנה המימון גבולי/מסוכן (DSCR<1 או תזרים שלילי לאחר חוב)'],
+                            ['GO מותנה — מחיר גבוה', 'העסק רווחי והמימון תקין, אך שווי העסקה (מכפיל 4) שלילי — במחיר הנוכחי ההשקעה אינה חוזרת בתשואה הנדרשת. מוצג המחיר ההוגן לפי מכפיל 4'],
+                            ['NO-GO', 'העסק אינו רווחי תפעולית — אינו כדאי כהשקעה ללא תלות במחיר'],
+                            ['מדרג ההכרעה', 'ראשי: איתנות העסק — תחילה רווחיות תפעולית (EBIT), אחריה מבנה המימון (DSCR/תזרים). משני: שווי העסקה לפי מכפיל 4 (שמרני) — סף מחיר צהוב שאינו פוסל את העסק אלא מתריע על מחיר. שלישי: DCF (הצלבה) ו-IRR מול הרף האישי — מאירים ואינם פוסלים.'],
+                            ['שווי העסק מול שווי העסקה', 'שווי העסק = זרם התקבולים העתידי (ברוטו). שווי העסקה = שווי העסק פחות ההשקעה (נטו) — זה מה שנבדק.'],
                             ['ROI מצטבר / תקופות החזר', 'מדדי מידע בלבד — אינם קובעים GO/NO-GO'],
-                            ['Risk Rating', 'ציר נפרד המשלב כדאיות עסקה (NPV), IRR, DSCR ותזרים לאחר חוב'],
+                            ['Risk Rating', 'ציר נפרד המשלב שווי העסקה, IRR, DSCR ותזרים לאחר חוב'],
                             ['מה לא נכלל', 'אובליגו מלא, התחייבויות לזמן קצר ומבנה הון מאזני — נדרשת השלמה חיצונית לפני החלטה'],
-                            ['הערה', 'הגיליון מציג את ההנחות שנקלטו במערכת ואינו משנה נוסחאות פיננסיות.']
+                            ['הערה', 'הגיליון מציג את ההנחות שנקלטו במערכת ואינו משנה נוסחאות פיננסיות. כל ההערכות מניחות עסק ללא שינוי לאורך התקופה.']
                         ]}
                     );
                 } else {
@@ -6042,12 +6161,16 @@ a{color:inherit}
                         ['סיכום מילולי', feasibilitySummary.conclusion],
                         ['בסיס החלטה', 'Investor Basis — לאחר מימון']
                     ]},
-                    { title:'כדאיות מהוונת — NPV ו-IRR', rows:[
-                        ['ריבית היוון', (feasibilitySummary.discountRatePct ?? 5) / 100, pctFmt],
-                        ['NPV העסקה (קובע GO/NO-GO)', feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? 'לא זמין' : Math.round(feasibilitySummary.selectedNpv), feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? undefined : NUM],
+                    { title:'הערכת שווי — שווי העסק (מכפיל) ושווי העסקה (נטו)', rows:[
+                        ['שווי העסק — מכפיל 4 (שמרני, קובע)', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m4) ? Math.round(feasibilitySummary.multDeal.m4) : 'לא זמין', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m4) ? NUM : undefined],
+                        ['שווי העסק — מכפיל 5 (טיפוסי)', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m5) ? Math.round(feasibilitySummary.multDeal.m5) : 'לא זמין', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m5) ? NUM : undefined],
+                        ['שווי העסק — מכפיל 6 (יציב/צומח)', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m6) ? Math.round(feasibilitySummary.multDeal.m6) : 'לא זמין', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m6) ? NUM : undefined],
+                        ['שווי העסקה (שווי העסק במכפיל 4 − השקעה)', feasibilitySummary.dealValueNpv4 === null || !isFinite(feasibilitySummary.dealValueNpv4) ? 'לא זמין' : Math.round(feasibilitySummary.dealValueNpv4), feasibilitySummary.dealValueNpv4 === null || !isFinite(feasibilitySummary.dealValueNpv4) ? undefined : NUM],
+                        ['ריבית חסרת סיכון (DCF, הערכה 3 בלבד)', (feasibilitySummary.discountRatePct ?? 5) / 100, pctFmt],
+                        ['הרדל — תשואה נדרשת (היוון הערכות 1–2)', (feasibilitySummary.requiredRoi ?? 15) / 100, pctFmt],
+                        ['שווי העסקה — הצלבת DCF (הערכה 1)', feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? 'לא זמין' : Math.round(feasibilitySummary.selectedNpv), feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? undefined : NUM],
                         ['IRR העסקה', feasibilitySummary.selectedIrrPct === null ? 'לא זמין' : feasibilitySummary.selectedIrrPct / 100, feasibilitySummary.selectedIrrPct === null ? undefined : pctFmt],
-                        ['רף אישי (קו ייחוס, אינו פוסל)', (feasibilitySummary.requiredRoi ?? 15) / 100, pctFmt],
-                        ['הערה', 'ההכרעה נקבעת לפי NPV של היוון זרם התקבולים ל-5 שנים בריבית ההיוון (חסרת סיכון), ללא ערך שיורי. הרף האישי מושווה ל-IRR ואינו פוסל.']
+                        ['הערה', 'שווי העסק = זרם התקבולים העתידי (ברוטו). שווי העסקה = שווי העסק פחות ההשקעה (נטו). שיטת המכפיל היא הקובעת. הצלבת DCF — הערכה 1: 5 שנים מהוונות בהרדל + שיורי לפי מכפיל 4 מובא בהרדל; הערכה 2: גורדון לאינסוף בהרדל; הערכה 3: 5 שנים בריבית חסרת סיכון בלבד. כל ההערכות מניחות עסק ללא שינוי לאורך התקופה.']
                     ]},
                     { title:'מדדי מפתח', rows:[
                         ['הכנסות שנתיות', Math.round(cachedOutput.totalRev || sum('revenue')), NUM],
@@ -6144,6 +6267,27 @@ a{color:inherit}
                 wRisk = buildRiskSheet(feasibilitySummary, M);
             }
 
+            // ── גיליון צור קשר (לידים) ──
+            const leadName = (S.pdfLead && S.pdfLead.fullName) ? S.pdfLead.fullName : '';
+            const wContact = XLSX.utils.aoa_to_sheet([
+                ['BudgetSmart — הערכת כדאיות ותקציב'],
+                [''],
+                ['הדוח מציג את התוצאות והמדדים לפי הנתונים שהוזנו.'],
+                ['הפרשנות המעמיקה, זיהוי הסיכונים, החוזקות ודרכי השיפור — נבחנים בייעוץ אישי.'],
+                [''],
+                ['רוצה להבין מה המספרים אומרים על העסק שלך, ואיך לשפר?'],
+                ['צור קשר לשיחת ייעוץ ראשונית ללא עלות:'],
+                [''],
+                ['עזרא אליעזר — מנהל כספים חיצוני (CFO) ויועץ פיננסי'],
+                ['טלפון', '050-2900102'],
+                ['דוא"ל', 'ezra@ezraeliezer.com'],
+                ['אתר', 'ezraeliezer.com'],
+                [''],
+                ['הדוח אינו מהווה ייעוץ פיננסי, חשבונאי, משפטי או ייעוץ השקעות.'],
+                [leadName ? ('הופק עבור: ' + leadName) : '', '']
+            ]);
+            wContact['!cols'] = [{ wch: 60 }, { wch: 30 }];
+
             // ── בניית החוברת ──
             const wb = XLSX.utils.book_new();
             wb.Workbook = { Views:[{ RTL:true }] };
@@ -6155,6 +6299,7 @@ a{color:inherit}
             if(wRisk) XLSX.utils.book_append_sheet(wb, wRisk, 'ניתוח סיכונים');
             XLSX.utils.book_append_sheet(wb, w2, 'מדדי ביצוע');
             XLSX.utils.book_append_sheet(wb, w3, 'ביצוע מול תחזית');
+            XLSX.utils.book_append_sheet(wb, wContact, 'צור קשר');
             const safeCompany = (reportCompany || 'עסק_ללא_שם').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_');
             const filePrefix = S.appMode === 'new' ? 'דוח_כדאיות_השקעה' : 'מודל_פיננסי_חזוי';
             XLSX.writeFile(wb, `${filePrefix}_${fy}_${safeCompany}.xlsx`, { bookType:'xlsx' });
