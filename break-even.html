@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="מחשבון נקודת איזון במכירות ותחזית רווח תפעולי חודשי לעסקים.">
+  <title>מחשבון נקודת איזון במכירות | BudgetSmart</title>
+  <!-- Google Analytics (GA4) — מזהה המדידה של ezraeliezer.com. למחיקת המעקב: הסירו את שני בלוקי ה-script הללו. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NGB6JB9MYM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NGB6JB9MYM');
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&display=swap');
+    *{box-sizing:border-box}body{margin:0;font-family:Assistant,Arial,sans-serif;background:#f8fafc;color:#1e293b;direction:rtl}.page{min-height:100vh;padding:24px 16px 40px}.container{max-width:1080px;margin:0 auto}.hero{background:linear-gradient(135deg,#0f172a 0%,#1e293b 55%,#2563eb 100%);color:#fff;border-radius:24px;padding:34px 28px;box-shadow:0 20px 45px rgba(15,23,42,.18);margin-bottom:22px}.brand{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);padding:8px 13px;border-radius:999px;font-size:14px;font-weight:700;margin-bottom:18px}.brand-dot{width:10px;height:10px;border-radius:999px;background:#38bdf8;box-shadow:0 0 0 5px rgba(56,189,248,.18)}h1{margin:0 0 10px;font-size:clamp(30px,5vw,46px);line-height:1.05}.subtitle{margin:0 0 12px;font-size:clamp(18px,3vw,24px);font-weight:800;color:#dbeafe}.description{max-width:820px;margin:0;color:#cbd5e1;font-size:17px;line-height:1.75}.trust-line{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}.pill{background:rgba(255,255,255,.12);color:#e0f2fe;border:1px solid rgba(255,255,255,.16);padding:7px 11px;border-radius:999px;font-size:13px;font-weight:700}.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}.card{background:#fff;border:1px solid #e2e8f0;border-radius:22px;box-shadow:0 10px 25px rgba(15,23,42,.06);overflow:hidden}.card-header{padding:20px 22px;border-bottom:1px solid #e2e8f0;background:#fff}.card-header h2{margin:0;font-size:22px}.card-body{padding:22px}.field{margin-bottom:18px}label{display:block;margin-bottom:7px;font-weight:800;color:#334155;font-size:15px}.input-wrap{position:relative}input{width:100%;border:1px solid #cbd5e1;border-radius:14px;padding:13px 14px 13px 44px;font-size:18px;font-weight:700;color:#0f172a;outline:none;background:#fff;text-align:right;transition:.15s ease}input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}.suffix{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#64748b;font-weight:800;font-size:15px}.hint{margin-top:8px;padding:10px 12px;border-radius:14px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:13px;line-height:1.55}.hint strong{color:#1e293b}.actions{display:flex;gap:10px;margin-top:20px}button{border:none;border-radius:14px;padding:13px 18px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;transition:.15s ease}.primary{flex:1;background:#2563eb;color:#fff;box-shadow:0 10px 20px rgba(37,99,235,.22)}.primary:hover{background:#1d4ed8;transform:translateY(-1px)}.secondary{background:#f1f5f9;color:#334155}.secondary:hover{background:#e2e8f0}.error{display:none;margin-top:12px;background:#fff1f2;color:#be123c;border:1px solid #fecdd3;border-radius:14px;padding:11px 13px;font-weight:700;font-size:14px}.results-placeholder{padding:26px;text-align:center;color:#64748b;background:#f8fafc;border:1px dashed #cbd5e1;border-radius:18px;line-height:1.7}.result-list{display:none;gap:14px;flex-direction:column}.result-card{border-radius:18px;border:1px solid #e2e8f0;padding:18px;background:#fff}.result-card.main{background:#eff6ff;border-color:#bfdbfe}.result-title{color:#475569;font-weight:800;font-size:14px;margin-bottom:5px}.result-value{font-size:30px;line-height:1.1;font-weight:800;color:#0f172a;margin-bottom:9px;direction:rtl}.result-note{color:#475569;font-size:14px;line-height:1.55;margin:0}.positive{color:#047857}.negative{color:#be123c}.disclaimer{margin-top:16px;color:#64748b;font-size:12px;line-height:1.6;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:11px 12px}.helper-table{margin-top:22px}.helper-table h2{margin:0 0 6px;font-size:22px}.helper-table p{margin:0 0 14px;color:#64748b;line-height:1.6}table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:16px;font-size:14px}th,td{padding:12px 14px;border-bottom:1px solid #e2e8f0;text-align:right}th{background:#0f172a;color:#fff;font-weight:800}tr:nth-child(even) td{background:#f8fafc}.tag{display:inline-flex;padding:4px 9px;border-radius:999px;font-weight:800;font-size:12px}.tag-variable{background:#fef3c7;color:#92400e}.tag-fixed{background:#dbeafe;color:#1e40af}.cta{margin-top:22px;background:#0f172a;color:#fff;border-radius:22px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:18px;box-shadow:0 10px 25px rgba(15,23,42,.12)}.cta h2{margin:0 0 5px;font-size:22px}.cta p{margin:0;color:#cbd5e1;line-height:1.6}.cta a{text-decoration:none;background:#2563eb;color:#fff;padding:13px 18px;border-radius:14px;font-weight:800;white-space:nowrap;box-shadow:0 10px 20px rgba(37,99,235,.24)}.cta a:hover{background:#1d4ed8}.footer{margin-top:18px;text-align:center;color:#64748b;font-size:13px}@media(max-width:860px){.grid{grid-template-columns:1fr}.hero{padding:28px 22px}.cta{flex-direction:column;align-items:stretch}.cta a{text-align:center}}@media(max-width:520px){.page{padding:14px 10px 28px}.actions{flex-direction:column}.card-body,.card-header{padding:18px}.result-value{font-size:26px}th,td{padding:10px 9px;font-size:13px}}
+    .intro{background:#fff;border:1px solid #e2e8f0;border-radius:22px;box-shadow:0 10px 25px rgba(15,23,42,.06);padding:24px 22px;margin-bottom:22px}
+    .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .intro-block h2{margin:0 0 7px;font-size:19px;color:#0f172a}
+    .intro-block p{margin:0;color:#475569;font-size:15px;line-height:1.7}
+    .info-card{margin-top:22px}
+    .info-card h2{margin:0 0 10px;font-size:22px;color:#0f172a}
+    .info-card>.card-body>p{margin:0 0 6px;color:#475569;font-size:15px;line-height:1.7}
+    .sources-list{list-style:none;padding:0;margin:14px 0 0}
+    .sources-list>li{padding:14px 0;border-bottom:1px solid #e2e8f0;color:#475569;font-size:15px;line-height:1.75}
+    .sources-list>li:last-child{border-bottom:none}
+    .sources-list strong{color:#0f172a}
+    .formula{display:block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;margin:8px 0 2px;font-weight:700;color:#0f172a;font-size:15px}
+    .formula.ltr{direction:ltr;unicode-bidi:isolate;text-align:left}
+    .example-note{display:block;background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px 13px;margin:8px 0 0;color:#1e40af;font-size:14px;line-height:1.65}
+    .warn-note{display:block;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:10px 13px;margin:8px 0 0;color:#92400e;font-size:14px;line-height:1.65}
+    .rule-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:12px 14px;margin:0 0 16px;color:#166534;font-size:14px;line-height:1.6}
+    .disclaimer-full p{color:#64748b;font-size:13.5px;line-height:1.75;margin:0 0 12px}
+    .disclaimer-full p:last-child{margin-bottom:0}
+    .disclaimer-full strong{color:#475569}
+    .byline{margin-top:16px;color:#bfdbfe;font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:9px}
+    .byline .byline-dot{width:7px;height:7px;border-radius:999px;background:#38bdf8;flex:none}
+    .insight{border-radius:18px;padding:16px 18px;margin-bottom:6px}
+    .insight-title{display:block;font-weight:800;font-size:16px;margin-bottom:5px}
+    .insight-text{margin:0;font-size:14px;line-height:1.65}
+    .insight-danger{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239}
+    .insight-warn{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+    .insight-ok{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+    .form-subhead{margin:22px 0 16px;padding-top:18px;border-top:1px solid #e2e8f0;font-weight:800;color:#334155;font-size:14px;display:flex;align-items:center;gap:8px}
+    .form-subhead .sub-dot{width:7px;height:7px;border-radius:999px;background:#06b6d4;flex:none}
+    .result-card.cash{background:#ecfeff;border-color:#a5f3fc}
+    .privacy-note{margin-top:22px;padding:14px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;color:#64748b;font-size:13px;line-height:1.7;text-align:center}
+    .privacy-note strong{color:#475569}
+    @media(max-width:860px){.intro-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="page"><div class="container">
+    <header class="hero">
+      <div class="brand"><span class="brand-dot"></span> BudgetSmart</div>
+      <h1>מחשבון נקודת איזון במכירות</h1>
+      <p class="subtitle">כמה העסק חייב למכור בכל חודש כדי לכסות את כל ההוצאות הקבועות ולהתחיל להרוויח?</p>
+      <p class="description">נקודת האיזון היא אחד המדדים החשובים ביותר בניהול עסק. באמצעות מספר נתונים פשוטים תוכל לחשב את יעד המכירות המינימלי, להעריך את רמת הסיכון העסקי ולקבל החלטות טובות יותר בנוגע לתמחור, הוצאות וצמיחה.</p>
+      <p class="byline"><span class="byline-dot"></span> מאת עזרא אליעזר · יועץ עסקי ו־CFO</p>
+      <div class="trust-line"><span class="pill">לבעלי עסקים</span><span class="pill">ליזמים</span><span class="pill">למשקיעים</span><span class="pill">ליועצים עסקיים</span></div>
+    </header>
+
+    <section class="intro"><div class="intro-grid">
+      <div class="intro-block"><h2>מה זה נקודת איזון?</h2><p>רמת המכירות שבה העסק לא מרוויח ולא מפסיד — ההכנסות מכסות בדיוק את כל ההוצאות. מתחת לרמה הזו העסק מפסיד, ומעליה הוא מתחיל להרוויח.</p></div>
+      <div class="intro-block"><h2>למה לחשב אותה?</h2><p>כדי לדעת מהו יעד המכירות המינימלי שחייבים לעמוד בו בכל חודש, להעריך את מרחק הביטחון מההפסד, ולבחון החלטות על תמחור, גיוס עובד או הוצאה חדשה — לפני שמתחייבים.</p></div>
+    </div></section>
+
+    <main class="grid">
+      <section class="card"><div class="card-header"><h2>הזן נתונים לחישוב</h2></div><div class="card-body">
+        <div class="field"><label for="fixedCosts">הוצאות קבועות חודשיות</label><div class="input-wrap"><input id="fixedCosts" type="text" inputmode="numeric" placeholder="לדוגמה: 50,000" oninput="formatMoneyField(this)"><span class="suffix">₪</span></div><div class="hint"><strong>מה לכלול?</strong> שכירות, שכר הנהלה, משרד, ביטוחים, הנהלת חשבונות, תוכנות, תקשורת וכל הוצאה שאינה משתנה ישירות לפי כמות המכירות או העבודה ללקוח.</div></div>
+        <div class="field"><label for="grossMargin">מרווח גולמי (%)</label><div class="input-wrap"><input id="grossMargin" type="text" inputmode="decimal" placeholder="לדוגמה: 40" oninput="formatPercentField(this)"><span class="suffix">%</span></div><div class="hint"><strong>מה להזין?</strong> שיעור הרווח שנותר מהמכירות לאחר ניכוי עלות המכר, עלויות ייצור וכל עלות ישירה אחרת הקשורה במכירה או בביצוע השירות.</div></div>
+        <div class="field"><label for="expectedSales">מכירות חודשיות צפויות</label><div class="input-wrap"><input id="expectedSales" type="text" inputmode="numeric" placeholder="לדוגמה: 150,000" oninput="formatMoneyField(this)"><span class="suffix">₪</span></div><div class="hint"><strong>מה לכלול?</strong> סך ההכנסות החודשיות הצפויות לפני מע״מ. אין לכלול הלוואות, השקעות בעלים או הכנסות מימון.</div></div>
+        <div class="field"><label for="unitPrice">מחיר ממוצע ליחידה <span style="font-weight:600;color:#64748b">(אופציונלי)</span></label><div class="input-wrap"><input id="unitPrice" type="text" inputmode="numeric" placeholder="לדוגמה: 100" oninput="formatMoneyField(this)"><span class="suffix">₪</span></div><div class="hint"><strong>למה זה נועד?</strong> מלאו שדה זה רק אם תרצו לקבל את נקודת האיזון גם <strong>במספר יחידות</strong>, ולא רק בכסף. החישוב ביחידות מתאים לעסק עם <strong>מוצר אחד או מחיר אחיד</strong> — יצרן של מוצר בודד, שירות במחיר קבוע, טיפול, מנוי או קורס. לעסק עם מגוון רחב של מוצרים במחירים שונים החישוב ביחידות הוא הערכה גסה בלבד, ונקודת האיזון <strong>בכסף</strong> היא המדד המעשי.</div></div>
+        <div class="form-subhead"><span class="sub-dot"></span> לבדיקת איזון תזרימי (אופציונלי)</div>
+        <div class="field"><label for="principal">החזר קרן חודשי <span style="font-weight:600;color:#64748b">(ללא ריבית)</span></label><div class="input-wrap"><input id="principal" type="text" inputmode="numeric" placeholder="לדוגמה: 8,000" oninput="formatMoneyField(this)"><span class="suffix">₪</span></div><div class="hint"><strong>מה להזין?</strong> סך החזרי ההלוואות החודשיים — <strong>רק רכיב הקרן</strong>. הריבית כבר נכללת בהוצאות הקבועות, ולכן אין לכלול אותה כאן (אחרת תיספר פעמיים). אם ידוע לכם רק ההחזר הכולל — הפחיתו ממנו את הריבית החודשית.</div></div>
+        <div class="field"><label for="depreciation">פחת חודשי <span style="font-weight:600;color:#64748b">(אופציונלי)</span></label><div class="input-wrap"><input id="depreciation" type="text" inputmode="numeric" placeholder="לדוגמה: 3,000" oninput="formatMoneyField(this)"><span class="suffix">₪</span></div><div class="hint"><strong>מה להזין?</strong> פחת על ציוד ורכוש קבוע. הפחת הוא הוצאה חשבונאית שאינה יציאת מזומן, ולכן בבדיקת התזרים הוא מנוכה. אם אינכם יודעים — השאירו ריק, והתוצאה תהיה מעט שמרנית (גבוהה יותר).</div></div>
+        <div class="actions"><button class="primary" type="button" onclick="calculateBreakEven()">חשב נקודת איזון</button><button class="secondary" type="button" onclick="resetCalculator()">נקה</button></div>
+        <div id="errorBox" class="error"></div>
+      </div></section>
+
+      <section class="card"><div class="card-header"><h2>תוצאות החישוב</h2></div><div class="card-body">
+        <div id="resultsPlaceholder" class="results-placeholder">הזן את הנתונים ולחץ על “חשב נקודת איזון” כדי לראות את יעד המכירות המינימלי והרווח התפעולי החזוי.</div>
+        <div id="resultList" class="result-list">
+          <div class="result-card main"><div class="result-title">נקודת איזון במכירות</div><div id="breakEvenValue" class="result-value">₪0</div><p id="breakEvenNote" class="result-note"></p></div>
+          <div id="cashCard" class="result-card cash" style="display:none"><div class="result-title">נקודת איזון תזרימית</div><div id="cashBreakEvenValue" class="result-value">₪0</div><p id="cashBreakEvenNote" class="result-note"></p></div>
+          <div id="insightBox" style="display:none"></div>
+          <div class="result-card"><div class="result-title">פער מהמכירות הצפויות</div><div id="gapValue" class="result-value">₪0</div><p id="gapNote" class="result-note"></p></div>
+          <div class="result-card"><div class="result-title">רווח / הפסד תפעולי חזוי</div><div id="operatingProfitValue" class="result-value">₪0</div><p id="operatingProfitNote" class="result-note"></p></div>
+          <div id="cashFlowCard" class="result-card" style="display:none"><div class="result-title">תזרים חודשי חזוי</div><div id="cashFlowValue" class="result-value">₪0</div><p id="cashFlowNote" class="result-note"></p></div>
+          <div id="unitsCard" class="result-card" style="display:none"><div class="result-title">נקודת איזון ביחידות</div><div id="unitsValue" class="result-value">0</div><p id="unitsNote" class="result-note"></p></div>
+        </div>
+        <div class="disclaimer">החישוב מהווה כלי עזר ראשוני בלבד, המבוסס על הנתונים שהוזנו. אינו מהווה ייעוץ ואין להסתמך עליו לבדו — ראו הרחבה והסרת אחריות בתחתית העמוד.</div>
+      </div></section>
+    </main>
+
+    <section class="card info-card"><div class="card-body"><h2>מהיכן לוקחים את הנתונים?</h2>
+      <p>הנתונים נשענים על דוח רווח והפסד פשוט. אם הדוח שברשותכם שנתי — חלקו את הסכומים ב־12 לקבלת ממוצע חודשי.</p>
+      <ul class="sources-list">
+        <li><strong>מרווח גולמי — מתוך דוח רווח והפסד.</strong> הרווח הגולמי בשקלים הוא ההכנסות פחות עלות המכר (שתי השורות הראשונות בדוח). את האחוז מחשבים כך:
+          <span class="formula">מרווח גולמי באחוזים = רווח גולמי ÷ הכנסות × 100</span>
+          <span class="example-note"><strong>דוגמה:</strong> הכנסות שנתיות <span dir="ltr" style="unicode-bidi:isolate">1,000,000 ₪</span>, עלות המכר <span dir="ltr" style="unicode-bidi:isolate">600,000 ₪</span> ← רווח גולמי <span dir="ltr" style="unicode-bidi:isolate">400,000 ₪</span> ← מרווח גולמי של 40%.</span>
+          <span class="warn-note"><strong>שימו לב:</strong> ודאו שעלות המכר כוללת את כל העלויות הישירות (חומר, סחורה, עבודה ישירה, עמלות). אם חלקן "יושבות" בטעות בהוצאות ההנהלה — המרווח ייראה גבוה מדי, ונקודת האיזון תצא נמוכה מדי.</span>
+        </li>
+        <li><strong>הוצאות קבועות.</strong> סך סעיפי ההנהלה והכלליות וההוצאות הקבועות של מכירה ושיווק — אלה שאינם תלויים בהיקף הפעילות (ראו טבלת הסיווג למטה).</li>
+        <li><strong>מכירות חודשיות צפויות.</strong> ממוצע חודשי של ההכנסות בפועל בתקופה האחרונה, או תחזית ריאלית לחודש טיפוסי.</li>
+        <li><strong>מחיר ממוצע ליחידה (לחישוב ביחידות).</strong> מחושב מתוך הנתונים שכבר יש לכם:
+          <span class="formula">מחיר ממוצע ליחידה = סך ההכנסות ÷ מספר היחידות שנמכרו</span>
+        </li>
+        <li><strong>החזר קרן ופחת (לאיזון התזרימי).</strong> החזר הקרן החודשי מופיע בלוח הסילוקין של ההלוואה — רק רכיב הקרן, ללא הריבית. הפחת מופיע בדוח רווח והפסד או בדוח הפחת של רואה החשבון.
+          <span class="example-note"><strong>ההבדל בין שתי נקודות האיזון:</strong> הנקודה <strong>התפעולית</strong> עונה על "כמה למכור כדי לא להפסיד בדוח". הנקודה <strong>התזרימית</strong> עונה על "כמה למכור כדי לא להיתקע במזומן" — היא מוסיפה את החזרי הקרן (יציאת מזומן שאינה מופיעה בדוח) ומורידה את הפחת (הוצאה בדוח שאינה מזומן). עסק יכול להיות רווחי בדוח ובכל זאת לסבול ממחסור במזומן בדיוק בגלל הפער הזה.</span>
+        </li>
+      </ul>
+    </div></section>
+
+    <section class="card helper-table"><div class="card-body"><h2>לא בטוחים כיצד לסווג הוצאה?</h2><p>הטבלה הבאה מסייעת להבחין בין הוצאות קבועות, שנכנסות לשדה ההוצאות הקבועות, לבין עלויות ישירות שנכללות במרווח הגולמי.</p><div class="rule-box"><strong>כלל אצבע:</strong> אם ההוצאה גדלה ככל שמוכרים יותר — היא משתנה ונכנסת לעלות המכר. אם היא קיימת גם בחודש ללא מכירות — היא קבועה.</div><table><thead><tr><th>סוג הוצאה</th><th>סיווג מומלץ</th></tr></thead><tbody><tr><td>שכירות</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>שכר הנהלה / מנכ״ל</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>מנהלת משרד</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>איש מכירות בשכר בסיס</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>ביטוחים</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>הנהלת חשבונות ושכר רו״ח</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>ארנונה, חשמל ומים</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>תוכנות, מנויים ותקשורת</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>פחת על ציוד</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>ריבית והוצאות מימון שוטפות</td><td><span class="tag tag-fixed">הוצאה קבועה</span></td></tr><tr><td>חומרי גלם</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>סחורה למכירה</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>אריזה ומשלוח ללקוח</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>עובד ייצור לפי תפוקה</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>עובד שירות שמבצע עבודה ללקוח</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>עמלת מכירה לפי מכירות</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>עמלות סליקה / אשראי</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr><tr><td>דמי הפצה לפי מכירה</td><td><span class="tag tag-variable">עלות מכר / עלות ישירה</span></td></tr></tbody></table></div></section>
+
+    <section class="card info-card disclaimer-full"><div class="card-body"><h2>חשוב לדעת — מגבלות הכלי והסרת אחריות</h2>
+      <p>החישוב מהווה כלי עזר ראשוני בלבד ומבוסס כל־כולו על הנתונים שהוזנו על ידי המשתמש. הוא מניח קשר לינארי בין מכירות לעלויות בטווח הרלוונטי, ואינו מתחשב בעונתיות, בתמהיל מוצרים, במע״מ, במימון או בהוצאות חד־פעמיות. נקודת האיזון המחושבת היא תפעולית־חשבונאית, ואינה זהה בהכרח לנקודת האיזון התזרימית הכוללת גם החזרי הלוואות.</p>
+      <p><strong>הסרת אחריות:</strong> הכלי מסופק כמות שהוא (<span dir="ltr" style="unicode-bidi:isolate">As-Is</span>) למטרות מידע והמחשה בלבד, ואינו מהווה ייעוץ פיננסי, חשבונאי, מיסויי, משפטי או השקעתי. אין להסתמך עליו לבדו. עזרא אליעזר — יועץ עסקי ו־CFO — ומערכת BudgetSmart אינם נושאים באחריות לכל נזק ישיר או עקיף הנובע מהשימוש בכלי. לפני קבלת החלטה מהותית מומלץ לבצע ניתוח פיננסי מלא ולהיוועץ באיש מקצוע.</p>
+    </div></section>
+
+    <section class="cta"><div><h2>רוצים ניתוח פיננסי מלא?</h2><p>עזרא אליעזר, יועץ עסקי ו־CFO, ילווה אתכם במערכת BudgetSmart לבניית תקציב, תחזית תזרים, רווח והפסד, KPI ובדיקת כדאיות השקעה.</p></div><a href="https://www.ezraeliezer.com" target="_blank" rel="noopener">פתח את BudgetSmart</a></section>
+    <div class="privacy-note"><strong>פרטיות:</strong> כל החישובים מתבצעים במכשיר שלכם, בתוך הדפדפן. הנתונים שתזינו אינם נשמרים ואינם נשלחים לשום שרת. לצורך שיפור הכלי בלבד נאספת מדידת שימוש אנונימית (Google Analytics), שאינה כוללת את הנתונים הפיננסיים שהזנתם.</div>
+    <div class="footer">© BudgetSmart · עזרא אליעזר — יועץ עסקי ו־CFO</div>
+  </div></div>
+
+<script>
+function getEl(id){ return document.getElementById(id); }
+function cleanNumber(value){
+  var cleaned = String(value || '').replace(/,/g,'').replace(/[₪%\s]/g,'').replace(/[^0-9.\-]/g,'');
+  var num = parseFloat(cleaned);
+  return isNaN(num) ? 0 : num;
+}
+function formatMoneyField(input){
+  var raw = String(input.value || '').replace(/,/g,'').replace(/[^0-9]/g,'');
+  if(raw === ''){ input.value = ''; return; }
+  input.value = Number(raw).toLocaleString('en-US');
+}
+function formatPercentField(input){
+  var raw = String(input.value || '').replace(/,/g,'.').replace(/[^0-9.]/g,'');
+  var firstDot = raw.indexOf('.');
+  if(firstDot !== -1){ raw = raw.slice(0, firstDot + 1) + raw.slice(firstDot + 1).replace(/\./g,''); }
+  input.value = raw;
+}
+function money(value){
+  return '₪' + Math.round(Math.abs(value || 0)).toLocaleString('he-IL');
+}
+function signedMoney(value){
+  if(value > 0) return '+' + money(value);
+  if(value < 0) return '-' + money(value);
+  return money(0);
+}
+function showError(msg){
+  var box = getEl('errorBox');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+function clearError(){
+  var box = getEl('errorBox');
+  box.textContent = '';
+  box.style.display = 'none';
+}
+function calculateBreakEven(){
+  clearError();
+  var fixedCosts = cleanNumber(getEl('fixedCosts').value);
+  var grossMarginPct = cleanNumber(getEl('grossMargin').value);
+  var expectedSales = cleanNumber(getEl('expectedSales').value);
+  var unitPrice = cleanNumber(getEl('unitPrice').value);
+  var principal = cleanNumber(getEl('principal').value);
+  var depreciation = cleanNumber(getEl('depreciation').value);
+
+  if(fixedCosts <= 0){ showError('יש להזין הוצאות קבועות חודשיות בסכום גדול מ־0.'); return; }
+  if(grossMarginPct <= 0 || grossMarginPct > 100){ showError('יש להזין מרווח גולמי תקין בין 1% ל־100%.'); return; }
+  if(expectedSales < 0){ showError('מכירות חודשיות צפויות אינן יכולות להיות שליליות.'); return; }
+
+  var grossMargin = grossMarginPct / 100;
+  var breakEven = fixedCosts / grossMargin;
+  var gap = expectedSales - breakEven;
+  var operatingProfit = (expectedSales * grossMargin) - fixedCosts;
+  var hasCash = (principal > 0 || depreciation > 0);
+  var cashFlow = operatingProfit + depreciation - principal;
+
+  getEl('resultsPlaceholder').style.display = 'none';
+  getEl('resultList').style.display = 'flex';
+
+  getEl('breakEvenValue').textContent = money(breakEven);
+  getEl('breakEvenNote').textContent = 'העסק צריך למכור לפחות ' + money(breakEven) + ' בחודש כדי לכסות את כל ההוצאות הקבועות ולהגיע לנקודת האיזון.';
+
+  var cashCard = getEl('cashCard');
+  if(hasCash){
+    var cashFixed = fixedCosts - depreciation + principal;
+    if(cashFixed < 0){ cashFixed = 0; }
+    var cashBreakEven = cashFixed / grossMargin;
+    var cashDiff = cashBreakEven - breakEven;
+    cashCard.style.display = 'block';
+    getEl('cashBreakEvenValue').textContent = money(cashBreakEven);
+    var cashNote;
+    if(cashDiff > 0){
+      cashNote = 'נקודת האיזון התזרימית גבוהה ב־' + money(cashDiff) + ' מהאיזון התפעולי. זהו הפער שבו עסק רווחי על הנייר עלול בכל זאת להיתקע במזומן — יש למכור יותר כדי לעמוד גם בהחזרי ההלוואות.';
+    } else if(cashDiff < 0){
+      cashNote = 'נקודת האיזון התזרימית נמוכה ב־' + money(cashDiff) + ' מהאיזון התפעולי, משום שהפחת אינו יציאת מזומן בפועל ולכן מנוכה מהחישוב.';
+    } else {
+      cashNote = 'נקודת האיזון התזרימית זהה לאיזון התפעולי.';
+    }
+    if(expectedSales > 0){
+      cashNote += expectedSales >= cashBreakEven ? ' המכירות הצפויות מכסות גם את האיזון התזרימי.' : ' שימו לב: המכירות הצפויות אינן מכסות את האיזון התזרימי.';
+    }
+    getEl('cashBreakEvenNote').textContent = cashNote;
+  } else {
+    cashCard.style.display = 'none';
+  }
+
+  var gapValue = getEl('gapValue');
+  gapValue.textContent = signedMoney(gap);
+  gapValue.className = 'result-value ' + (gap >= 0 ? 'positive' : 'negative');
+  var beLabel = hasCash ? 'נקודת האיזון התפעולית' : 'נקודת האיזון';
+  getEl('gapNote').textContent = gap >= 0 ? 'המכירות הצפויות גבוהות ב־' + money(gap) + ' מ' + beLabel + '.' : 'המכירות הצפויות נמוכות ב־' + money(gap) + ' מ' + beLabel + '.';
+
+  var profitValue = getEl('operatingProfitValue');
+  profitValue.textContent = signedMoney(operatingProfit);
+  profitValue.className = 'result-value ' + (operatingProfit >= 0 ? 'positive' : 'negative');
+  var profitNote = operatingProfit >= 0 ? 'לפי הנתונים שהוזנו, העסק צפוי להציג רווח תפעולי חודשי של כ־' + money(operatingProfit) + '.' : 'לפי הנתונים שהוזנו, העסק צפוי להציג הפסד תפעולי חודשי של כ־' + money(operatingProfit) + '.';
+  if(hasCash){ profitNote += ' זהו הרווח החשבונאי, לפני החזרי קרן ההלוואות — ראו את שורת התזרים החזוי לתמונת המזומן בפועל.'; }
+  getEl('operatingProfitNote').textContent = profitNote;
+
+  var cashFlowCard = getEl('cashFlowCard');
+  if(hasCash){
+    cashFlowCard.style.display = 'block';
+    var cfValue = getEl('cashFlowValue');
+    cfValue.textContent = signedMoney(cashFlow);
+    cfValue.className = 'result-value ' + (cashFlow >= 0 ? 'positive' : 'negative');
+    getEl('cashFlowNote').textContent = cashFlow >= 0
+      ? 'לאחר החזרי קרן ההלוואות (ובנטרול הפחת), העסק צפוי לייצר עודף מזומן חודשי של כ־' + money(cashFlow) + '.'
+      : 'לאחר החזרי קרן ההלוואות (ובנטרול הפחת), העסק צפוי לגירעון מזומן חודשי של כ־' + money(cashFlow) + ' — יוצא יותר מזומן ממה שנכנס, למרות הרווח החשבונאי.';
+  } else {
+    cashFlowCard.style.display = 'none';
+  }
+
+  var unitsCard = getEl('unitsCard');
+  if(unitPrice > 0){
+    var breakEvenUnits = Math.ceil(breakEven / unitPrice);
+    unitsCard.style.display = 'block';
+    getEl('unitsValue').textContent = breakEvenUnits.toLocaleString('he-IL') + ' יחידות';
+    var unitsNote = 'כדי להגיע לנקודת האיזון יש למכור כ־' + breakEvenUnits.toLocaleString('he-IL') + ' יחידות בחודש, במחיר ממוצע של ' + money(unitPrice) + ' ליחידה.';
+    if(expectedSales > 0){
+      var expectedUnits = Math.round(expectedSales / unitPrice);
+      unitsNote += ' לפי המכירות הצפויות מדובר בכ־' + expectedUnits.toLocaleString('he-IL') + ' יחידות בחודש.';
+    }
+    getEl('unitsNote').textContent = unitsNote;
+  } else {
+    unitsCard.style.display = 'none';
+  }
+
+  var insightBox = getEl('insightBox');
+  if(expectedSales > 0){
+    var opMos = (expectedSales - breakEven) / expectedSales;
+    var cashMos = hasCash ? (expectedSales - cashBreakEven) / expectedSales : opMos;
+    var bindingMos = Math.min(opMos, cashMos);
+    var opPct = Math.round(Math.abs(opMos) * 100);
+    var cashPct = Math.round(Math.abs(cashMos) * 100);
+    var bindPct = Math.round(Math.abs(bindingMos) * 100);
+    var cls, title, text;
+    if(bindingMos < 0){
+      cls = 'insight insight-danger';
+      if(hasCash && opMos >= 0 && cashMos < 0){
+        title = 'רווחי בדוח, גירעון תזרימי';
+        text = 'המכירות הצפויות מספיקות לכיסוי ההוצאות התפעוליות, אך לא לכיסוי גם החזרי ההלוואות — כלומר העסק רווחי על הנייר אך צפוי להיתקע במזומן. יש להגדיל מכירות, לשפר מרווח, לצמצם הוצאות או לפרוס מחדש את ההלוואות.';
+      } else {
+        title = 'מתחת לנקודת האיזון';
+        text = 'המכירות הצפויות נמוכות מנקודת האיזון' + (hasCash ? ' התזרימית' : '') + '. כדי להגיע לאיזון יש להגדיל את המכירות, לשפר את המרווח הגולמי או לצמצם את ההוצאות הקבועות.';
+      }
+    } else if(bindingMos <= 0.20){
+      cls = 'insight insight-warn';
+      title = 'מרווח ביטחון נמוך';
+      if(hasCash){
+        text = 'מרווח הביטחון התפעולי הוא כ־' + opPct + '%, אך מרווח הביטחון התזרימי — לאחר החזרי ההלוואות — הוא כ־' + cashPct + '% בלבד. ' + (cashMos < opMos ? 'זהו הפער שמסכן עסק רווחי על הנייר: די בירידה של כ־' + cashPct + '% במכירות כדי שלא לעמוד בהחזרי ההלוואות. ' : '') + 'מומלץ לחזק את המרווח או את היקף המכירות לפני התרחבות בהוצאות.';
+      } else {
+        text = 'נקודת האיזון קרובה למכירות הצפויות — מרווח הביטחון הוא כ־' + bindPct + '% בלבד. די בירידה של כ־' + bindPct + '% במכירות, או בשחיקה קלה במרווח הגולמי, כדי להחזיר את העסק לאזור ההפסד. לפני התרחבות בהוצאות מומלץ לחזק תחילה את המרווח או את היקף המכירות.';
+      }
+    } else {
+      cls = 'insight insight-ok';
+      title = 'מרווח ביטחון נוח';
+      if(hasCash){
+        text = 'גם לאחר החזרי ההלוואות מרווח הביטחון התזרימי נוח — כ־' + cashPct + '%. העסק יכול לספוג ירידה של עד כ־' + cashPct + '% במכירות לפני שייכנס ללחץ תזרימי.';
+      } else {
+        text = 'המכירות הצפויות גבוהות מנקודת האיזון בכ־' + bindPct + '%. העסק יכול לספוג ירידה של עד כ־' + bindPct + '% במכירות לפני שיגיע לנקודת האיזון.';
+      }
+    }
+    insightBox.className = cls;
+    insightBox.innerHTML = '<span class="insight-title">' + title + '</span><p class="insight-text">' + text + '</p>';
+    insightBox.style.display = 'block';
+  } else {
+    insightBox.style.display = 'none';
+  }
+}
+function resetCalculator(){
+  clearError();
+  getEl('fixedCosts').value = '';
+  getEl('grossMargin').value = '';
+  getEl('expectedSales').value = '';
+  getEl('unitPrice').value = '';
+  getEl('principal').value = '';
+  getEl('depreciation').value = '';
+  getEl('unitsCard').style.display = 'none';
+  getEl('cashCard').style.display = 'none';
+  getEl('cashFlowCard').style.display = 'none';
+  getEl('insightBox').style.display = 'none';
+  getEl('resultsPlaceholder').style.display = 'block';
+  getEl('resultList').style.display = 'none';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' && (e.target.id === 'fixedCosts' || e.target.id === 'grossMargin' || e.target.id === 'expectedSales' || e.target.id === 'unitPrice' || e.target.id === 'principal' || e.target.id === 'depreciation')){
+    calculateBreakEven();
+  }
+});
+</script>
+</body>
+</html>
