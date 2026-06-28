@@ -446,6 +446,28 @@ a{color:inherit}
 .bs-advanced-toggle{display:inline-flex;align-items:center;gap:.35rem;border:1px solid #334155;border-radius:.5rem;padding:.4rem .7rem;color:#cbd5e1;background:#1e293b;font-size:11px;font-weight:600;cursor:pointer}
 .bs-advanced-toggle:hover{background:#334155}
 
+/* Valuation display — accordion for calculation methods */
+details.vx-acc{margin-top:.75rem}
+details.vx-acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #cbd5e1;border-radius:.5rem;padding:.7rem 1rem;font-size:.875rem;font-weight:600;color:#334155;transition:background .15s}
+details.vx-acc>summary:hover{background:#f8fafc}
+details.vx-acc>summary::-webkit-details-marker{display:none}
+details.vx-acc>summary .vx-chev{transition:transform .2s;color:#64748b}
+details.vx-acc[open]>summary .vx-chev{transform:rotate(180deg)}
+details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom-color:transparent}
+
+/* Pro teaser lock — מעטפת נעילה ויזואלית לשימוש חוזר (פעילה רק במצב free) */
+.pro-locked{position:relative!important}
+.pro-locked>*:not(.pro-lock-overlay){filter:blur(3.5px);pointer-events:none;user-select:none;opacity:.6}
+.pro-lock-overlay{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;background:rgba(248,250,252,.45);border-radius:inherit;text-align:center;padding:14px}
+.pro-lock-overlay .pro-lock-badge{background:#1e293b;color:#fff;font-weight:700;font-size:13px;padding:7px 16px;border-radius:999px;display:flex;align-items:center;gap:6px;box-shadow:0 6px 18px rgba(0,0,0,.22)}
+.pro-lock-overlay .pro-lock-sub{font-size:11px;color:#0f172a;font-weight:700;background:rgba(255,255,255,.9);padding:3px 10px;border-radius:6px;max-width:90%;line-height:1.4}
+.free-lock{display:none}
+.plan-free .free-lock{display:inline}
+/* נעילה רכה: הסתרת שדות מתקדמים ב-Free + שורת הנחות שמופיעה רק ב-Free */
+.plan-free [data-pro-hide]{display:none!important}
+[data-free-only]{display:none}
+.plan-free [data-free-only]{display:block}
+
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -488,9 +510,9 @@ a{color:inherit}
                     </button>
                     <button type="button" data-mode-choice="new" onclick="chooseMode('new')" class="text-right p-5 rounded-xl border-2 border-indigo-200 hover:border-indigo-500 hover:shadow-md transition-all bg-indigo-50/40 cursor-pointer group">
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="text-base font-bold text-slate-800">בדיקת כדאיות</span>
+                            <span class="text-base font-bold text-slate-800">כדאיות / שווי</span>
                         </div>
-                        <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות כלכלית לעסק חדש או השקעה</p>
+                        <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות והערכת שווי — לעסק חדש, השקעה או עסק קיים</p>
                     </button>
                 </div>
             </div>
@@ -543,9 +565,16 @@ a{color:inherit}
                 </h3>
                 <p class="text-xs text-slate-400 mb-3">בחר כיצד לפרוס את ההכנסה השנתית על פני 12 חודשים:</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
+                    <label class="p-3 bg-slate-800 rounded-lg border-2 border-blue-500 flex flex-col gap-1 cursor-pointer hover:bg-slate-700 transition-all">
+                        <div class="flex items-center gap-2">
+                            <input type="radio" name="seasonality-profile" value="past" checked onchange="handleSeasonalityChange(this.value)" class="accent-blue-500">
+                            <span class="text-sm font-bold"><span class="free-lock">🔒 </span>🗓️ פריסה לפי העבר</span>
+                        </div>
+                        <span class="text-[11px] text-blue-300">מחושב מהחודשים שהזנת — ניתן לעריכה</span>
+                    </label>
                     <label class="p-3 bg-slate-800 rounded-lg border border-slate-700 flex flex-col gap-1 cursor-pointer hover:bg-slate-700 transition-all">
                         <div class="flex items-center gap-2">
-                            <input type="radio" name="seasonality-profile" value="stable" checked onchange="handleSeasonalityChange(this.value)" class="accent-blue-500">
+                            <input type="radio" name="seasonality-profile" value="stable" onchange="handleSeasonalityChange(this.value)" class="accent-blue-500">
                             <span class="text-sm font-bold">📊 ממוצע שווה</span>
                         </div>
                         <span class="text-[11px] text-slate-400">חלוקה שווה — 1/12 בכל חודש</span>
@@ -573,6 +602,19 @@ a{color:inherit}
                     </label>
                 </div>
                 <div id="seasonality-method-info" class="mt-3 text-xs text-slate-400 leading-relaxed"></div>
+
+                <!-- ── רשת משקולות ניתנת לעריכה — מופיעה רק ב"פריסה לפי העבר" ── -->
+                <div id="past-weights-box" class="mt-4 pt-3 border-t border-slate-700 hidden">
+                    <div class="flex items-center justify-between mb-2 flex-wrap gap-2">
+                        <span class="text-xs font-bold text-blue-300">משקולות חודשיות (%) — ניתן לעריכה</span>
+                        <div class="flex items-center gap-2">
+                            <span id="past-weights-sum" class="text-[11px]"></span>
+                            <button id="past-weights-reset" onclick="resetPastWeights()" class="hidden text-[11px] px-2 py-0.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-600">↺ אפס לחישוב מהעבר</button>
+                        </div>
+                    </div>
+                    <div id="past-weights-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2"></div>
+                    <p id="past-weights-source" class="mt-2 text-[11px] text-slate-400 leading-relaxed"></p>
+                </div>
             </div>
 
             <div id="custom-monthly-section" class="hidden mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
@@ -851,12 +893,22 @@ a{color:inherit}
                     <i data-lucide="calculator" class="text-blue-600 w-5 h-5"></i>
                     שלב 4: השלמת נתונים — לדוחות P&L ותזרים
                 </h2>
-                <p class="text-xs text-slate-500 mb-5">שדות אלו אינם חובה — אם לא תמלא, המערכת תחשב EBITDA בלבד. מילוי מלא יפיק דוח P&L ותזרים מקצועי מלא.</p>
+                <p class="text-xs text-slate-500 mb-5" data-pro-hide>שדות אלו אינם חובה — אם לא תמלא, המערכת תחשב EBITDA בלבד. מילוי מלא יפיק דוח P&L ותזרים מקצועי מלא.</p>
+
+                <div data-free-only class="mb-5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                    <div class="flex items-start gap-2">
+                        <span class="text-amber-600 text-base leading-none mt-0.5">📌</span>
+                        <div class="text-xs text-amber-800 leading-relaxed">
+                            <strong>פחת ומס מחושבים אוטומטית</strong> לפי הנחות יסוד (פחת 0, מס חברות 23%) — אין צורך למלא דבר. לשליטה מלאה בהנחות ולהתאמה מדויקת לעסק שלך:
+                            <button onclick="showUpgradeModal('פחת ומס מתקדמים')" style="margin-top:10px;display:inline-block;background:#d97706;color:#ffffff;font-weight:700;font-size:14px;padding:10px 22px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12)">שדרג לפרו ←</button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="space-y-5 max-w-2xl">
 
 <!-- 4. פחת והפחתות D+A -->
-                <div class="p-5 bg-slate-50 rounded-xl border border-slate-200">
+                <div class="p-5 bg-slate-50 rounded-xl border border-slate-200" data-pro-hide>
                     <div class="flex items-center gap-2 mb-3">
                         <i data-lucide="layers" class="w-4 h-4 text-blue-600 flex-shrink-0"></i>
                         <h3 class="text-sm font-bold text-slate-800">פחת והפחתות — D &amp; A</h3>
@@ -875,7 +927,7 @@ a{color:inherit}
                         </p>
                         <p class="flex items-start gap-1.5 pt-1 border-t border-slate-200">
                             <i data-lucide="info" class="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5"></i>
-                            <span class="text-slate-500">אם לא תזין כלום — המערכת תחשב <strong class="text-slate-600">EBIT = EBITDA</strong> (כלומר תניח פחת אפס, מה שמתאים לעסקי שירות ללא רכוש קבוע משמעותי).</span>
+                            <span class="text-slate-500">אם לא תזין כלום — המערכת תניח <strong class="text-slate-600">פחת 0</strong> (EBIT = EBITDA). יש לעסק ציוד, רכב או נכסים מתכלים? הזן את הפחת השנתי מהדוחות, או פרט את הציוד — כדי שהרווח והשווי יהיו מדויקים יותר.</span>
                         </p>
                     </div>
 
@@ -955,10 +1007,10 @@ a{color:inherit}
                 </div>
 
 <!-- ── בלוק מימון ומס ── -->
-            <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 mt-2">
+            <div id="finance-tax-card" class="p-5 bg-slate-50 rounded-xl border border-slate-200 mt-2">
                 <div class="flex items-center gap-2 mb-3">
                     <i data-lucide="landmark" class="w-4 h-4 text-amber-600 flex-shrink-0"></i>
-                    <h3 class="text-sm font-bold text-slate-800">מימון ומס — להשלמת דוח P&L</h3>
+                    <h3 class="text-sm font-bold text-slate-800">מימון<span data-pro-hide> ומס</span> — להשלמת דוח P&L</h3>
                     <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded-full font-medium">נדרש לדף 5</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -973,7 +1025,7 @@ a{color:inherit}
                         </div>
                         <p class="text-[11px] text-slate-500 mt-1.5">ללא הלוואות — השאר 0</p>
                     </div>
-                    <div>
+                    <div data-pro-hide>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">
                             שיעור המס (%)
                         </label>
@@ -981,12 +1033,12 @@ a{color:inherit}
                             <input type="number" id="input-tax-rate" min="0" max="100" value="23" oninput="saveAndRecalc()" class="w-full pl-8 pr-3 py-2 border border-slate-300 rounded-lg bg-white text-slate-800 outline-none text-right focus:ring-2 focus:ring-amber-500">
                             <span class="absolute left-3 top-2.5 text-slate-500 text-sm">%</span>
                         </div>
-                        <p class="text-[11px] text-slate-500 mt-1.5">ברירת המחדל 23% — מס חברות בישראל. ניתן לשנות לפי הסדר המס שלך.</p>
+                        <p class="text-[11px] text-slate-500 mt-1.5">ברירת המחדל 23% — מס חברות בישראל. זהו מס ברמת החברה, <strong class="text-slate-600">לא הכסף בכיס</strong>: משיכת רווח לבעלים חייבת במס דיבידנד נוסף. עוסק שאינו חברה — מס לפי מדרגות. ניתן לשנות לפי הסדר המס שלך.</p>
                     </div>
                 </div>
 
                 <!-- ── תזמון תשלום המס בתזרים ── -->
-                <div class="mt-4 pt-3 border-t border-slate-200">
+                <div class="mt-4 pt-3 border-t border-slate-200" data-pro-hide>
                     <label class="block text-xs font-semibold text-slate-600 mb-2">
                         אופן תשלום המס בתזרים המזומנים
                     </label>
@@ -1262,6 +1314,13 @@ a{color:inherit}
                         <canvas id="chart-expenses-pie"></canvas>
                     </div>
                 </div>
+                <div id="opex-pie-card" class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hidden">
+                    <h3 class="text-sm font-bold text-slate-700 mb-1 text-center">פילוח הוצאות תפעוליות (ללא עלות מכר)</h3>
+                    <p class="text-[11px] text-slate-400 text-center mb-3">שכר · שיווק · הוצאות קבועות — אחוז מסך ההוצאות התפעוליות</p>
+                    <div class="w-full h-[280px] relative flex items-center justify-center">
+                        <canvas id="chart-opex-pie"></canvas>
+                    </div>
+                </div>
                 <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-700 mb-1 text-center">השוואה שנתית — הכנסות (אלפי ₪)</h3>
                     <p class="text-[11px] text-slate-400 text-center mb-3" id="lbl-annual-chart-years">שנה קודמת · שנה נוכחית · תחזית</p>
@@ -1336,6 +1395,17 @@ a{color:inherit}
                 <!-- ── סיכום מנהלים — מוצג במסלול בדיקת כדאיות ── -->
                 <div id="executive-summary-zone" class="hidden mb-6"></div>
 
+                <!-- ── שורת הנחות יסוד — מוצגת רק ב-Free ── -->
+                <div data-free-only class="mb-5 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+                    <div class="flex items-start gap-2">
+                        <span class="text-amber-600 text-base leading-none mt-0.5">📌</span>
+                        <div class="text-xs text-amber-800 leading-relaxed">
+                            <strong>הנחות יסוד בחישוב:</strong> מס חברות 23%, פחת 0. הערכים האלה משפיעים על הרווח ועל הערכת השווי. לשליטה מלאה בהנחות והתאמה מדויקת לעסק שלך:
+                            <button onclick="showUpgradeModal('הנחות יסוד — מס ופחת')" style="margin-top:10px;display:inline-block;background:#d97706;color:#ffffff;font-weight:700;font-size:14px;padding:10px 22px;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.12)">שדרג לפרו ←</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ── טאבים ── -->
                 <div class="flex gap-1 bg-slate-100 rounded-xl p-1 mb-5 overflow-x-auto">
                     <button onclick="switchReportTab('budget')" id="tab-budget"
@@ -1403,7 +1473,7 @@ a{color:inherit}
                 </div>
 
                 <!-- ── ניתוח רגישות חי ── -->
-                <div class="mt-6 bg-slate-900 text-white rounded-xl p-5 shadow-md border border-slate-800">
+                <div class="mt-6 bg-slate-900 text-white rounded-xl p-5 shadow-md border border-slate-800" data-pro-lock="ניתוח רגישות — שחק בהנחות וראה איך הכל זז">
                     <h3 class="text-sm font-bold text-blue-400 mb-1 flex items-center gap-1.5">
                         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                         סימולציית רגישות — What-If Analysis
@@ -1473,7 +1543,7 @@ a{color:inherit}
                 </div>
 
                 <!-- ── שמירת תרחישים ── -->
-                <div class="mt-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm">
+                <div class="mt-4 bg-white border border-gray-100 rounded-xl p-4 shadow-sm" data-pro-lock="תרחישים — שמור והשווה שמרני / בסיס / אופטימי">
                     <div class="flex justify-between items-center mb-3 flex-wrap gap-2">
                         <h3 class="text-sm font-bold text-slate-700 flex items-center gap-1.5">
                             <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
@@ -1575,47 +1645,6 @@ a{color:inherit}
 
     
 
-        <!-- BudgetSmart PDF Lead Modal -->
-        <div id="pdf-lead-modal" class="hidden fixed inset-x-0 top-0 z-50" style="bottom:0;background:rgba(15,23,42,.72);padding:18px;align-items:center;justify-content:center;">
-            <div class="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-lg p-5" dir="rtl">
-                <div class="flex items-start justify-between gap-3 border-b border-slate-200 pb-3 mb-4">
-                    <div>
-                        <h3 id="pdf-lead-title" class="text-lg font-bold text-slate-900">הפקת דוח PDF מקצועי</h3>
-                        <p id="pdf-lead-subtitle" class="text-xs text-slate-500 mt-1">לצורך קבלת הדוח יש להשאיר פרטים. לאחר אימות תקין הדוח ייפתח להדפסה/שמירה כ-PDF.</p>
-                    </div>
-                    <button type="button" onclick="closePdfLeadModal()" class="text-slate-400 hover:text-slate-700 text-xl leading-none cursor-pointer" aria-label="סגור">×</button>
-                </div>
-
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">שם מלא <span class="text-rose-600">*</span></label>
-                        <input id="pdf-lead-name" type="text" autocomplete="name" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-right focus:ring-2 focus:ring-blue-500 outline-none" placeholder="לדוגמה: משה כהן">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">טלפון נייד <span class="text-rose-600">*</span></label>
-                        <input id="pdf-lead-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-left focus:ring-2 focus:ring-blue-500 outline-none" placeholder="050-0000000">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">אימייל</label>
-                        <input id="pdf-lead-email" type="email" autocomplete="email" dir="ltr" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-left focus:ring-2 focus:ring-blue-500 outline-none" placeholder="name@example.com">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">שם העסק</label>
-                        <input id="pdf-lead-company" type="text" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-right focus:ring-2 focus:ring-blue-500 outline-none" placeholder="שם העסק / החברה">
-                    </div>
-                    <p id="pdf-lead-error" class="hidden text-xs text-rose-600 font-semibold bg-rose-50 border border-rose-200 rounded-lg px-3 py-2"></p>
-                    <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                        הנתונים נשמרים בשלב זה בדפדפן המקומי בלבד. בשלב הבא ניתן לחבר את הטופס ל-Google Sheet / CRM / Webhook.
-                    </p>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3 justify-between mt-5 pt-4 border-t border-slate-200">
-                    <button type="button" onclick="closePdfLeadModal()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg cursor-pointer">ביטול</button>
-                    <button type="button" onclick="submitPdfLeadForm()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold px-5 py-2 rounded-lg shadow cursor-pointer">אשר והפק PDF</button>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     
@@ -1654,6 +1683,46 @@ a{color:inherit}
             <button onclick="document.getElementById('privacy-modal').style.display='none'"
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-sm cursor-pointer border-none">
                 סגור
+            </button>
+        </div>
+    </div>
+
+    <!-- ── מודאל שדרוג ל-Pro ── -->
+    <div id="upgrade-modal"
+         style="display:none"
+         class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
+         onclick="if(event.target===this)closeUpgradeModal()">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-right shadow-2xl" dir="rtl">
+            <div class="flex items-center gap-2 mb-1">
+                <span style="font-size:22px">⭐</span>
+                <h3 class="text-lg font-extrabold text-slate-900">אפשרות זו זמינה ב-BudgetSmart Pro</h3>
+            </div>
+            <p id="upgrade-feature-line" class="text-sm text-slate-600 mb-4"></p>
+
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+                <div class="text-xs font-bold text-slate-500 mb-2">בגרסת Pro תקבל:</div>
+                <ul class="text-sm text-slate-700 space-y-1.5">
+                    <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> הפקת PDF ו-Excel מלאים</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> דוח לבנק ולמשקיע</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> ניתוח רגישות ותרחישים</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> שלושת מודלי השווי + הנחות יסוד מתקדמות</li>
+                    <li class="flex items-center gap-2"><span class="text-emerald-600">✓</span> פריסה לפי העבר ועדכונים</li>
+                </ul>
+            </div>
+
+            <div class="flex items-baseline justify-center gap-2 mb-1">
+                <span class="text-2xl font-extrabold text-slate-900">299 ₪</span>
+                <span class="text-sm text-slate-500">חד-פעמי · כולל שנה ראשונה של עדכונים</span>
+            </div>
+            <p class="text-center text-[11px] text-slate-400 mb-4">לאחר השנה הראשונה — 20 ₪ לחודש לעדכונים (רשות). הנתונים שלך נשארים אצלך, על המחשב.</p>
+
+            <a id="upgrade-cta" href="https://www.ezraeliezer.com/budgetsmart-pro" target="_blank" rel="noopener"
+               class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-sm text-center transition-all mb-2">
+                שדרג ל-Pro ←
+            </a>
+            <button onclick="closeUpgradeModal()"
+                    class="w-full bg-white hover:bg-slate-50 text-slate-500 font-medium py-2 rounded-lg text-sm cursor-pointer border border-slate-200">
+                אולי מאוחר יותר
             </button>
         </div>
     </div>
@@ -1699,11 +1768,62 @@ a{color:inherit}
                 <p class="block text-slate-400 font-normal">
                     השימוש באפליקציה/תוכנה זו נעשה על אחריותו הבלעדית והמלאה של המשתמש. כלי זה מהווה סימולטור עזר טכנולוגי למטרות הערכה עצמית בלבד, ואינו מהווה תחליף לייעוץ פיננסי פרטני ומקצועי המותאם לנתוני העסק הספציפיים שלך. אין לראות בתוצאות המודל הבטחה או מצג לרווחיות עתידית כלשהי.
                 </p>
+                <p class="block text-center text-[11px] text-slate-500 pt-3 border-t border-slate-800/60 mt-3">
+                    <span class="font-semibold text-slate-400">BudgetSmart</span>
+                    <span id="app-version-indicator"></span>
+                </p>
             </div>
         </div>
     </footer>
 
     <script>
+        // ── חיווי גרסה — מקור אמת יחיד. עדכן כאן בכל שחרור גרסה. ──
+        const APP_VERSION = '2.11.3';
+        const APP_BUILD_DATE = '27.06.2026';
+        const APP_PLAN = 'free'; // 'free' | 'pro' — תשתית עתידית לחלוקת גרסאות
+
+        // ── ליבת Free/Pro: שער יחיד לכל פיצ'ר נעול ──
+        function requirePro(featureName) {
+            if (APP_PLAN === 'pro') return true;
+            showUpgradeModal(featureName);
+            return false;
+        }
+        function showUpgradeModal(featureName) {
+            const line = document.getElementById('upgrade-feature-line');
+            if (line) line.textContent = featureName
+                ? `${featureName} — פיצ'ר זה זמין בגרסת Pro.`
+                : 'פיצ\'ר זה זמין בגרסת Pro.';
+            const m = document.getElementById('upgrade-modal');
+            if (m) m.style.display = 'flex';
+        }
+        function closeUpgradeModal() {
+            const m = document.getElementById('upgrade-modal');
+            if (m) m.style.display = 'none';
+        }
+
+        // עוטף כל אזור עם data-pro-lock בשכבת נעילה ויזואלית (טיזר). שקוף לגמרי ב-Pro.
+        function applyProLocks() {
+            const locked = APP_PLAN !== 'pro';
+            document.body.classList.toggle('plan-free', locked);
+            document.querySelectorAll('[data-pro-lock]').forEach(el => {
+                const existing = el.querySelector(':scope > .pro-lock-overlay');
+                if (locked) {
+                    el.classList.add('pro-locked');
+                    if (!existing) {
+                        const label = el.getAttribute('data-pro-lock') || 'פיצ\'ר Pro';
+                        const ov = document.createElement('div');
+                        ov.className = 'pro-lock-overlay';
+                        ov.innerHTML = `<div class="pro-lock-badge">🔒 Pro</div><div class="pro-lock-sub">${label}</div>`;
+                        ov.addEventListener('click', () => showUpgradeModal(label));
+                        el.appendChild(ov);
+                    }
+                } else {
+                    el.classList.remove('pro-locked');
+                    if (existing) existing.remove();
+                }
+            });
+        }
+
         // מבנה הנתונים המרכזי של האפליקציה
         const S = {
             currentStep: 1,
@@ -1715,7 +1835,9 @@ a{color:inherit}
             customMonths2024: Array(12).fill(0),
             customMonths2025: Array(12).fill(0),
             grossMarginPct: null, // אין ברירת מחדל — המשתמש חייב להזין
-            seasonalityProfile: 'stable',
+            seasonalityProfile: 'past',
+            seasonalityUserSet: false, // האם המשתמש בחר פרופיל ידנית (מונע דריסת ברירת מחדל לפי מסלול)
+            pastWeights: null, // null = חישוב אוטומטי מההיסטוריה; מערך 12 = דריסה ידנית (שברים)
             activeCustomYear: '2025', // פרופיל עונתיות שנבחר
             growthMode: 'historical', // 'historical' | 'manual'
             modes: { marketing: 'ils', payroll: 'ils', fixed: 'ils' },
@@ -1779,6 +1901,7 @@ a{color:inherit}
         let chartRevExpInstance = null;
         let chartEbitdaInstance = null;
         let chartPieInstance = null;
+        let chartOpexInstance = null;
         let chartAnnualInstance = null;
         const monthNames = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
 
@@ -1819,6 +1942,10 @@ a{color:inherit}
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            // חיווי גרסה בפוטר — נמשך מהקבוע המרכזי
+            const verEl = document.getElementById('app-version-indicator');
+            if (verEl) verEl.textContent = ` · גרסה ${APP_VERSION} · עודכן ${APP_BUILD_DATE}`;
+            applyProLocks();
             // מציגים קודם את מסך הפתיחה, לפני פעולות חישוב/שחזור שעלולות להיכשל.
             // כך גם אם חישוב חדש כמו פירוט השקעה גורם לשגיאה, כפתורי הבחירה לא נעלמים.
             try {
@@ -1839,6 +1966,7 @@ a{color:inherit}
                 hideSaveLoadOnMobile();
                 updateYearLabels();
                 renderMonthlyGrid();
+                initPastWeightsBox();
                 injectReportMetaPanels();
                 recalcAll();
                 renderScenariosTable();
@@ -1969,6 +2097,8 @@ a{color:inherit}
                 grossMarginPct: parseFloat(document.getElementById('gross-margin-pct')?.value) || null,
                 targetGrowthPct: parseFloat(document.getElementById('target-growth-pct')?.value) || 0,
                 seasonalityProfile: S.seasonalityProfile,
+                seasonalityUserSet: S.seasonalityUserSet,
+                pastWeights: S.pastWeights,
                 growthMode: S.growthMode,
                 modes: S.modes,
                 inputs: S.inputs,
@@ -2011,7 +2141,9 @@ a{color:inherit}
                 S.rev2025 = data.rev2025 || 0;
                 S.customMonths2024 = data.customMonths2024 || Array(12).fill(0);
                 S.customMonths2025 = data.customMonths2025 || Array(12).fill(0);
-                S.seasonalityProfile = data.seasonalityProfile || 'stable';
+                S.seasonalityProfile = data.seasonalityProfile || 'past';
+                S.seasonalityUserSet = !!data.seasonalityUserSet;
+                S.pastWeights = Array.isArray(data.pastWeights) ? data.pastWeights : null;
                 S.growthMode = data.growthMode || 'historical';
                 // restore growth mode toggle UI
                 if(S.growthMode === 'manual') setGrowthMode('manual', true); // silent — אל תקרא saveAndRecalc בטעינה
@@ -2475,9 +2607,11 @@ a{color:inherit}
         function chooseMode(mode) {
             S.appMode = mode;
             S.currentStep = 1;
+            applyContextualSeasonalityDefault();
             // קודם מעבירים למסך הבא, ורק אחר כך מנסים לשמור.
             // כך שגיאת שמירה/חישוב לא תעצור את הלחיצה במסך הפתיחה.
             startWizard(1);
+            syncSeasonalityUI();
             try { saveDataToStorage(); } catch (e) { console.error('Mode save failed:', e); }
         }
         function startWizard(stepId) {
@@ -2691,6 +2825,9 @@ a{color:inherit}
             document.querySelectorAll('.mode-only-existing').forEach(el => el.classList.toggle('hidden', isNew));
             const fin4 = document.getElementById('step4-financing-field');
             if(fin4) fin4.style.display = isNew ? 'none' : '';
+            // בכדאיות אין מימון בשלב 4 (הוא בשלב נפרד); ב-Free גם פחת/מס מוסתרים — לכן הכרטיס כולו מתרוקן
+            const ftc = document.getElementById('finance-tax-card');
+            if(ftc) ftc.style.display = (isNew && APP_PLAN !== 'pro') ? 'none' : '';
             setVisibleById('revenue-prev-wrap', !isNew);
             setVisibleById('custom-monthly-section', !isNew && S.revMode === 'custom');
             setVisibleById('growth-column', !isNew);
@@ -2717,7 +2854,7 @@ a{color:inherit}
             const isNew = S.appMode === 'new';
             const ind = document.getElementById('mode-indicator');
             if(ind) {
-                const label = isNew ? 'בדיקת כדאיות כלכלית' : 'תקציב ותחזית לעסק קיים';
+                const label = isNew ? 'כדאיות / שווי' : 'תקציב ותחזית לעסק קיים';
                 ind.innerHTML = `מסלול: <span class="font-semibold text-slate-500">${label}</span>`;
             }
             const title1 = document.querySelector('#view-step-1 h2');
@@ -2757,6 +2894,8 @@ a{color:inherit}
             const budgetChartsRow = document.getElementById('charts-row-budget');
             if(budgetChartsRow) budgetChartsRow.classList.toggle('hidden', isNew);
             const annualCompareCard = document.getElementById('lbl-annual-chart-years')?.closest('.bg-white');
+            const opexPieCard = document.getElementById('opex-pie-card');
+            if(opexPieCard) opexPieCard.classList.toggle('hidden', !isNew);
             if(annualCompareCard) {
                 if(isNew) {
                     annualCompareCard.classList.add('hidden');
@@ -2842,6 +2981,7 @@ a{color:inherit}
                 if(customSection) customSection.classList.remove('hidden');
                 renderMonthlyGrid();
             }
+            if (S.seasonalityProfile === 'past') renderPastWeightsGrid();
             saveAndRecalc();
         }
 
@@ -3313,8 +3453,129 @@ a{color:inherit}
         }
 
         function handleSeasonalityChange(profile) {
+            if (profile === 'past' && !requirePro('פריסה לפי העבר')) {
+                // Free: לא מחילים — חוזרים לאפשרות פתוחה ופותחים שדרוג
+                S.seasonalityProfile = 'stable';
+                const stableRadio = document.querySelector('input[name="seasonality-profile"][value="stable"]');
+                if (stableRadio) stableRadio.checked = true;
+                const box = document.getElementById('past-weights-box');
+                if (box) box.classList.add('hidden');
+                saveAndRecalc();
+                return;
+            }
             S.seasonalityProfile = profile;
+            S.seasonalityUserSet = true;
+            const box = document.getElementById('past-weights-box');
+            if (box) box.classList.toggle('hidden', profile !== 'past');
+            if (profile === 'past') renderPastWeightsGrid();
             saveAndRecalc();
+        }
+
+        // קובע ברירת מחדל עונתיות לפי המסלול ולפי קיום היסטוריה, ומסנכרן את ה-UI.
+        // כדאיות/שווי ללא נתונים חודשיים → "ממוצע שווה"; אחרת → "פריסה לפי העבר".
+        function applyContextualSeasonalityDefault() {
+            if (S.seasonalityUserSet || Array.isArray(S.pastWeights)) return;
+            if (S.appMode === 'new' && !getHistoricalWeights()) {
+                S.seasonalityProfile = 'stable';
+            } else {
+                S.seasonalityProfile = 'past';
+            }
+        }
+
+        function syncSeasonalityUI() {
+            const radio = document.querySelector(`input[name="seasonality-profile"][value="${S.seasonalityProfile}"]`);
+            if (radio) radio.checked = true;
+            initPastWeightsBox();
+        }
+
+        // ── רשת משקולות "פריסה לפי העבר" ──
+        function pastWeightsForDisplay() {
+            if (Array.isArray(S.pastWeights)) return { weights: S.pastWeights.slice(), source: 'manual' };
+            const hist = getHistoricalWeights();
+            if (hist) return { weights: hist, source: 'history' };
+            return { weights: Array(12).fill(1/12), source: 'equal' };
+        }
+
+        function renderPastWeightsGrid() {
+            const grid = document.getElementById('past-weights-grid');
+            if (!grid) return;
+            const { weights, source } = pastWeightsForDisplay();
+            grid.innerHTML = '';
+            monthNames.forEach((mName, idx) => {
+                const pct = (weights[idx] || 0) * 100;
+                const wrap = document.createElement('div');
+                wrap.className = 'flex flex-col';
+                wrap.innerHTML = `
+                    <label class="text-[10px] text-slate-400 mb-0.5">${mName}</label>
+                    <div class="relative">
+                        <input type="text" inputmode="decimal" value="${pct.toFixed(1)}" oninput="handlePastWeightInput(${idx}, this)" onfocus="clearOnFocus(this)" class="w-full pl-5 pr-2 py-1 bg-slate-800 text-white text-sm border border-slate-600 rounded text-right outline-none focus:ring-2 focus:ring-blue-500">
+                        <span class="absolute left-1.5 top-1.5 text-slate-500 text-[11px]">%</span>
+                    </div>`;
+                grid.appendChild(wrap);
+            });
+            updatePastWeightsIndicator();
+            const srcEl = document.getElementById('past-weights-source');
+            const resetBtn = document.getElementById('past-weights-reset');
+            if (srcEl) {
+                const equalNote = S.appMode === 'new'
+                    ? 'ℹ️ אין נתונים חודשיים במסלול זה. הקלד את המשקולות ידנית כאן — או, לפריסה לפי הדפוס האמיתי של העסק, בנה תחילה תקציב במסלול "תקציב ותחזית" עם החודשים בפועל.'
+                    : 'ℹ️ אין עדיין נתונים חודשיים היסטוריים — התחלנו מפריסה שווה. ערוך כרצונך, או מלא נתונים ב"מילוי מותאם".';
+                srcEl.textContent = source === 'manual'
+                    ? '✏️ ערכים שערכת ידנית. אפשר לאפס לחישוב מהעבר בכל רגע.'
+                    : source === 'history'
+                        ? '✅ מחושב מהחודשים שהזנת בשנים הקודמות (ממוצע משוקלל). ניתן לעריכה — כל שינוי יישמר עד שתאפס.'
+                        : equalNote;
+            }
+            if (resetBtn) resetBtn.classList.toggle('hidden', source !== 'manual');
+        }
+
+        function updatePastWeightsIndicator() {
+            const sumEl = document.getElementById('past-weights-sum');
+            if (!sumEl) return;
+            let sum = 0;
+            document.querySelectorAll('#past-weights-grid input').forEach(inp => {
+                sum += parseFloat(inp.value.replace(/[^0-9.]/g, '')) || 0;
+            });
+            sum = Math.round(sum * 10) / 10;
+            if (Math.abs(sum - 100) < 0.15) {
+                sumEl.textContent = '✓ סכום 100%';
+                sumEl.className = 'text-[11px] text-emerald-400 font-bold';
+            } else {
+                sumEl.textContent = `סכום ${sum}% — ינורמל ל-100%`;
+                sumEl.className = 'text-[11px] text-amber-400 font-bold';
+            }
+        }
+
+        function handlePastWeightInput(idx, el) {
+            const arr = [];
+            document.querySelectorAll('#past-weights-grid input').forEach(inp => {
+                arr.push((parseFloat(inp.value.replace(/[^0-9.]/g, '')) || 0) / 100);
+            });
+            S.pastWeights = arr; // דריסה ידנית (שברים גולמיים; הנרמול בעת החישוב)
+            updatePastWeightsIndicator();
+            const resetBtn = document.getElementById('past-weights-reset');
+            if (resetBtn) resetBtn.classList.remove('hidden');
+            const srcEl = document.getElementById('past-weights-source');
+            if (srcEl) srcEl.textContent = '✏️ ערכים שערכת ידנית. אפשר לאפס לחישוב מהעבר בכל רגע.';
+            saveAndRecalc();
+        }
+
+        function resetPastWeights() {
+            S.pastWeights = null;
+            renderPastWeightsGrid();
+            saveAndRecalc();
+        }
+
+        function initPastWeightsBox() {
+            // Free: "פריסה לפי העבר" נעולה — לא יכולה להיות ברירת המחדל הפעילה
+            if (APP_PLAN !== 'pro' && S.seasonalityProfile === 'past') {
+                S.seasonalityProfile = 'stable';
+                const stableRadio = document.querySelector('input[name="seasonality-profile"][value="stable"]');
+                if (stableRadio) stableRadio.checked = true;
+            }
+            const box = document.getElementById('past-weights-box');
+            if (box) box.classList.toggle('hidden', S.seasonalityProfile !== 'past');
+            if (S.seasonalityProfile === 'past') renderPastWeightsGrid();
         }
 
         function addManpowerRow() {
@@ -3450,10 +3711,44 @@ a{color:inherit}
                 return { weights: w.map(v => v / sum), source: 'year_2024' };
             }
 
+            // ── פרופיל "פריסה לפי העבר" — מחושב מההיסטוריה, ניתן לדריסה ידנית ──
+            if (S.seasonalityProfile === 'past') {
+                // 1. דריסה ידנית גוברת
+                if (Array.isArray(S.pastWeights)) {
+                    const sum = S.pastWeights.reduce((a,b) => a+b, 0);
+                    if (sum > 0) return { weights: S.pastWeights.map(v => v / sum), source: 'past_manual' };
+                }
+                // 2. חישוב מההיסטוריה (ללא תלות במצב הקלט)
+                const hist = getHistoricalWeights();
+                if (hist) return { weights: hist, source: 'past_history' };
+                // 3. אין נתונים → פריסה שווה (ניתנת לעריכה ב-UI)
+                return { weights: Array(12).fill(1/12), source: 'past_equal' };
+            }
+
             // ── מקרה A: רק נתונים שנתיים → עונתיות נבחרת ──
             const sw = seasonalityWeights[S.seasonalityProfile] || seasonalityWeights.stable;
             const swSum = sw.reduce((a,b) => a+b, 0);
             return { weights: sw.map(v => v / swSum), source: 'seasonal_profile' };
+        }
+
+        // משקולות מההיסטוריה החודשית (ממוצע אחוז כל חודש על פני השנים שהוקלדו). null אם אין נתונים.
+        function getHistoricalWeights() {
+            const t24 = S.customMonths2024.reduce((a,b) => a+b, 0);
+            const t25 = S.customMonths2025.reduce((a,b) => a+b, 0);
+            const have24 = t24 > 0, have25 = t25 > 0;
+            let w = null;
+            if (have24 && have25) {
+                const w24 = S.customMonths2024.map(v => v / t24);
+                const w25 = S.customMonths2025.map(v => v / t25);
+                w = w24.map((v, i) => (v + w25[i]) / 2);
+            } else if (have25) {
+                w = S.customMonths2025.map(v => v / t25);
+            } else if (have24) {
+                w = S.customMonths2024.map(v => v / t24);
+            }
+            if (!w) return null;
+            const s = w.reduce((a,b) => a+b, 0);
+            return s > 0 ? w.map(v => v / s) : null;
         }
 
         function setGrowthMode(mode, silent) {
@@ -3632,6 +3927,9 @@ a{color:inherit}
                     both_years:      '✅ משתמש בממוצע משקלים מהשנה הקודמת והנוכחית — התחזית הכי מדויקת.',
                     year_2025:       '✅ משתמש במשקל חודשי בפועל מהשנה הנוכחית — תחזית מדויקת.',
                     year_2024:       '⚠️ משתמש במשקל חודשי מהשנה הקודמת (אין נתוני השנה הנוכחית).',
+                    past_history:    '✅ פריסה לפי העבר — ממוצע משוקלל מהחודשים שהזנת. התחזית מבוססת על הדפוס העונתי האמיתי של העסק.',
+                    past_manual:     '✏️ פריסה לפי העבר — משקולות שערכת ידנית (ינורמלו ל-100%).',
+                    past_equal:      'ℹ️ פריסה לפי העבר — אין עדיין נתונים חודשיים, לכן פריסה שווה (ניתנת לעריכה).',
                     seasonal_profile:'📊 אין נתונים חודשיים — משתמש בפרופיל עונתי נבחר.'
                 };
                 infoEl.textContent = labels[source] || '';
@@ -4149,65 +4447,125 @@ a{color:inherit}
             const _dealBadgeBd  = dealValueNpv4 === null ? '#cbd5e1' : (dealValuePositive ? '#10b981' : '#f43f5e');
             const _dealBadgeFg  = dealValueNpv4 === null ? '#475569' : (dealValuePositive ? '#065f46' : '#9f1239');
 
+            // ── תצוגת שווי חדשה: hero (טווח ברוטו) + בלוק עסקה/גשר. החישוב לא השתנה. ──
+            const _shortIls = (v) => {
+                if(!isFinite(v) || v <= 0) return null;
+                if(v >= 1e6) return (v/1e6).toFixed(1).replace(/\.0$/, '');
+                if(v >= 1e3) return String(Math.round(v/1e3));
+                return String(Math.round(v));
+            };
+            const _heroHasWorth = annualDealFlow > 0 && isFinite(multDeal.m4) && multDeal.m4 > 0;
+            const _heroUnit = multDeal.m5 >= 1e6 ? ' מיליון' : (multDeal.m5 >= 1e3 ? ' אלף' : '');
+            const _heroRange = _heroHasWorth ? `₪${_shortIls(multDeal.m4)} – ₪${_shortIls(multDeal.m5)}${_heroUnit}` : 'לא ניתן להעריך שווי';
+            const _heroSub = _heroHasWorth
+                ? `הטווח מבוסס על רווח תפעולי שנתי (EBIT) של <strong style="color:#0f172a">${_grossFmt(annualDealFlow)}</strong> ומכפיל ענפי שמרני. הוא משקף את אי-הוודאות הטבעית בכל הערכת שווי — אין מספר אחד מדויק, יש טווח סביר.`
+                : 'הרווח התפעולי (EBIT) אינו חיובי לפי הנתונים שהוזנו, ולכן לא ניתן להעריך שווי בשיטת המכפיל. בדוק את ההכנסות וההוצאות בשלבים הקודמים.';
+
+            let _dealBlock;
+            if(investment > 0 && dealValueNpv4 !== null && isFinite(dealValueNpv4)) {
+                _dealBlock = `
+                    <div class="rounded-xl border p-3.5 mt-3" style="background:${_dealBadgeBg};border-color:${_dealBadgeBd}">
+                        <div class="text-xs font-bold" style="color:${_dealBadgeFg}">שווי העסקה (נטו) — שווי במכפיל 4 פחות המחיר/השקעה</div>
+                        <div class="font-extrabold" style="color:${_dealBadgeFg};font-size:1.6rem;line-height:1.2">${_valFmt(dealValueNpv4)}</div>
+                        <p class="text-[11px] mt-1" style="color:${_dealBadgeFg}">${npvCompareNote}</p>
+                    </div>`;
+            } else {
+                _dealBlock = `
+                    <div class="rounded-xl mt-3" style="background:#eef2ff;border:1px solid #c7d2fe;padding:.9rem 1.1rem;display:flex;align-items:flex-start;gap:10px">
+                        <span style="color:#4338ca;font-size:18px;line-height:1;margin-top:1px">↪</span>
+                        <div style="font-size:13px;color:#4338ca;line-height:1.6"><strong>בודק רכישה?</strong> הזן את מחיר העסקה (שדה ההשקעה) כדי לראות <strong>שווי העסקה נטו</strong> — כמה העסק שווה פחות כמה שתשלם.</div>
+                    </div>`;
+            }
+
+            const heroHtml = `
+                <div class="rounded-xl border border-slate-200 bg-white" style="padding:1.4rem 1.4rem 1.2rem">
+                    <div style="display:flex;align-items:center;gap:8px;color:#64748b;font-size:13px;margin-bottom:8px">
+                        <span style="color:#4f46e5;font-weight:700">▣</span>
+                        <span>שווי העסק המוערך</span>
+                        <span style="font-size:11px;color:#94a3b8;background:#f1f5f9;padding:2px 8px;border-radius:.4rem">ברוטו · לפני התאמות עסקה</span>
+                    </div>
+                    <div style="font-size:2rem;font-weight:800;color:#0f172a;line-height:1.2;letter-spacing:-.5px">${_heroRange}</div>
+                    <p style="font-size:13.5px;color:#475569;line-height:1.6;margin:9px 0 0;max-width:58ch">${_heroSub}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5" style="margin-top:1.1rem">
+                        <div style="background:#f8fafc;border-radius:.5rem;padding:.8rem 1rem">
+                            <div style="font-size:12px;color:#64748b;margin-bottom:3px">רווח תפעולי (EBIT)</div>
+                            <div style="font-size:18px;font-weight:700;color:#0f172a">${_grossFmt(annualDealFlow)}</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:.5rem;padding:.8rem 1rem">
+                            <div style="font-size:12px;color:#64748b;margin-bottom:3px">שיטה מובילה</div>
+                            <div style="font-size:18px;font-weight:700;color:#0f172a">מכפיל ענפי</div>
+                        </div>
+                        <div style="background:#f8fafc;border-radius:.5rem;padding:.8rem 1rem">
+                            <div style="font-size:12px;color:#64748b;margin-bottom:3px">רמת שמרנות</div>
+                            <div style="font-size:18px;font-weight:700;color:#065f46">שמרנית</div>
+                        </div>
+                    </div>
+                    ${_dealBlock}
+                </div>`;
+
             const multiplierHtml = `
                 <div class="rounded-xl border border-slate-200 p-4 bg-white">
-                    <h4 class="text-sm font-bold text-slate-700 mb-1" title="שווי העסקה = שווי העסק המניב פחות ההשקעה (הערך הנקי שהעסקה יוצרת לך). שווי העסק המניב = השווי הכלכלי של זרם התקבולים העתידי (ברוטו, לפני השקעה).">שווי העסקה — לפי מכפיל (הקובעת) <span class="text-[11px] font-normal text-slate-400">(ⓘ ריחוף לפירוט)</span></h4>
-                    <p class="text-[11px] text-slate-500 mb-3">שווי העסקה = שווי העסק המניב במכפיל 4 פחות ההשקעה — זה הערך הנקי שהעסקה יוצרת והמדד הקובע. נמדד על רווח תפעולי שנתי (EBIT) של ${_grossFmt(annualDealFlow)}.</p>
-
-                    <div class="rounded-lg border p-3 mb-3" style="background:${_dealBadgeBg};border-color:${_dealBadgeBd}">
-                        <div class="text-xs font-bold" style="color:${_dealBadgeFg}">שווי העסקה (מכפיל 4 − השקעה)</div>
-                        <div class="font-extrabold" style="color:${_dealBadgeFg};font-size:1.9rem;line-height:1.15">${_valFmt(dealValueNpv4)}</div>
-                        <p class="text-[11px] mt-1" style="color:${_dealBadgeFg}">${npvCompareNote}</p>
-                    </div>
-
-                    <div class="text-[11px] font-bold text-slate-500 mb-1">שווי העסק המניב (ברוטו, לפני השקעה)</div>
+                    <h4 class="text-sm font-bold text-slate-700 mb-1">שיטה א׳ · מכפיל שוק על הרווח התפעולי</h4>
+                    <p class="text-[11px] text-slate-500 mb-3">המכפיל נקבע לפי <strong>רמת התלות</strong> של העסק. ככל שהעסק תלוי פחות בבעלים ובלקוח/ספק מרכזי — המכפיל גבוה יותר. בחר את השורה שמתארת את העסק שלך.</p>
                     <div class="grid grid-cols-3 gap-2">
                         <div class="rounded-lg border-2 p-3 text-center" style="border-color:#4f46e5;background:#eef2ff">
-                            <div class="text-[11px] font-bold text-indigo-600">מכפיל 4 · קובע</div>
-                            <div class="font-bold text-indigo-900" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m4)}</div>
-                            <div class="text-[10px] text-slate-500 mt-1">שמרני — הרף התחתון. תלות גבוהה בבעלים / לקוח מרכזי / תנודתיות.</div>
-                            <div class="text-[10px] text-indigo-500 mt-1 font-medium">נבחר מתוך שמרנות — התאם לפי סוג החברה</div>
+                            <div class="text-[11px] font-bold text-indigo-600">מכפיל 4 · שמרני</div>
+                            <div class="font-bold text-indigo-900" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m4)}</div>
+                            <div style="display:inline-block;font-size:11px;font-weight:700;background:#fef3c7;color:#92400e;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות גבוהה</div>
+                            <div class="text-[10px] text-indigo-500" style="line-height:1.5">תלות גבוהה בבעלים, ובלקוחות או ספקים מרכזיים</div>
                         </div>
                         <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
                             <div class="text-[11px] font-bold text-slate-500">מכפיל 5 · טיפוסי</div>
-                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m5)}</div>
-                            <div class="text-[10px] text-slate-400 mt-1">עסק יציב יחסית, פיזור לקוחות סביר.</div>
+                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m5)}</div>
+                            <div style="display:inline-block;font-size:11px;font-weight:700;background:#fff;color:#64748b;border:1px solid #e2e8f0;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות בינונית</div>
+                            <div class="text-[10px] text-slate-400" style="line-height:1.5">פיזור לקוחות סביר, תלות חלקית בבעלים</div>
                         </div>
                         <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
-                            <div class="text-[11px] font-bold text-slate-500">מכפיל 6 · יציב/צומח</div>
-                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3">${_grossFmt(multDeal.m6)}</div>
-                            <div class="text-[10px] text-slate-400 mt-1">הכנסה חוזרת, מותג, תלות נמוכה בבעלים.</div>
+                            <div class="text-[11px] font-bold text-slate-500">מכפיל 6 · צומח</div>
+                            <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m6)}</div>
+                            <div style="display:inline-block;font-size:11px;font-weight:700;background:#ecfdf5;color:#065f46;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות נמוכה</div>
+                            <div class="text-[10px] text-slate-400" style="line-height:1.5">הכנסה חוזרת, מותג, תלות נמוכה בבעלים</div>
                         </div>
                     </div>
                 </div>`;
 
+            const _hasFinancing = (typeof fin !== 'undefined' && fin && fin.loan > 0);
+            const _grossCellLead = (v) => `<td class="py-1.5" style="text-align:left;color:#0f172a;font-weight:700">${_grossFmt(v)}</td>`;
+            const _grossCell = (v) => `<td class="py-1.5" style="text-align:left;color:#334155">${_grossFmt(v)}</td>`;
+            const _invHeadCell = _hasFinancing ? `<td class="py-1 font-medium" style="text-align:left">המשקיע<br><span class="font-normal text-[10px]">אחרי חוב והון עצמי</span></td>` : '';
+            const _invCellLead = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#334155;font-weight:600">${_grossFmt(dInv.g1)}</td>` : '';
+            const _invCell2 = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g2)}</td>` : '';
+            const _invCell3 = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g3)}</td>` : '';
             const dcfHtml = `
                 <div class="rounded-xl border border-slate-200 bg-white p-4 mt-3">
-                    <h4 class="text-sm font-bold text-slate-700 mb-1">שווי העסקה — לפי DCF (הצלבה)</h4>
-                    <p class="text-[11px] text-slate-500 mb-3">הצלבה לשיטת המכפיל בלבד — אינה קובעת. הטבלה מציגה שווי העסקה (נטו) = שווי העסק המניב המהוון פחות ההשקעה. הבדיקה מניחה עסק <strong>ללא שינוי</strong> לאורך התקופה. שלוש ההערכות משתמשות בריביות שונות (הרדל מול חסר סיכון), ולכן נותנות טווח.</p>
+                    <h4 class="text-sm font-bold text-slate-700 mb-1">שיטה ב׳ · היוון תזרים (DCF) — הצלבה</h4>
+                    <p class="text-[11px] text-slate-500 mb-3">בדיקה מצליבה לשיטת המכפיל, אינה קובעת. שלוש הערכות בריביות שונות נותנות טווח. ההנחה: עסק <strong>ללא שינוי</strong> לאורך התקופה. הערכים הם שווי ברוטו (לפני השקעה).</p>
                     <table class="w-full text-sm" style="border-collapse:collapse">
                         <tr class="text-slate-500 text-xs" style="border-bottom:1px solid #e2e8f0">
                             <td class="py-1"></td>
-                            <td class="py-1 font-medium">סך העסקה<br><span class="font-normal text-[10px]">בלי חוב ÷ השקעה</span></td>
-                            <td class="py-1 font-medium">המשקיע<br><span class="font-normal text-[10px]">עם חוב ÷ הון עצמי</span></td>
+                            <td class="py-1 font-medium" style="text-align:left">שווי ברוטו</td>
+                            ${_invHeadCell}
                         </tr>
                         <tr style="border-bottom:1px solid #f1f5f9;background:#f8fafc">
-                            <td class="py-1.5 text-slate-700"><span class="font-bold">הערכה 1 · מבוססת מכפיל (5 שנים + שיורי)</span><br><span class="text-[10px] text-slate-400">5 שנים @ הרדל ${reqPctTxt}% + שיורי לפי מכפיל ${MULT_PRIMARY} מובא @ הרדל ${reqPctTxt}%</span></td>
-                            <td class="py-1.5 font-bold" style="${_valCol(dDeal.e1)}">${_valFmt(dDeal.e1)}</td>
-                            <td class="py-1.5" style="${_valCol(dInv.e1)}">${_valFmt(dInv.e1)}</td>
+                            <td class="py-1.5 text-slate-700"><span class="font-bold">הערכה 1 · מבוססת מכפיל</span><br><span class="text-[10px] text-slate-400">5 שנים @ הרדל ${reqPctTxt}% + ערך שיורי לפי מכפיל ${MULT_PRIMARY}</span></td>
+                            ${_grossCellLead(dDeal.g1)}
+                            ${_invCellLead}
                         </tr>
                         <tr style="border-bottom:1px solid #f1f5f9">
                             <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 2 · מסורתית ללא צמיחה</span><br><span class="text-[10px] text-slate-400">היוון לנצח @ הרדל ${reqPctTxt}% (גורדון)</span></td>
-                            <td class="py-1.5" style="${_valCol(dDeal.e2)}">${_valFmt(dDeal.e2)}</td>
-                            <td class="py-1.5" style="${_valCol(dInv.e2)}">${_valFmt(dInv.e2)}</td>
+                            ${_grossCell(dDeal.g2)}
+                            ${_invCell2}
                         </tr>
                         <tr>
-                            <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 3 · שווי בחסר</span><br><span class="text-[10px] text-slate-400">5 שנים @ ${discountRatePct}% בלבד, ללא שיורי — לפרויקט עם מועד סיום</span></td>
-                            <td class="py-1.5" style="${_valCol(dDeal.e3)}">${_valFmt(dDeal.e3)}</td>
-                            <td class="py-1.5" style="${_valCol(dInv.e3)}">${_valFmt(dInv.e3)}</td>
+                            <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 3 · שווי בחסר (רצפה)</span><br><span class="text-[10px] text-slate-400">5 שנים @ ${discountRatePct}% בלבד, ללא שיורי</span></td>
+                            ${_grossCell(dDeal.g3)}
+                            ${_invCell3}
                         </tr>
                     </table>
-                    <p class="text-[11px] text-slate-500 mt-2"><strong>הערכה 1</strong> מבוססת מכפיל: 5 שנים מהוונות בהרדל ושיורי לפי מכפיל ${MULT_PRIMARY} (גם הוא בהרדל) — קרובה ביותר למכפיל. <strong>הערכה 2</strong> (גורדון) מהוונת את הזרם לנצח בהרדל, ולכן יוצאת הגבוהה ביותר. <strong>הערכה 3</strong> היא הרצפה — 5 שנים בחסר סיכון בלבד, ללא שיורי, לפרויקט עם מועד סיום. ההפרש בין הצדדים משקף את אפקט המינוף.</p>
+                    <div style="margin-top:11px;padding-top:9px;border-top:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:7px">
+                        <span style="color:#94a3b8;font-size:13px;line-height:1.2;margin-top:1px">ⓘ</span>
+                        <p class="text-[11px] text-slate-500" style="margin:0;line-height:1.6">שלוש ההערכות עוטפות את הטווח הראשי ומאשרות אותו — הערכה 3 היא הרצפה, גורדון היא התקרה.${_hasFinancing ? '' : ' עמודת ״המשקיע״ (אחרי חוב והון עצמי) תופיע כאן אוטומטית כשיוזן מימון.'}</p>
+                    </div>
                 </div>`;
 
             const valuationHtml = multiplierHtml + dcfHtml; // תאימות לאחור
@@ -4311,6 +4669,7 @@ a{color:inherit}
                 valHorizon,
                 reqPctTxt,
                 valuationHtml,
+                heroHtml,
                 multiplierHtml,
                 dcfHtml,
                 selectedIrrPct,
@@ -4699,7 +5058,7 @@ a{color:inherit}
 
         function buildPdfAssumptions(summary) {
             const seasonality = document.querySelector('input[name="seasonality-profile"]:checked')?.value || 'stable';
-            const labels = { stable:'פריסה שווה', summer:'עונתיות קיץ', winter:'עונתיות חורף', q4_peak:'סוף שנה חזק' };
+            const labels = { past:'פריסה לפי העבר (ממוצע משוקלל / עריכה ידנית)', stable:'פריסה שווה', summer:'עונתיות קיץ', winter:'עונתיות חורף', q4_peak:'סוף שנה חזק' };
             const items = [
                 ['מרווח גולמי', pctPdf(S.grossMarginPct)],
                 ['שיעור צמיחה / מקור תחזית', cachedOutput?.growthSourceLabel || 'לפי הנתונים שהוזנו'],
@@ -4721,128 +5080,10 @@ a{color:inherit}
 
 
         function generateProfessionalPdfReport() {
-            openPdfLeadModal();
+            if (!requirePro('הפקת דוח PDF')) return;
+            generateProfessionalPdfReportDirect();
         }
 
-        function getPdfLeadDefaults() {
-            if(!S.pdfLead) {
-                try { S.pdfLead = JSON.parse(localStorage.getItem('budgetsmart_pdf_lead') || '{}'); } catch(e) { S.pdfLead = {}; }
-            }
-            const meta = collectReportMeta(false);
-            return {
-                fullName: (S.pdfLead.fullName || '').trim(),
-                phone: (S.pdfLead.phone || '').trim(),
-                email: (S.pdfLead.email || '').trim(),
-                companyName: (S.pdfLead.companyName || meta.companyName || '').trim()
-            };
-        }
-
-        let leadTarget = 'pdf';
-        function runLeadTarget() {
-            if(leadTarget === 'excel') exportToExcelDirect();
-            else generateProfessionalPdfReportDirect();
-        }
-        function openPdfLeadModal(target) {
-            leadTarget = (target === 'excel') ? 'excel' : 'pdf';
-            if(!cachedOutput || !Array.isArray(cachedOutput.monthsData)) { alert('אין נתונים זמינים להפקת הדוח.'); return; }
-            const modal = document.getElementById('pdf-lead-modal');
-            if(!modal) { runLeadTarget(); return; }
-            const titleEl = document.getElementById('pdf-lead-title');
-            const subEl = document.getElementById('pdf-lead-subtitle');
-            if(titleEl) titleEl.textContent = leadTarget === 'excel' ? 'הורדת גיליון Excel מקצועי' : 'הפקת דוח PDF מקצועי';
-            if(subEl) subEl.textContent = leadTarget === 'excel'
-                ? 'לצורך קבלת הגיליון יש להשאיר פרטים. לאחר אימות תקין הקובץ יורד למחשב כ-Excel.'
-                : 'לצורך קבלת הדוח יש להשאיר פרטים. לאחר אימות תקין הדוח ייפתח להדפסה/שמירה כ-PDF.';
-            const lead = getPdfLeadDefaults();
-            const nameEl = document.getElementById('pdf-lead-name');
-            const phoneEl = document.getElementById('pdf-lead-phone');
-            const emailEl = document.getElementById('pdf-lead-email');
-            const companyEl = document.getElementById('pdf-lead-company');
-            const errorEl = document.getElementById('pdf-lead-error');
-            if(nameEl) nameEl.value = lead.fullName || '';
-            if(phoneEl) phoneEl.value = lead.phone || '';
-            if(emailEl) emailEl.value = lead.email || '';
-            if(companyEl) companyEl.value = lead.companyName || '';
-            if(errorEl) { errorEl.classList.add('hidden'); errorEl.textContent = ''; }
-            modal.classList.remove('hidden');
-            modal.style.display = 'flex';
-            setTimeout(() => { if(nameEl && !nameEl.value) nameEl.focus(); else if(phoneEl) phoneEl.focus(); }, 50);
-        }
-
-        function closePdfLeadModal() {
-            const modal = document.getElementById('pdf-lead-modal');
-            if(!modal) return;
-            modal.classList.add('hidden');
-            modal.style.display = 'none';
-        }
-
-        function normalizeIsraeliPhone(value) {
-            let raw = String(value || '').trim();
-            let digits = raw.replace(/[^0-9]/g, '');
-            if(digits.startsWith('972')) digits = '0' + digits.slice(3);
-            if(digits.length === 9 && digits.startsWith('5')) digits = '0' + digits;
-            return digits;
-        }
-
-        function validatePdfLeadForm() {
-            const fullName = (document.getElementById('pdf-lead-name')?.value || '').trim().replace(/\s+/g, ' ');
-            const phoneInput = (document.getElementById('pdf-lead-phone')?.value || '').trim();
-            const email = (document.getElementById('pdf-lead-email')?.value || '').trim();
-            const companyName = (document.getElementById('pdf-lead-company')?.value || '').trim();
-            const phone = normalizeIsraeliPhone(phoneInput);
-
-            if(fullName.length < 2 || !/[א-תA-Za-z]/.test(fullName)) {
-                return { ok:false, message:'יש להזין שם מלא תקין.' };
-            }
-            if(!/^05\d{8}$/.test(phone)) {
-                return { ok:false, message:'יש להזין מספר טלפון נייד ישראלי תקין, לדוגמה 050-0000000.' };
-            }
-            if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                return { ok:false, message:'כתובת האימייל אינה תקינה.' };
-            }
-            return { ok:true, lead:{ fullName, phone, email, companyName } };
-        }
-
-        function submitPdfLeadForm() {
-            const result = validatePdfLeadForm();
-            const errorEl = document.getElementById('pdf-lead-error');
-            if(!result.ok) {
-                if(errorEl) { errorEl.textContent = result.message; errorEl.classList.remove('hidden'); }
-                else alert(result.message);
-                return;
-            }
-
-            S.pdfLead = result.lead;
-            if(!S.reportMeta) S.reportMeta = { companyName: '', projectName: '', industry: '', preparedBy: '', notes: '' };
-            if(result.lead.companyName) {
-                S.reportMeta.companyName = result.lead.companyName;
-                syncReportMetaInputs();
-            }
-            try {
-                localStorage.setItem('budgetsmart_pdf_lead', JSON.stringify(result.lead));
-                localStorage.setItem('cfo_budget_app_report_meta', JSON.stringify(S.reportMeta));
-            } catch(e) {}
-
-            // שליחת הליד למייל דרך Formspree (אותו מנגנון כמו טופס צור הקשר). ההורדה מתבצעת בכל מקרה.
-            try {
-                const sourceLabel = leadTarget === 'excel' ? 'הורדת Excel' : 'הורדת PDF';
-                fetch('https://formspree.io/f/xkoelzoo', {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        שם: result.lead.fullName,
-                        טלפון: result.lead.phone,
-                        אימייל: result.lead.email || '',
-                        עסק: result.lead.companyName || '',
-                        מקור: sourceLabel,
-                        _subject: 'ליד חדש מ-BudgetSmart — ' + sourceLabel + (result.lead.companyName ? ' · ' + result.lead.companyName : '')
-                    })
-                }).catch(function(){ /* גם אם השליחה נכשלה — לא חוסמים את ההורדה */ });
-            } catch(e) {}
-
-            closePdfLeadModal();
-            runLeadTarget();
-        }
         function generateProfessionalPdfReportDirect() {
             if(!cachedOutput || !Array.isArray(cachedOutput.monthsData)) { alert('אין נתונים זמינים להפקת PDF.'); return; }
             recalcAll();
@@ -5009,10 +5250,19 @@ a{color:inherit}
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> הערכת שווי — שיטת מכפיל (ראשי) והצלבת DCF</h3>
-                        ${summary.multiplierHtml || ''}
-                        ${summary.dcfHtml || ''}
-                        <p class="text-[11px] text-slate-500 mt-2">שיטת המכפיל היא הקובעת; טבלת ה-DCF שמתחתיה היא הצלבה בלבד. המסקנה המסכמת מופיעה בתקציר המנהלים בהמשך הדף.</p>
+                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> הערכת שווי</h3>
+                        ${summary.heroHtml || ''}
+                        <details class="vx-acc">
+                            <summary>
+                                <span style="display:flex;align-items:center;gap:8px"><i data-lucide="calculator" class="w-4 h-4 text-slate-500"></i> הצג את שיטות החישוב המלאות</span>
+                                <span class="vx-chev" style="font-size:14px">▾</span>
+                            </summary>
+                            <div style="border:1px solid #e2e8f0;border-top:none;border-radius:0 0 .5rem .5rem;padding:.9rem;background:#fff" data-pro-lock="שלושת מודלי השווי + הצלבת DCF">
+                                ${summary.multiplierHtml || ''}
+                                ${summary.dcfHtml || ''}
+                                <p class="text-[11px] text-slate-400 mt-2">שיטת המכפיל היא הקובעת; ה-DCF הוא הצלבה. המסקנה המסכמת מופיעה בתקציר המנהלים בהמשך הדף.</p>
+                            </div>
+                        </details>
                     </div>
 
                     <div>
@@ -5064,6 +5314,7 @@ a{color:inherit}
                 </div>`;
 
             if(window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+            applyProLocks();
         }
 
         function stabilizeChartConfig(config) {
@@ -5258,6 +5509,72 @@ a{color:inherit}
                         }
                     }
                 });
+            }
+
+            // ── גרף עוגה: הוצאות תפעוליות ללא עלות מכר (שכר/שיווק/קבועות) ──
+            const ctxOpex = document.getElementById('chart-opex-pie')?.getContext('2d');
+            if(ctxOpex) {
+                const oPay   = months.reduce((s,m)=>s+m.payrollCost, 0);
+                const oMkt   = months.reduce((s,m)=>s+m.mktCost,     0);
+                const oFixed = months.reduce((s,m)=>s+m.fixedCost,   0);
+                const oLabels = [], oData = [], oColors = [];
+                if(oPay   > 0){ oLabels.push('משכורות ושכר');  oData.push(Math.round(oPay));   oColors.push('#3b82f6'); }
+                if(oMkt   > 0){ oLabels.push('שיווק ופרסום');  oData.push(Math.round(oMkt));   oColors.push('#f59e0b'); }
+                if(oFixed > 0){ oLabels.push('הנהלה וכלליות'); oData.push(Math.round(oFixed)); oColors.push('#8b5cf6'); }
+
+                const opexTotal = oData.reduce((a,b)=>a+b,0);
+                if(opexTotal > 0) {
+                    const opexSliceLabels = {
+                        id: 'opexSliceLabels',
+                        afterDatasetsDraw(chart) {
+                            const { ctx, data } = chart;
+                            const total = data.datasets[0].data.reduce((a,b)=>a+b,0);
+                            if(!total) return;
+                            chart.getDatasetMeta(0).data.forEach((arc, i) => {
+                                const pct = (data.datasets[0].data[i] / total * 100);
+                                if(pct < 5) return;
+                                const mid = (arc.startAngle + arc.endAngle) / 2;
+                                const r   = (arc.outerRadius + arc.innerRadius) / 2;
+                                ctx.save();
+                                ctx.fillStyle = '#fff';
+                                ctx.font = 'bold 11px Assistant,sans-serif';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText(pct.toFixed(1)+'%', arc.x + r*Math.cos(mid), arc.y + r*Math.sin(mid));
+                                ctx.restore();
+                            });
+                        }
+                    };
+                    chartOpexInstance = updateOrCreateChart(chartOpexInstance, ctxOpex, {
+                        type: 'doughnut',
+                        plugins: [opexSliceLabels],
+                        data: { labels: oLabels, datasets: [{ data: oData, backgroundColor: oColors, borderWidth: 2, borderColor: '#fff' }] },
+                        options: {
+                            responsive: true, maintainAspectRatio: false, cutout: '52%',
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        font: { size: 11 }, padding: 8,
+                                        generateLabels(chart) {
+                                            const d = chart.data;
+                                            const total = d.datasets[0].data.reduce((a,b)=>a+b,0);
+                                            return d.labels.map((lbl, i) => ({
+                                                text: lbl + '  ' + (total>0?((d.datasets[0].data[i]/total*100).toFixed(1)):'0') + '%',
+                                                fillStyle: d.datasets[0].backgroundColor[i],
+                                                strokeStyle: '#fff', lineWidth: 1, hidden: false, index: i
+                                            }));
+                                        }
+                                    }
+                                },
+                                tooltip: { callbacks: { label: c => {
+                                    const total = c.dataset.data.reduce((a,b)=>a+b,0);
+                                    return ' ' + c.label + ': ₪' + c.raw.toLocaleString() + ' (' + (total>0?((c.raw/total)*100).toFixed(1):0) + '%)';
+                                }}}
+                            }
+                        }
+                    });
+                }
             }
 
             // ── גרף השוואה שנתית / החזר הון עצמי מצטבר לפי מסלול ──
@@ -5571,7 +5888,7 @@ a{color:inherit}
             });
         }
 
-                function exportToExcel() { openPdfLeadModal('excel'); }
+                function exportToExcel() { if (!requirePro('ייצוא Excel')) return; exportToExcelDirect(); }
                 function exportToExcelDirect() {
             if(!cachedOutput) { alert('אין נתוני תקציב זמינים לייצוא כרגע.'); return; }
             if(typeof XLSX === 'undefined') { alert('ספריית הייצוא עדיין נטענת — נסה שוב בעוד רגע.'); return; }
@@ -5975,6 +6292,7 @@ a{color:inherit}
 
             const buildAssumptionsSheet = (summary) => {
                 const seasonalityLabel = {
+                    past: 'פריסה לפי העבר — ממוצע משוקלל מההיסטוריה / עריכה ידנית',
                     stable: 'ממוצע שווה — 1/12 בכל חודש',
                     summer: 'עונתיות קיץ — שיא בחודשים יוני–אוגוסט',
                     winter: 'עונתיות חורף — שיא בחודשים נובמבר–ינואר',
