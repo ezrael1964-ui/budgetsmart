@@ -368,6 +368,12 @@ a{color:inherit}
 .focus\:ring-2:focus,.focus\:ring-blue-500:focus{
   box-shadow:0 0 0 2px rgba(59,130,246,.5);outline:none
 }
+.focus\:ring-indigo-500:focus{box-shadow:0 0 0 2px rgba(99,102,241,.5);outline:none}
+.focus\:ring-emerald-500:focus{box-shadow:0 0 0 2px rgba(16,185,129,.5);outline:none}
+.focus\:ring-rose-500:focus{box-shadow:0 0 0 2px rgba(244,63,94,.5);outline:none}
+.text-amber-700{color:#b45309}
+.text-emerald-700{color:#047857}
+.text-rose-700{color:#be123c}
 
 /* ── Hover ── */
 .hover\:bg-blue-700:hover    {background-color:#1d4ed8}
@@ -514,6 +520,13 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         </div>
                         <p class="text-[13px] text-slate-600 leading-relaxed">בדיקת כדאיות והערכת שווי — לעסק חדש, השקעה או עסק קיים</p>
                     </button>
+                </div>
+                <div class="js-saveload text-center mt-5 pt-4" style="border-top:1px solid #f1f5f9">
+                    <span class="text-xs text-slate-400">יש לך עבודה שמורה? </span>
+                    <button type="button" onclick="document.getElementById('load-work-input').click()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 cursor-pointer inline-flex items-center gap-1" style="text-decoration:underline">
+                        טען קובץ עבודה
+                    </button>
+                    <span class="text-xs text-slate-400"> — תחזור בדיוק לנקודה שבה עצרת</span>
                 </div>
             </div>
         </section>
@@ -711,7 +724,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 </div>
             </div>
 
-            <div class="flex justify-end mt-6">
+            <div class="flex flex-col sm:flex-row justify-between gap-3 items-center mt-6">
+                <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                 <button onclick="goToStep(2)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
                     המשך: הוצאות אופרטיביות <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
@@ -790,6 +804,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 <button onclick="goToStep(1)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה לנתוני בסיס
                 </button>
+                <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                 <button onclick="nextFromStep2()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
                     <span id="btn-step2-next-label">המשך: השקעה ומימון</span> <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
@@ -876,6 +891,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 <button onclick="goToStep(2)" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer">
                     <i data-lucide="arrow-right" class="w-4 h-4"></i> חזרה: הוצאות אופרטיביות
                 </button>
+                <span class="saveload-slot flex flex-col sm:flex-row gap-3 w-full sm:w-auto"></span>
                 <button onclick="goToStep(4)" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition-all flex items-center gap-2 cursor-pointer">
                     המשך: השלמת נתונים לדוחות <i data-lucide="arrow-left" class="w-4 h-4"></i>
                 </button>
@@ -1250,6 +1266,125 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             <div id="dashboard-content">
             <!-- ── בדיקת כדאיות השקעה — מוצג בראש דף המדדים במסלול בדיקת כדאיות ── -->
             <div id="feasibility-zone" class="hidden"></div>
+
+            <!-- ══ התאמות מאזניות (Pro) — שכבת דיוק רשות. שדות ריקים = אפס השפעה ══ -->
+            <section id="balance-adjustments-panel" class="mode-only-new hidden bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                <div class="border-b border-slate-200 pb-3 mb-4">
+                    <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> התאמות מאזניות <span class="text-xs font-semibold text-slate-400">(רשות — למי שמחזיק נתוני מאזן)</span></h3>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">ההערכה שלמעלה מניחה <strong>עסקה נקייה</strong>: מסירה עם הון חוזר נורמלי, ללא חוב פיננסי או מזומן עודף בתוך העסק, וללא נכסים עודפים — כלומר כל ההתאמות כאן שוות אפס. מילוי הנתונים מדייק את השווי ואת מדדי העסקה; כל שדה ריק נשאר בהנחת האפס, ומחיקת הנתונים מחזירה את הכלי להתנהגות המקורית.</p>
+                </div>
+
+                <!-- הערת נרמול הרווח — מלל בלבד, גלוי בשתי הגרסאות -->
+                <div class="rounded-xl border p-4 mb-4" style="background:#fffbeb;border-color:#fcd34d">
+                    <h4 class="text-sm font-bold mb-1" style="color:#92400e">לפני ההתאמות המאזניות — ודא שהרווח עצמו מנורמל</h4>
+                    <p class="text-[11.5px] leading-relaxed" style="color:#78350f">ההתאמות בעמוד זה הן מאזניות (מספר אחד על השווי). אבל המכפיל רץ על הרווח התפעולי — וכל שקל עיוות ברווח מוכפל <strong>פי 4–6 בשווי</strong>. לכן, לפני הכל, ודא שההכנסות וההוצאות שהזנת משקפות רווח מנורמל. הדברים שכדאי לבדוק:</p>
+                    <ul class="text-[11.5px] leading-relaxed mt-1.5 pr-4" style="color:#78350f;list-style:disc">
+                        <li><strong>שכר בעלים מול שכר שוק למשרה</strong> — המשמעותי מכולם, ולשני הכיוונים: בעלים שמשך 25 אלף ₪ בחודש כשמנהל שכיר למשרה עולה 50 — הרווח מוצג גבוה ב-300 אלף ₪ בשנה ויש להפחיתו; בעלים שמשך יותר משכר השוק — הרווח מוצג נמוך מדי ויש להוסיף.</li>
+                        <li><strong>שכר בני משפחה</strong> — מועסקים שלא עובדים בפועל, או עובדים בשכר שאינו ריאלי לתפקיד.</li>
+                        <li><strong>שכר דירה לצד קשור</strong> — נכס בבעלות הבעלים המושכר לעסק מעל או מתחת למחיר השוק.</li>
+                        <li><strong>הוצאות פרטיות בעסק</strong> — רכב, נסיעות, תקשורת ואירוח שאינם משרתים את הפעילות.</li>
+                        <li><strong>סעיפים חד-פעמיים</strong> — מענקים, פיצויי ביטוח, רווח ממכירת נכס, תביעה או הוצאה חריגה שלא יחזרו.</li>
+                        <li><strong>עסקאות עם צדדים קשורים</strong> — קניות או מכירות במחירים שאינם מחירי שוק.</li>
+                        <li><strong>הוצאות שישתנו אחרי ההעברה</strong> — שירותים שהבעלים נתן בעצמו ללא עלות ויצטרכו עובד/ספק בתשלום, או להפך.</li>
+                    </ul>
+                    <p class="text-[10.5px] mt-1.5" style="color:#a16207">התיקון נעשה בשלבי ההכנסות וההוצאות (הזן ערכים מנורמלים), לא בשדות שבהמשך — כאן מתקנים מאזן, שם מתקנים רווח.</p>
+                </div>
+                <div data-pro-lock="התאמות מאזניות — הון חוזר נורמלי, חוב נטו ודיוק השווי" class="space-y-4">
+
+                    <!-- בלוק א' — הון חוזר נורמלי -->
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <h4 class="text-sm font-bold text-slate-700 mb-1">א׳ · הון חוזר נורמלי מול בפועל</h4>
+                        <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">המכפיל מניח שהעסק נמסר עם הון חוזר נורמלי. הזן את ימי האשראי הנורמליים לעסק, ואת היתרות מהמאזן — הכלי יחשב את הפער, שמתווסף או נגרע מהשווי שקל-בשקל. <strong>עסק חדש ללא מאזן?</strong> הזן 0 ביתרות — הכלי יחשב את בניית ההון החוזר הנדרשת כהשקעה נוספת ביום הראשון.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">ימי לקוחות (נורמלי)</label>
+                                <input type="number" id="adj-dso" min="0" max="365" oninput="onAdjInput()" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="למשל 75">
+                                <p class="text-[10px] text-slate-400 mt-1">תוך כמה ימים לקוחות משלמים (שוטף+60 ≈ 75)</p>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">ימי מלאי (נורמלי)</label>
+                                <input type="number" id="adj-dio" min="0" max="365" oninput="onAdjInput()" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="0 לעסק שירותים">
+                                <p class="text-[10px] text-slate-400 mt-1">כמה ימי מכירה המלאי מכסה. חישבת ימי כיסוי אמיתיים (מול עלות)? הכפל ב-(1 − מרווח גולמי %) לפני ההזנה</p>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">ימי ספקים (נורמלי)</label>
+                                <input type="number" id="adj-dpo" min="0" max="365" oninput="onAdjInput()" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="למשל 60">
+                                <p class="text-[10px] text-slate-400 mt-1">תוך כמה ימים העסק משלם לספקים. חישבת ימים אמיתיים מהכרטסת (מול קניות)? הכפל ב-(1 − מרווח גולמי %) לפני ההזנה</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-[11px] font-bold text-slate-600">הון חוזר בפועל במסירה:</span>
+                            <div class="inline-flex rounded-lg border border-slate-300 overflow-hidden text-[11px] font-semibold">
+                                <button type="button" id="adj-wcmode-annual" onclick="setAdjWcMode('annual')" class="px-3 py-1 cursor-pointer" style="background:#4f46e5;color:#fff">מאזן סוף שנה</button>
+                                <button type="button" id="adj-wcmode-monthly" onclick="setAdjWcMode('monthly')" class="px-3 py-1 cursor-pointer bg-white text-slate-600">יתרות חודשיות (מדויק)</button>
+                            </div>
+                        </div>
+                        <div id="adj-wc-annual-wrap" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">יתרת לקוחות (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-ar" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="מהמאזן">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">יתרת מלאי (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-inv" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="מהמאזן">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">יתרת ספקים (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-ap" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="מהמאזן">
+                            </div>
+                        </div>
+                        <div id="adj-wc-monthly-wrap" class="hidden">
+                            <p class="text-[11px] text-slate-500 mb-2">הון חוזר נטו לסוף כל חודש: לקוחות + מלאי − ספקים. אפשר להזין ערך שלילי. הממוצע של החודשים שמולאו ישמש כהון החוזר המייצג.</p>
+                            <div id="adj-wc-monthly-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2"></div>
+                        </div>
+                        <p class="text-[10.5px] text-slate-400 mt-2 leading-relaxed">⚠ יתרה מאזנית היא <strong>צילום של נקודת זמן</strong>. בעסק עונתי, הון חוזר בסוף שנה עשוי שלא לייצג את השנה כולה — לחישוב מדויק עבור למצב "יתרות חודשיות" והזן נתונים ממאזני בוחן חודשיים. את <strong>הימים</strong> מדויק לגזור מכרטסות הלקוחות והספקים (תאריך פירעון מול תאריך חשבונית, בשקלול לפי סכום) — לא רק מיתרת סוף שנה.</p>
+                    </div>
+
+                    <!-- בלוק ב' — חוב נטו -->
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <h4 class="text-sm font-bold text-slate-700 mb-1">ב׳ · חוב נטו בתוך העסק הנמסר</h4>
+                        <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">גשר משווי הפעילות (מכפיל × EBIT) לשווי לבעלים. רלוונטי רק אם העסק נמסר עם חוב או מזומן בתוכו — ריק = ההנחה שהעסקה נקייה נשארת.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">חוב פיננסי שעובר עם העסק (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-debt" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                <p class="text-[10px] text-amber-700 mt-1 leading-relaxed">⚠ חוב שנשאר <strong>בעסק</strong> ועובר אליך. אל תזין כאן הלוואה שאתה לוקח למימון הרכישה — היא שייכת לשלב המימון.</p>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-600 block mb-1">מזומן שנשאר בעסק במסירה (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-cash" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                                <p class="text-[10px] text-slate-400 mt-1 leading-relaxed">מזומן שנמסר <strong>בתוך העסק</strong> — לא המזומן שלך למימון העסקה (הוא בשלב המימון).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- בלוק ג' — התאמות ידניות -->
+                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                        <h4 class="text-sm font-bold text-slate-700 mb-1">ג׳ · התאמות ידניות</h4>
+                        <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">למי שיודע: נכסים עודפים שאינם משרתים את הפעילות (נדל"ן, רכב, השקעות) — תוספת. השקעות הוניות נדחות, פיצויים לא ממומנים, מלאי מת, חובות מסופקים — הפחתה.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[11px] font-bold text-emerald-700 block mb-1">תוספת לשווי (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-add-amt" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-emerald-500" placeholder="0">
+                                <input type="text" id="adj-add-label" oninput="onAdjInput()" maxlength="60" class="w-full mt-1.5 pl-3 pr-3 py-1.5 border border-slate-200 rounded-lg bg-white outline-none text-right text-xs" placeholder="תיאור (למשל: נדל&quot;ן שאינו תפעולי)">
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-rose-700 block mb-1">הפחתה משווי (₪)</label>
+                                <input type="text" inputmode="decimal" id="adj-sub-amt" oninput="onAdjMoneyInput(this)" onfocus="clearOnFocus(this)" class="w-full pl-3 pr-3 py-2 border border-slate-300 rounded-lg bg-white outline-none text-right focus:ring-2 focus:ring-rose-500" placeholder="0">
+                                <input type="text" id="adj-sub-label" oninput="onAdjInput()" maxlength="60" class="w-full mt-1.5 pl-3 pr-3 py-1.5 border border-slate-200 rounded-lg bg-white outline-none text-right text-xs" placeholder="תיאור (למשל: השקעות הוניות נדחות)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- תוצאות — גשר ההתאמות (מתעדכן דינמית) -->
+                    <div id="adj-results"></div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-[10.5px] text-slate-400 leading-relaxed">ההתאמות משפיעות על מדדי העסקה (שווי, IRR העסקה, החזר, ROI). מדדי ההון העצמי ומבנה המימון אינם משתנים — מימון ההשלמה נבחן בשלב המימון.</p>
+                        <button type="button" onclick="clearAdjustments()" class="text-[11px] font-semibold text-slate-500 hover:text-rose-600 border border-slate-300 rounded-lg px-3 py-1.5 transition-all cursor-pointer whitespace-nowrap">נקה התאמות</button>
+                    </div>
+                </div>
+            </section>
 
             <div id="forecast-kpi-grid" class="mode-only-existing grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm text-center flex flex-col justify-center items-center">
@@ -1778,8 +1913,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
     <script>
         // ── חיווי גרסה — מקור אמת יחיד. עדכן כאן בכל שחרור גרסה. ──
-        const APP_VERSION = '2.11.3';
-        const APP_BUILD_DATE = '27.06.2026';
+        const APP_VERSION = '2.12.0';
+        const APP_BUILD_DATE = '04.07.2026';
         const APP_PLAN = 'free'; // 'free' | 'pro' — תשתית עתידית לחלוקת גרסאות
 
         // ── ליבת Free/Pro: שער יחיד לכל פיצ'ר נעול ──
@@ -1856,6 +1991,16 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             taxRate: 23,
             taxTiming: 'monthly', // 'monthly' | 'quarterly' | 'annual' — תזמון תשלום המס בתזרים
             actuals: null, // נתוני ביצוע בפועל (שלב 7) — מאותחל בעת הצורך
+            // ── התאמות מאזניות (Pro) — שכבת דיוק רשות. null = לא הוזן = אפס השפעה ──
+            adjustments: {
+                dso: null, dio: null, dpo: null,          // ימי לקוחות / מלאי / ספקים (הון חוזר נורמלי)
+                wcMode: 'annual',                          // 'annual' (מאזן סוף שנה) | 'monthly' (12 יתרות)
+                ar: null, inv: null, ap: null,             // יתרות מאזן סוף שנה: לקוחות / מלאי / ספקים
+                wcMonthly: Array(12).fill(null),           // הון חוזר נטו לסוף כל חודש (מצב חודשי)
+                debt: null, cash: null,                    // חוב פיננסי ומזומן שנמסרים בתוך העסק
+                addAmt: null, addLabel: '',                // תוספת ידנית (נכסים עודפים)
+                subAmt: null, subLabel: ''                 // הפחתה ידנית (CapEx נדחה / התחייבויות)
+            },
             openingBalance: 0,
             investment: 0, // השקעה ראשונית — לבדיקת כדאיות (Payback / ROI)
             investmentInputMode: 'total', // 'total' | 'breakdown' — סכום כולל או פירוט השקעה
@@ -2125,6 +2270,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 mktGrowth: S.mktGrowth,
                 mktElasticity: parseFloat(document.getElementById('input-mkt-elasticity')?.value) || 5,
                 manpower: S.manpower,
+                adjustments: S.adjustments,
+                currentStep: S.currentStep,
                 reportMeta: collectReportMeta(false)
             };
             localStorage.setItem('cfo_budget_app_data', JSON.stringify(dataToSave));
@@ -2163,6 +2310,14 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 S.taxRate        = data.taxRate        ?? 23;
                 S.taxTiming      = data.taxTiming      || 'monthly';
                 if(data.actuals) S.actuals = data.actuals;
+                // ── שחזור התאמות מאזניות (Pro) — מיזוג על ברירות המחדל כדי לתמוך בקבצים ישנים ──
+                S.adjustments = Object.assign({
+                    dso: null, dio: null, dpo: null, wcMode: 'annual',
+                    ar: null, inv: null, ap: null, wcMonthly: Array(12).fill(null),
+                    debt: null, cash: null, addAmt: null, addLabel: '', subAmt: null, subLabel: ''
+                }, data.adjustments || {});
+                if(!Array.isArray(S.adjustments.wcMonthly) || S.adjustments.wcMonthly.length !== 12) S.adjustments.wcMonthly = Array(12).fill(null);
+                if(typeof populateAdjustmentInputs === 'function') populateAdjustmentInputs();
                 setTaxTiming(S.taxTiming, true); // silent — עדכון UI בלבד
                 S.openingBalance = data.openingBalance || 0;
                 S.investment = data.investment || 0;
@@ -2399,6 +2554,12 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     localStorage.setItem('cfo_budget_app_data', JSON.stringify(parsed));
                     loadSavedData();
                     recalcAll();
+                    // ניווט: אם נשמר מסלול — נכנסים לאשף ישירות לשלב שבו נעצרה העבודה (קבצים ישנים בלי שלב — שלב 1)
+                    if(S.appMode) {
+                        const seq = stepSequence();
+                        const savedStep = (parsed.currentStep !== undefined && parsed.currentStep !== null && seq.includes(String(parsed.currentStep))) ? parsed.currentStep : seq[0];
+                        startWizard(savedStep);
+                    }
                     showToastNotification('העבודה נטענה בהצלחה 📂');
                 } catch(err) {
                     showToastNotification('הקובץ אינו תקין או אינו שייך לכלי');
@@ -4248,6 +4409,144 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
         }
 
 
+        // ════════════════════════════════════════════════════════════
+        //  התאמות מאזניות (Pro) — הון חוזר נורמלי, חוב נטו, ידניות
+        //  עיקרון: null = לא הוזן = אפס השפעה. שדות ריקים ⇒ הכלי מתנהג בדיוק כמו קודם.
+        // ════════════════════════════════════════════════════════════
+        function _adjReadNum(id) {
+            const el = document.getElementById(id);
+            if(!el) return null;
+            const raw = String(el.value || '').trim();
+            if(raw === '') return null;
+            const num = parseFloat(raw.replace(/,/g, ''));
+            return isFinite(num) ? num : null;
+        }
+        function onAdjMoneyInput(el) {
+            parseAndFormatInput(el); // עיצוב אלפים + שמירת סמן — שדות אלה אינם שליליים
+            onAdjInput();
+        }
+        function onAdjInput() {
+            syncAdjustmentsFromDOM();
+            saveAndRecalc();
+        }
+        function syncAdjustmentsFromDOM() {
+            const a = S.adjustments;
+            a.dso = _adjReadNum('adj-dso');
+            a.dio = _adjReadNum('adj-dio');
+            a.dpo = _adjReadNum('adj-dpo');
+            a.ar  = _adjReadNum('adj-ar');
+            a.inv = _adjReadNum('adj-inv');
+            a.ap  = _adjReadNum('adj-ap');
+            a.debt = _adjReadNum('adj-debt');
+            a.cash = _adjReadNum('adj-cash');
+            a.addAmt = _adjReadNum('adj-add-amt');
+            a.subAmt = _adjReadNum('adj-sub-amt');
+            const addL = document.getElementById('adj-add-label');
+            const subL = document.getElementById('adj-sub-label');
+            a.addLabel = addL ? addL.value.trim() : '';
+            a.subLabel = subL ? subL.value.trim() : '';
+            for(let i = 0; i < 12; i++) {
+                const el = document.getElementById(`adj-wc-m${i}`);
+                if(!el) continue;
+                const raw = String(el.value || '').trim();
+                a.wcMonthly[i] = raw === '' ? null : (isFinite(parseFloat(raw.replace(/,/g, ''))) ? parseFloat(raw.replace(/,/g, '')) : null);
+            }
+        }
+        function renderAdjMonthlyGrid() {
+            const grid = document.getElementById('adj-wc-monthly-grid');
+            if(!grid || grid.dataset.rendered === '1') return;
+            let html = '';
+            for(let i = 0; i < 12; i++) {
+                const v = (S.adjustments.wcMonthly && S.adjustments.wcMonthly[i] !== null && isFinite(S.adjustments.wcMonthly[i])) ? S.adjustments.wcMonthly[i] : '';
+                html += `<div>
+                    <label class="text-[10px] font-bold text-slate-500 block mb-0.5">חודש ${i + 1}</label>
+                    <input type="text" inputmode="decimal" dir="ltr" id="adj-wc-m${i}" value="${v}" oninput="onAdjInput()" onfocus="clearOnFocus(this)" class="w-full pl-2 pr-2 py-1.5 border border-slate-300 rounded-lg bg-white outline-none text-right text-sm focus:ring-2 focus:ring-indigo-500" placeholder="0">
+                </div>`;
+            }
+            grid.innerHTML = html;
+            grid.dataset.rendered = '1';
+        }
+        function setAdjWcMode(mode, silent) {
+            S.adjustments.wcMode = (mode === 'monthly') ? 'monthly' : 'annual';
+            const isMonthly = S.adjustments.wcMode === 'monthly';
+            const annualWrap  = document.getElementById('adj-wc-annual-wrap');
+            const monthlyWrap = document.getElementById('adj-wc-monthly-wrap');
+            if(annualWrap)  annualWrap.classList.toggle('hidden', isMonthly);
+            if(monthlyWrap) monthlyWrap.classList.toggle('hidden', !isMonthly);
+            if(isMonthly) renderAdjMonthlyGrid();
+            const btnA = document.getElementById('adj-wcmode-annual');
+            const btnM = document.getElementById('adj-wcmode-monthly');
+            const on  = 'background:#4f46e5;color:#fff';
+            const off = 'background:#fff;color:#475569';
+            if(btnA) btnA.style.cssText = isMonthly ? off : on;
+            if(btnM) btnM.style.cssText = isMonthly ? on : off;
+            if(!silent) onAdjInput();
+        }
+        function populateAdjustmentInputs() {
+            const a = S.adjustments || {};
+            const setV = (id, v, fmt) => {
+                const el = document.getElementById(id);
+                if(!el) return;
+                el.value = (v === null || v === undefined || v === '') ? '' : (fmt ? Number(v).toLocaleString('en-US') : v);
+            };
+            setV('adj-dso', a.dso); setV('adj-dio', a.dio); setV('adj-dpo', a.dpo);
+            setV('adj-ar', a.ar, true); setV('adj-inv', a.inv, true); setV('adj-ap', a.ap, true);
+            setV('adj-debt', a.debt, true); setV('adj-cash', a.cash, true);
+            setV('adj-add-amt', a.addAmt, true); setV('adj-sub-amt', a.subAmt, true);
+            setV('adj-add-label', a.addLabel); setV('adj-sub-label', a.subLabel);
+            if(a.wcMode === 'monthly') {
+                const grid = document.getElementById('adj-wc-monthly-grid');
+                if(grid) grid.dataset.rendered = ''; // רינדור מחדש עם הערכים השמורים
+            }
+            setAdjWcMode(a.wcMode || 'annual', true);
+        }
+        function clearAdjustments() {
+            S.adjustments = {
+                dso: null, dio: null, dpo: null, wcMode: 'annual',
+                ar: null, inv: null, ap: null, wcMonthly: Array(12).fill(null),
+                debt: null, cash: null, addAmt: null, addLabel: '', subAmt: null, subLabel: ''
+            };
+            const grid = document.getElementById('adj-wc-monthly-grid');
+            if(grid) grid.dataset.rendered = '';
+            populateAdjustmentInputs();
+            saveAndRecalc();
+            showToastNotification('ההתאמות נוקו — ההערכה חזרה להנחת עסקה נקייה');
+        }
+        // חישוב ההתאמות: מחזיר אובייקט עם רכיבי ההשפעה. active=false ⇒ הכל אפס.
+        function computeBalanceAdjustments(totalRev) {
+            const a = S.adjustments || {};
+            const hasDays = a.dso !== null || a.dio !== null || a.dpo !== null;
+            const normalDays = hasDays ? ((a.dso || 0) + (a.dio || 0) - (a.dpo || 0)) : null;
+            const normalWC = (hasDays && totalRev > 0) ? totalRev * normalDays / 365 : null;
+            let actualWC = null, actualSrc = '', monthsFilled = 0;
+            if(a.wcMode === 'monthly') {
+                const vals = (a.wcMonthly || []).filter(v => v !== null && isFinite(v));
+                monthsFilled = vals.length;
+                if(vals.length > 0) {
+                    actualWC = vals.reduce((s, v) => s + v, 0) / vals.length;
+                    actualSrc = `ממוצע ${vals.length} יתרות חודשיות`;
+                }
+            } else {
+                if(a.ar !== null || a.inv !== null || a.ap !== null) {
+                    actualWC = (a.ar || 0) + (a.inv || 0) - (a.ap || 0);
+                    actualSrc = 'מאזן סוף שנה (נקודת זמן)';
+                }
+            }
+            const wcActive = normalWC !== null && actualWC !== null;
+            const wcAdj = wcActive ? (actualWC - normalWC) : 0; // נמסר מתחת לנורמלי ⇒ שלילי ⇒ הקונה משלים ⇒ השווי יורד
+            const netDebtActive = a.debt !== null || a.cash !== null;
+            const netDebtAdj = netDebtActive ? ((a.cash || 0) - (a.debt || 0)) : 0;
+            const manualActive = a.addAmt !== null || a.subAmt !== null;
+            const manualAdj = manualActive ? ((a.addAmt || 0) - (a.subAmt || 0)) : 0;
+            const stockAdj = wcAdj + netDebtAdj + manualAdj;
+            const active = wcActive || netDebtActive || manualActive;
+            const actualDays = (actualWC !== null && totalRev > 0) ? (actualWC * 365 / totalRev) : null;
+            return { active, hasDays, normalDays, normalWC, actualWC, actualSrc, monthsFilled,
+                     wcActive, wcAdj, netDebtActive, netDebtAdj, manualActive, manualAdj,
+                     stockAdj, actualDays,
+                     addLabel: a.addLabel || '', subLabel: a.subLabel || '' };
+        }
+
         function computeInvestmentSummary(totalNet, monthsData) {
             const investment = getInitialInvestment();
             if(S.appMode !== 'new' || investment <= 0 || !Array.isArray(monthsData)) return null;
@@ -4428,6 +4727,39 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             const dDeal = dcfThree(annualDealFlow, investment);
             const dInv  = dcfThree(annualInvestorFlow, equityBase);
 
+            // ── התאמות מאזניות (Pro): שכבת דיוק רשות. adj.active=false ⇒ אפס השפעה, הכל כמקודם ──
+            // השפעת מלאי (חד-פעמית, יום המסירה): מתווספת באופן זהה לכל מודלי השווי — מכפילים ו-DCF.
+            // מדדי העסקה (IRR/החזר/ROI) מחושבים מחדש מול "השקעה אפקטיבית" = השקעה − ההתאמה.
+            const totalRevForAdj = monthsData.reduce((s, m) => s + (m.revenue || 0), 0);
+            const adj = computeBalanceAdjustments(totalRevForAdj);
+            let multDealAdj = null, dealValueAdj = null, dcfAdj = null, effInvestment = null;
+            let unleveragedIrrAdjPct = null, paybackOpAdjMonths = null, projectRoiAdjPct = null;
+            if(adj.active && annualDealFlow > 0) {
+                multDealAdj = { m4: multDeal.m4 + adj.stockAdj, m5: multDeal.m5 + adj.stockAdj, m6: multDeal.m6 + adj.stockAdj };
+                dealValueAdj = investment > 0 ? multDealAdj.m4 - investment : null;
+                dcfAdj = {
+                    g1: (dDeal.g1 !== null && isFinite(dDeal.g1)) ? dDeal.g1 + adj.stockAdj : null,
+                    g2: (dDeal.g2 !== null && isFinite(dDeal.g2)) ? dDeal.g2 + adj.stockAdj : null,
+                    g3: (dDeal.g3 !== null && isFinite(dDeal.g3)) ? dDeal.g3 + adj.stockAdj : null
+                };
+            }
+            if(adj.active && investment > 0) {
+                effInvestment = investment - adj.stockAdj; // התאמה שלילית ⇒ הקונה מוציא יותר בפועל ביום אפס
+                if(effInvestment > 0) {
+                    const adjFlows = [-effInvestment];
+                    for(let y = 1; y <= analysisHorizonYears; y++) adjFlows.push(totalEbitda);
+                    const r = calculateIRR(adjFlows);
+                    unleveragedIrrAdjPct = r === null ? null : r * 100;
+                    paybackOpAdjMonths = totalEbitda > 0 ? Math.round((effInvestment / totalEbitda) * 12) : null;
+                    projectRoiAdjPct = ((totalEbitda * analysisHorizonYears) - effInvestment) / effInvestment * 100;
+                } else {
+                    // ההתאמות מכסות את מלוא ההשקעה — החזר מיידי
+                    paybackOpAdjMonths = 0;
+                }
+            }
+            const decisiveDealValue = (adj.active && dealValueAdj !== null && isFinite(dealValueAdj)) ? dealValueAdj : dealValueNpv4;
+            const decisiveM4 = (adj.active && multDealAdj && isFinite(multDealAdj.m4)) ? multDealAdj.m4 : (multDeal ? multDeal.m4 : null);
+
             // ההכרעה הכוללת נשארת על רווחיות תפעולית + מימון. מדדי השווי מאירים ואינם פוסלים.
             const selectedNpv = dDeal.e1;                                    // הערכה 1, צד העסקה — הנגזרת הראשית
             const selectedIrrPct = unleveragedIrrPct;
@@ -4460,6 +4792,28 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             const _heroSub = _heroHasWorth
                 ? `הטווח מבוסס על רווח תפעולי שנתי (EBIT) של <strong style="color:#0f172a">${_grossFmt(annualDealFlow)}</strong> ומכפיל ענפי שמרני. הוא משקף את אי-הוודאות הטבעית בכל הערכת שווי — אין מספר אחד מדויק, יש טווח סביר.`
                 : 'הרווח התפעולי (EBIT) אינו חיובי לפי הנתונים שהוזנו, ולכן לא ניתן להעריך שווי בשיטת המכפיל. בדוק את ההכנסות וההוצאות בשלבים הקודמים.';
+
+            // ── רצועת התאמות מאזניות בהירו + הערת "עסקה נקייה" קבועה ──
+            let _adjStrip = '';
+            if(adj.active) {
+                const _d = (v, lbl) => `${lbl}: ${(v >= 0 ? '+' : '−')}₪${fmtILS(Math.abs(Math.round(v)))}`;
+                const parts = [];
+                if(adj.wcActive) parts.push(_d(adj.wcAdj, 'הון חוזר'));
+                if(adj.netDebtActive) parts.push(_d(adj.netDebtAdj, 'חוב נטו'));
+                if(adj.manualActive) parts.push(_d(adj.manualAdj, 'ידני'));
+                const _adjDealTxt = (dealValueAdj !== null && isFinite(dealValueAdj)) ? _valFmt(dealValueAdj) : 'לא זמין';
+                const _adjPos = dealValueAdj !== null && isFinite(dealValueAdj) && dealValueAdj >= 0;
+                const _asBg = dealValueAdj === null ? '#eef2ff' : (_adjPos ? '#ecfdf5' : '#fff1f2');
+                const _asBd = dealValueAdj === null ? '#6366f1' : (_adjPos ? '#10b981' : '#f43f5e');
+                const _asFg = dealValueAdj === null ? '#3730a3' : (_adjPos ? '#065f46' : '#9f1239');
+                _adjStrip = `
+                    <div class="rounded-xl border-2 p-3.5 mt-2" style="background:${_asBg};border-color:${_asBd}">
+                        <div class="text-xs font-bold" style="color:${_asFg}">שווי העסקה המותאם — כולל התאמות מאזניות (Δ ${(adj.stockAdj >= 0 ? '+' : '−')}₪${fmtILS(Math.abs(Math.round(adj.stockAdj)))})</div>
+                        <div class="font-extrabold" style="color:${_asFg};font-size:1.6rem;line-height:1.2">${_adjDealTxt}</div>
+                        <p class="text-[11px] mt-1" style="color:${_asFg}">${parts.join(' · ')} — פירוט מלא בפאנל "התאמות מאזניות" בהמשך הדף. זהו המספר הקובע להכרעת המחיר.</p>
+                    </div>`;
+            }
+            const _cleanNote = `<p style="font-size:10.5px;color:#94a3b8;margin-top:12px;line-height:1.6">ההערכה מניחה <strong>עסקה נקייה</strong>: מסירה עם הון חוזר נורמלי, ללא חוב פיננסי או מזומן עודף בתוך העסק וללא נכסים עודפים — כל ההתאמות המאזניות שוות אפס.${adj.active ? ' <strong>הוזנו התאמות</strong> — השווי המותאם מוצג לעיל.' : ' ניתן לדייק בפאנל "התאמות מאזניות" בהמשך הדף.'}</p>`;
 
             let _dealBlock;
             if(investment > 0 && dealValueNpv4 !== null && isFinite(dealValueNpv4)) {
@@ -4501,8 +4855,12 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         </div>
                     </div>
                     ${_dealBlock}
+                    ${_adjStrip}
+                    ${_cleanNote}
                 </div>`;
 
+            const _adjMultLine = (v) => (adj.active && multDealAdj && v !== null && isFinite(v))
+                ? `<div style="font-size:10.5px;font-weight:700;color:#4f46e5;margin-top:2px">מותאם: ${_grossFmt(v)}</div>` : '';
             const multiplierHtml = `
                 <div class="rounded-xl border border-slate-200 p-4 bg-white">
                     <h4 class="text-sm font-bold text-slate-700 mb-1">שיטה א׳ · מכפיל שוק על הרווח התפעולי</h4>
@@ -4511,18 +4869,21 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         <div class="rounded-lg border-2 p-3 text-center" style="border-color:#4f46e5;background:#eef2ff">
                             <div class="text-[11px] font-bold text-indigo-600">מכפיל 4 · שמרני</div>
                             <div class="font-bold text-indigo-900" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m4)}</div>
+                            ${_adjMultLine(multDealAdj ? multDealAdj.m4 : null)}
                             <div style="display:inline-block;font-size:11px;font-weight:700;background:#fef3c7;color:#92400e;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות גבוהה</div>
                             <div class="text-[10px] text-indigo-500" style="line-height:1.5">תלות גבוהה בבעלים, ובלקוחות או ספקים מרכזיים</div>
                         </div>
                         <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
                             <div class="text-[11px] font-bold text-slate-500">מכפיל 5 · טיפוסי</div>
                             <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m5)}</div>
+                            ${_adjMultLine(multDealAdj ? multDealAdj.m5 : null)}
                             <div style="display:inline-block;font-size:11px;font-weight:700;background:#fff;color:#64748b;border:1px solid #e2e8f0;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות בינונית</div>
                             <div class="text-[10px] text-slate-400" style="line-height:1.5">פיזור לקוחות סביר, תלות חלקית בבעלים</div>
                         </div>
                         <div class="rounded-lg border border-slate-200 p-3 text-center bg-slate-50">
                             <div class="text-[11px] font-bold text-slate-500">מכפיל 6 · צומח</div>
                             <div class="font-bold text-slate-700" style="font-size:1.15rem;line-height:1.3;margin:4px 0">${_grossFmt(multDeal.m6)}</div>
+                            ${_adjMultLine(multDealAdj ? multDealAdj.m6 : null)}
                             <div style="display:inline-block;font-size:11px;font-weight:700;background:#ecfdf5;color:#065f46;padding:1px 9px;border-radius:20px;margin-bottom:5px">תלות נמוכה</div>
                             <div class="text-[10px] text-slate-400" style="line-height:1.5">הכנסה חוזרת, מותג, תלות נמוכה בבעלים</div>
                         </div>
@@ -4530,8 +4891,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 </div>`;
 
             const _hasFinancing = (typeof fin !== 'undefined' && fin && fin.loan > 0);
-            const _grossCellLead = (v) => `<td class="py-1.5" style="text-align:left;color:#0f172a;font-weight:700">${_grossFmt(v)}</td>`;
-            const _grossCell = (v) => `<td class="py-1.5" style="text-align:left;color:#334155">${_grossFmt(v)}</td>`;
+            const _adjCellLine = (av) => (adj.active && av !== null && av !== undefined && isFinite(av))
+                ? `<div style="font-size:10.5px;font-weight:700;color:#4f46e5">מותאם: ${_grossFmt(av)}</div>` : '';
+            const _grossCellLead = (v, av) => `<td class="py-1.5" style="text-align:left;color:#0f172a;font-weight:700">${_grossFmt(v)}${_adjCellLine(av)}</td>`;
+            const _grossCell = (v, av) => `<td class="py-1.5" style="text-align:left;color:#334155">${_grossFmt(v)}${_adjCellLine(av)}</td>`;
             const _invHeadCell = _hasFinancing ? `<td class="py-1 font-medium" style="text-align:left">המשקיע<br><span class="font-normal text-[10px]">אחרי חוב והון עצמי</span></td>` : '';
             const _invCellLead = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#334155;font-weight:600">${_grossFmt(dInv.g1)}</td>` : '';
             const _invCell2 = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g2)}</td>` : '';
@@ -4548,17 +4911,17 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         </tr>
                         <tr style="border-bottom:1px solid #f1f5f9;background:#f8fafc">
                             <td class="py-1.5 text-slate-700"><span class="font-bold">הערכה 1 · מבוססת מכפיל</span><br><span class="text-[10px] text-slate-400">5 שנים @ הרדל ${reqPctTxt}% + ערך שיורי לפי מכפיל ${MULT_PRIMARY}</span></td>
-                            ${_grossCellLead(dDeal.g1)}
+                            ${_grossCellLead(dDeal.g1, dcfAdj ? dcfAdj.g1 : null)}
                             ${_invCellLead}
                         </tr>
                         <tr style="border-bottom:1px solid #f1f5f9">
                             <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 2 · מסורתית ללא צמיחה</span><br><span class="text-[10px] text-slate-400">היוון לנצח @ הרדל ${reqPctTxt}% (גורדון)</span></td>
-                            ${_grossCell(dDeal.g2)}
+                            ${_grossCell(dDeal.g2, dcfAdj ? dcfAdj.g2 : null)}
                             ${_invCell2}
                         </tr>
                         <tr>
                             <td class="py-1.5 text-slate-700"><span class="font-semibold">הערכה 3 · שווי בחסר (רצפה)</span><br><span class="text-[10px] text-slate-400">5 שנים @ ${discountRatePct}% בלבד, ללא שיורי</span></td>
-                            ${_grossCell(dDeal.g3)}
+                            ${_grossCell(dDeal.g3, dcfAdj ? dcfAdj.g3 : null)}
                             ${_invCell3}
                         </tr>
                     </table>
@@ -4596,8 +4959,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             // סטטוס מסכם: סף איתנות (רווחיות → מימון) קודם; אחריו סף מחיר צהוב כשערך העסקה (מכפיל 4) שלילי.
             let decisionLevel;
             let conclusion = '';
-            const priceTooHigh = dealValueNpv4 !== null && isFinite(dealValueNpv4) && dealValueNpv4 < 0;
-            const fairPriceTxt = (multDeal && isFinite(multDeal.m4)) ? '₪' + fmtILS(Math.round(multDeal.m4)) : 'לא זמין';
+            // סף המחיר: כשהתאמות מאזניות פעילות — ההכרעה על השווי המותאם (המספר הכן יותר)
+            const priceTooHigh = decisiveDealValue !== null && isFinite(decisiveDealValue) && decisiveDealValue < 0;
+            const fairPriceTxt = (decisiveM4 !== null && isFinite(decisiveM4)) ? '₪' + fmtILS(Math.round(decisiveM4)) + (adj.active ? ' (כולל התאמות מאזניות)' : '') : 'לא זמין';
             if(dealLevel === 'nogo') {
                 decisionLevel = 'nogo';
                 conclusion = 'העסק אינו רווחי תפעולית לפי הנתונים — אינו כדאי כהשקעה. מומלץ לבחון מחדש הכנסות, עלויות, מחיר רכישה או מבנה העסק.';
@@ -4666,6 +5030,17 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 selectedNpv,
                 dealValueNpv4,
                 multDeal,
+                adj,
+                multDealAdj,
+                dealValueAdj,
+                dcfAdj,
+                effInvestment,
+                unleveragedIrrAdjPct,
+                paybackOpAdjMonths,
+                paybackOpAdjTxt: adj.active ? fmtPayback(paybackOpAdjMonths) : null,
+                projectRoiAdjPct,
+                decisiveDealValue,
+                decisiveM4,
                 valHorizon,
                 reqPctTxt,
                 valuationHtml,
@@ -4803,6 +5178,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                                 ${row('מבנה המימון', `${summary.financingCfg.emoji} ${summary.financingCfg.title}`)}
                                 ${row('שווי העסק (מכפיל 4)', summary.multDeal && isFinite(summary.multDeal.m4) ? '₪' + fmtILS(Math.round(summary.multDeal.m4)) : 'לא זמין')}
                                 ${row(`שווי העסקה (מכפיל 4 − השקעה)`, summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : (summary.dealValueNpv4 >= 0 ? '+' : '−') + '₪' + fmtILS(Math.abs(Math.round(summary.dealValueNpv4))))}
+                                ${summary.adj && summary.adj.active ? row('שווי העסק המותאם (כולל התאמות מאזניות)', summary.multDealAdj && isFinite(summary.multDealAdj.m4) ? '₪' + fmtILS(Math.round(summary.multDealAdj.m4)) : 'לא זמין') + row('שווי העסקה המותאם — קובע', summary.dealValueAdj === null || !isFinite(summary.dealValueAdj) ? 'לא זמין' : (summary.dealValueAdj >= 0 ? '+' : '−') + '₪' + fmtILS(Math.abs(Math.round(summary.dealValueAdj)))) : ''}
                                 ${row(`IRR העסקה`, formatPctValue(summary.selectedIrrPct))}
                                 ${row('תקופת החזר השקעה', summary.paybackOpTxt)}
                                 ${row('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct))}
@@ -4825,7 +5201,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         </div>
 
                         <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 rounded-lg p-3">
-                            <strong>הערה:</strong> ${summary.horizonNote} השווי מוערך בשתי שיטות: <strong>שווי העסק</strong> לפי מכפיל על הרווח התפעולי (EBIT) — מכפיל 4 שמרני — ומתוכו <strong>שווי העסקה</strong> = שווי העסק פחות ההשקעה. כהצלבה מוצג DCF (הערכה 1: חמש שנים מהוונות בהרדל ${summary.requiredRoi}% + ערך שיורי לפי מכפיל 4 מובא להיום בהרדל). ההכרעה הכוללת כפופה לבריאות תפעולית ומימונית, ואז סף מחיר צהוב כששווי העסקה (מכפיל 4) שלילי. מוצגים מדדים נפרדים לעסקה עצמה ולתשואת ההון העצמי של המשקיע. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.
+                            <strong>הערה:</strong> ${summary.horizonNote} השווי מוערך בשתי שיטות: <strong>שווי העסק</strong> לפי מכפיל על הרווח התפעולי (EBIT) — מכפיל 4 שמרני — ומתוכו <strong>שווי העסקה</strong> = שווי העסק פחות ההשקעה. כהצלבה מוצג DCF (הערכה 1: חמש שנים מהוונות בהרדל ${summary.requiredRoi}% + ערך שיורי לפי מכפיל 4 מובא להיום בהרדל). ההכרעה הכוללת כפופה לבריאות תפעולית ומימונית, ואז סף מחיר צהוב כששווי העסקה (מכפיל 4) שלילי. מוצגים מדדים נפרדים לעסקה עצמה ולתשואת ההון העצמי של המשקיע. הסיכום אינו מחליף בדיקת רו"ח/יועץ השקעות, אך מספק תמונת כדאיות ראשונית לפי הנתונים שהוזנו במערכת.${summary.adj && summary.adj.active ? ' <strong>הוזנו התאמות מאזניות</strong> (הון חוזר נורמלי / חוב נטו / ידניות) — סף המחיר נבחן מול השווי המותאם.' : ' ההערכה מניחה עסקה נקייה — כל ההתאמות המאזניות (הון חוזר, חוב נטו, נכסים עודפים) שוות אפס.'}
                         </p>
 
                         <div class="text-[12px] text-slate-600 leading-relaxed border-r-4 border-amber-400 bg-amber-50 rounded-lg p-3">
@@ -4979,7 +5355,30 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     <tr><td>שווי העסקה (מכפיל 4 − השקעה)</td><td ${cls(dealStatus)}>${dealStatus}</td><td>${dealTxt}</td><td>הערך הנקי שהעסקה יוצרת. שלילי = המחיר גבוה מהשווי השמרני; המחיר ההוגן לפי מכפיל 4 הוא ${g(m.m4)}.</td></tr>
                     <tr><td>שווי העסקה — הצלבת DCF (הערכה 1)</td><td ${cls(summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון'))}>${summary.selectedNpv === null ? 'אזהרה' : (summary.selectedNpv >= 0 ? 'תקין' : 'סיכון')}</td><td>${summary.selectedNpv === null || !isFinite(summary.selectedNpv) ? 'לא זמין' : moneyPdf(summary.selectedNpv)}</td><td>הצלבה: חמש שנים מהוונות בהרדל + ערך שיורי לפי מכפיל 4 מובא בהרדל. מאיר ואינו קובע.</td></tr>
                 </table>
-                <p class="note" style="margin-top:10px">כל ההערכות מניחות עסק ללא שינוי (ללא צמיחה או ירידה) לאורך התקופה — זרם תקבולים קבוע.</p>`;
+                ${buildPdfAdjustments(summary)}
+                <p class="note" style="margin-top:10px">כל ההערכות מניחות עסק ללא שינוי (ללא צמיחה או ירידה) לאורך התקופה — זרם תקבולים קבוע.${summary.adj && summary.adj.active ? '' : ' ההערכה מניחה עסקה נקייה: מסירה עם הון חוזר נורמלי, ללא חוב פיננסי או מזומן עודף בעסק וללא נכסים עודפים — כל ההתאמות המאזניות שוות אפס.'}</p>`;
+        }
+
+        // ── סעיף התאמות מאזניות ב-PDF — מופיע רק כשהוזנו התאמות ──
+        function buildPdfAdjustments(summary) {
+            const adj = summary && summary.adj;
+            if(!adj || !adj.active) return '';
+            const g = v => (v === null || v === undefined || !isFinite(v)) ? 'לא זמין' : moneyPdf(v);
+            const sgn = v => `${v >= 0 ? '+' : '−'}${moneyPdf(Math.abs(Math.round(v))).replace('-', '')}`;
+            const rows = [];
+            rows.push(`<tr><td>שווי העסק — מכפיל 4 (לפני התאמות)</td><td>${g(summary.multDeal ? summary.multDeal.m4 : null)}</td><td>בסיס</td></tr>`);
+            if(adj.wcActive) rows.push(`<tr><td>התאמת הון חוזר (בפועל − נורמלי)</td><td>${sgn(adj.wcAdj)}</td><td>נורמלי ${g(adj.normalWC)} (${adj.normalDays} ימים) מול בפועל ${g(adj.actualWC)} — ${adj.actualSrc}</td></tr>`);
+            if(adj.netDebtActive) rows.push(`<tr><td>חוב נטו בעסק הנמסר</td><td>${sgn(adj.netDebtAdj)}</td><td>מזומן בעסק פחות חוב פיננסי שעובר עם העסק</td></tr>`);
+            if(adj.manualActive && adj.manualAdj !== 0) rows.push(`<tr><td>התאמות ידניות${[adj.addLabel, adj.subLabel].filter(Boolean).length ? ' — ' + [adj.addLabel, adj.subLabel].filter(Boolean).join(' / ') : ''}</td><td>${sgn(adj.manualAdj)}</td><td>נכסים עודפים / הפחתות שהוזנו ידנית</td></tr>`);
+            rows.push(`<tr><td style="font-weight:800">שווי העסק המותאם (מכפיל 4)</td><td style="font-weight:800">${g(summary.multDealAdj ? summary.multDealAdj.m4 : null)}</td><td>ההתאמה חלה זהה על מכפיל 4/5/6 ועל שלוש הערכות ה-DCF</td></tr>`);
+            if(summary.investment > 0) rows.push(`<tr><td style="font-weight:800">שווי העסקה המותאם — קובע</td><td style="font-weight:800;color:${(summary.dealValueAdj !== null && summary.dealValueAdj >= 0) ? '#166534' : '#991b1b'}">${summary.dealValueAdj === null || !isFinite(summary.dealValueAdj) ? 'לא זמין' : sgn(summary.dealValueAdj)}</td><td>שווי מותאם פחות המחיר/ההשקעה — סף המחיר בהכרעה נבחן מולו</td></tr>`);
+            return `
+                <p class="note" style="margin-top:14px"><strong>התאמות מאזניות (הוזנו על ידי המשתמש).</strong> ההערכה הבסיסית מניחה עסקה נקייה (הון חוזר נורמלי, ללא חוב/מזומן בעסק, ללא נכסים עודפים). ההתאמות שהוזנו מדייקות את השווי, ומגולמות גם ב-IRR העסקה, בתקופת ההחזר וב-ROI מול השקעה אפקטיבית של ${g(summary.effInvestment)}.</p>
+                <table class="report-table">
+                    <tr><th>רכיב</th><th>סכום</th><th>הסבר</th></tr>
+                    ${rows.join('')}
+                </table>
+                <p class="note" style="margin-top:8px">הערת נקודת זמן: יתרות מאזן הן צילום רגעי; ${adj.actualSrc.indexOf('חודשיות') >= 0 ? 'ההון החוזר בפועל חושב כממוצע יתרות חודשיות — הדיוק הגבוה.' : 'ההון החוזר בפועל נלקח ממאזן סוף שנה — בעסק עונתי מומלץ לדייק באמצעות ממוצע יתרות חודשיות.'}</p>`;
         }
 
         function buildPdfKpiCards(summary) {
@@ -4990,6 +5389,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 ['שווי העסק (מכפיל 5)', summary.multDeal && isFinite(summary.multDeal.m5) ? moneyPdf(summary.multDeal.m5) : 'לא זמין'],
                 ['שווי העסק (מכפיל 6)', summary.multDeal && isFinite(summary.multDeal.m6) ? moneyPdf(summary.multDeal.m6) : 'לא זמין'],
                 ['שווי העסקה (מכפיל 4 − השקעה)', summary.dealValueNpv4 === null || !isFinite(summary.dealValueNpv4) ? 'לא זמין' : moneyPdf(summary.dealValueNpv4)],
+                ...(summary.adj && summary.adj.active ? [
+                    ['שווי העסק המותאם (מכפיל 4)', summary.multDealAdj && isFinite(summary.multDealAdj.m4) ? moneyPdf(summary.multDealAdj.m4) : 'לא זמין'],
+                    ['שווי העסקה המותאם — קובע', summary.dealValueAdj === null || !isFinite(summary.dealValueAdj) ? 'לא זמין' : moneyPdf(summary.dealValueAdj)]
+                ] : []),
                 ['IRR העסקה', pctPdf(summary.selectedIrrPct)],
                 ['ROI על ההון העצמי', pctPdf(summary.equityRoiPct)],
                 ['תקופת החזר השקעה', summary.paybackOpTxt],
@@ -5142,8 +5545,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             if(!zone) return;
             const summary = computeInvestmentSummary(totalNet, monthsData);
 
-            if(!summary) { zone.classList.add('hidden'); zone.innerHTML=''; return; }
+            const adjPanel = document.getElementById('balance-adjustments-panel');
+            if(!summary) { zone.classList.add('hidden'); zone.innerHTML=''; if(adjPanel) adjPanel.classList.add('hidden'); return; }
             zone.classList.remove('hidden');
+            if(adjPanel) adjPanel.classList.remove('hidden');
 
             const roiColor = getInvestmentColor(summary.projectRoiPct, 'roi');
             const equityRoiColor = getInvestmentColor(summary.equityRoiPct, 'roi');
@@ -5188,6 +5593,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
             const totalRevenue = cachedOutput ? (cachedOutput.totalRev || 0) : monthsData.reduce((sum, m) => sum + (m.revenue || 0), 0);
             const totalEbitda = cachedOutput ? (cachedOutput.totalEbitda || 0) : monthsData.reduce((sum, m) => sum + (m.ebitda || 0), 0);
+            const hasAdj = !!(summary.adj && summary.adj.active);
+            const adjMini = (txt) => (hasAdj && txt !== null && txt !== undefined && txt !== 'לא זמין')
+                ? `<div style="font-size:11.5px;font-weight:700;color:#4f46e5;margin-top:2px">מותאם: ${txt}</div>` : '';
             const fundingLabel = summary.loanRequired > 0 ? 'הלוואה נדרשת' : 'מימון נדרש';
             const fundingValue = summary.loanRequired > 0 ? summary.loanRequired : summary.fundingRequired;
             const debtServiceTxt = summary.annualDebtService > 0 ? '₪' + fmtILS(summary.annualDebtService) : 'ללא שירות חוב';
@@ -5268,8 +5676,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     <div>
                         <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><i data-lucide="gauge" class="w-4 h-4 text-indigo-600"></i> מדדי השקעה נוספים</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-                            ${kpiCard('IRR העסקה', formatPctValue(summary.selectedIrrPct), (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct)) ? `מול הרף שהגדרת (${summary.requiredRoi ?? 15}%) — קו ייחוס שאינו פוסל` : 'תשואה פנימית על זרם תפעולי 5 שנים', (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct) && summary.selectedIrrPct < (summary.requiredRoi ?? 15)) ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' })}
-                            ${kpiCard('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct), `מידע בלבד — (תזרים תפעולי מצטבר − השקעה) ÷ השקעה, ללא ערך סופי`, roiColor)}
+                            ${kpiCard('IRR העסקה', formatPctValue(summary.selectedIrrPct) + adjMini(summary.unleveragedIrrAdjPct !== null ? formatPctValue(summary.unleveragedIrrAdjPct) : null), (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct)) ? `מול הרף שהגדרת (${summary.requiredRoi ?? 15}%) — קו ייחוס שאינו פוסל` : 'תשואה פנימית על זרם תפעולי 5 שנים', (summary.selectedIrrPct !== null && isFinite(summary.selectedIrrPct) && summary.selectedIrrPct < (summary.requiredRoi ?? 15)) ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' })}
+                            ${kpiCard('ROI מצטבר (לא מהוון)', formatPctValue(summary.projectRoiPct) + adjMini(summary.projectRoiAdjPct !== null ? formatPctValue(summary.projectRoiAdjPct) : null), `מידע בלבד — (תזרים תפעולי מצטבר − השקעה) ÷ השקעה, ללא ערך סופי`, roiColor)}
                             ${kpiCard('ROI על ההון העצמי', formatPctValue(summary.equityRoiPct), 'תזרים לבעלים (אחרי שירות חוב) ÷ הון עצמי, ללא ערך סופי', equityRoiColor)}
                             ${kpiCard('IRR על ההון העצמי', formatPctValue(summary.irrPct), `תשואה פנימית על התזרים אחרי שירות חוב, ללא ערך סופי`, irrColor)}
                             ${kpiCard('השפעת המינוף', formatPctValue(summary.leverageEffectPct), 'פער בין IRR ההון העצמי ל־IRR העסקה', getInvestmentColor(summary.leverageEffectPct, 'irr'))}
@@ -5304,7 +5712,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
                             ${kpiCard(fundingLabel, '₪' + fmtILS(fundingValue), 'מימון חסר לאחר מזומן קיים והון עצמי', { border:'#4f46e5', fg:'#312e81' })}
                             ${kpiCard('סיכון השקעה', `${summary.riskCfg.emoji} ${summary.riskCfg.title}`, summary.riskCfg.sub, summary.riskCfg)}
-                            ${kpiCard('תקופת החזר השקעה', summary.paybackOpTxt, (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? 'מעל 10 שנים — אופק רחב מדי לעסק קטן-בינוני (אינו פוסל)' : (summary.paybackOpMonths > 60 ? 'מעל 5 שנים — אופק רחב, שקול בזהירות (אינו פוסל)' : 'החזר תוך 5 שנים — סביר'), (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? { border:'#f43f5e', fg:'#9f1239' } : (summary.paybackOpMonths > 60 ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' }))}
+                            ${kpiCard('תקופת החזר השקעה', summary.paybackOpTxt + adjMini(summary.paybackOpAdjTxt), (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? 'מעל 10 שנים — אופק רחב מדי לעסק קטן-בינוני (אינו פוסל)' : (summary.paybackOpMonths > 60 ? 'מעל 5 שנים — אופק רחב, שקול בזהירות (אינו פוסל)' : 'החזר תוך 5 שנים — סביר'), (summary.paybackOpMonths === null || summary.paybackOpMonths > 120) ? { border:'#f43f5e', fg:'#9f1239' } : (summary.paybackOpMonths > 60 ? { border:'#f59e0b', fg:'#92400e' } : { border:'#10b981', fg:'#065f46' }))}
                             ${kpiCard('תקופת החזר הון עצמי', summary.paybackTxt, 'הון עצמי ÷ תזרים שנתי לבעלים', { border:'#cbd5e1', fg:'#0f172a' })}
                         </div>
                         <p class="text-[11px] leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-3 mt-3 text-slate-600">
@@ -5314,7 +5722,58 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 </div>`;
 
             if(window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+            renderAdjResults(summary);
             applyProLocks();
+        }
+
+        // ── גשר ההתאמות המאזניות — מוצג בתוך הפאנל, מתעדכן בכל חישוב ──
+        function renderAdjResults(summary) {
+            const box = document.getElementById('adj-results');
+            if(!box) return;
+            const adj = summary && summary.adj;
+            if(!adj || !adj.active) {
+                box.innerHTML = `<div class="rounded-xl border border-dashed border-slate-300 p-3.5 text-center text-[12px] text-slate-400">מלא נתונים באחד הבלוקים — וגשר ההשפעה על השווי יופיע כאן. שדות ריקים = אפס השפעה.</div>`;
+                return;
+            }
+            const money = v => `${v >= 0 ? '+' : '−'}₪${fmtILS(Math.abs(Math.round(v)))}`;
+            const gross = v => (v === null || !isFinite(v)) ? 'לא זמין' : '₪' + fmtILS(Math.round(v));
+            const bRow = (label, val, opts) => {
+                const o = opts || {};
+                return `<div class="flex justify-between gap-4 py-1.5 text-sm" style="border-bottom:1px solid #f1f5f9${o.strong ? ';font-weight:800' : ''}">
+                    <span style="color:${o.strong ? '#0f172a' : '#64748b'}">${label}</span>
+                    <span style="color:${o.color || '#0f172a'};font-weight:${o.strong ? 800 : 600};direction:ltr">${val}</span>
+                </div>`;
+            };
+            const dCol = v => v >= 0 ? '#065f46' : '#9f1239';
+            let wcDetail = '';
+            if(adj.wcActive) {
+                const dayTxt = adj.actualDays !== null
+                    ? ` · ימי הון חוזר בפועל: <strong>${Math.round(adj.actualDays)}</strong> מול <strong>${Math.round(adj.normalDays)}</strong> נורמלי${Math.round(adj.actualDays) > Math.round(adj.normalDays) ? ' — ההון החוזר בפועל כבד מהנורמלי' : (Math.round(adj.actualDays) < Math.round(adj.normalDays) ? ' — נמסר פחות הון חוזר מהנורמלי' : '')}`
+                    : '';
+                wcDetail = `<p class="text-[11px] text-slate-500 mb-2 leading-relaxed">הון חוזר נורמלי: <strong>${gross(adj.normalWC)}</strong> (${adj.normalDays} ימים × הכנסות ÷ 365) · בפועל: <strong>${gross(adj.actualWC)}</strong> (${adj.actualSrc})${dayTxt}.</p>`;
+            } else if(adj.hasDays && adj.normalWC !== null) {
+                wcDetail = `<p class="text-[11px] text-slate-500 mb-2 leading-relaxed">הון חוזר נורמלי לפי הימים שהוזנו: <strong>${gross(adj.normalWC)}</strong>. הזן יתרות (או 0 לעסק חדש) כדי לחשב את ההתאמה.</p>`;
+            }
+            const rows = [];
+            rows.push(bRow('שווי העסק — מכפיל 4 (לפני התאמות)', gross(summary.multDeal ? summary.multDeal.m4 : null)));
+            if(adj.wcActive) rows.push(bRow('התאמת הון חוזר (בפועל − נורמלי)', money(adj.wcAdj), { color: dCol(adj.wcAdj) }));
+            if(adj.netDebtActive) rows.push(bRow('חוב נטו (מזומן − חוב בעסק)', money(adj.netDebtAdj), { color: dCol(adj.netDebtAdj) }));
+            if(adj.manualActive && adj.manualAdj !== 0) {
+                const lbl = [adj.addLabel, adj.subLabel].filter(Boolean).join(' / ');
+                rows.push(bRow(`התאמות ידניות${lbl ? ' — ' + lbl : ''}`, money(adj.manualAdj), { color: dCol(adj.manualAdj) }));
+            }
+            rows.push(bRow('שווי העסק המותאם (מכפיל 4)', gross(summary.multDealAdj ? summary.multDealAdj.m4 : null), { strong: true }));
+            if(summary.investment > 0) {
+                rows.push(bRow('בניכוי המחיר / ההשקעה', money(-summary.investment), { color: '#9f1239' }));
+                rows.push(bRow('שווי העסקה המותאם', (summary.dealValueAdj !== null && isFinite(summary.dealValueAdj)) ? money(summary.dealValueAdj) : 'לא זמין', { strong: true, color: (summary.dealValueAdj !== null && summary.dealValueAdj >= 0) ? '#065f46' : '#9f1239' }));
+            }
+            box.innerHTML = `
+                <div class="rounded-xl border-2 p-4" style="border-color:#6366f1;background:#eef2ff40">
+                    <h4 class="text-sm font-bold text-slate-800 mb-2 flex items-center gap-2">גשר ההתאמות — ההשפעה המאזנית על השווי</h4>
+                    ${wcDetail}
+                    ${rows.join('')}
+                    <p class="text-[10.5px] text-slate-400 mt-2 leading-relaxed">ההתאמה (${money(adj.stockAdj)}) חלה באופן זהה על כל מודלי השווי — מכפיל 4/5/6 ושלוש הערכות ה-DCF — ומגולמת גם ב-IRR העסקה, בתקופת ההחזר וב-ROI (מול השקעה אפקטיבית של ${gross(summary.effInvestment)}). מדדי ההון העצמי ומבנה המימון אינם משתנים.</p>
+                </div>`;
         }
 
         function stabilizeChartConfig(config) {
@@ -6484,6 +6943,22 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                         ['שווי העסק — מכפיל 5 (טיפוסי)', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m5) ? Math.round(feasibilitySummary.multDeal.m5) : 'לא זמין', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m5) ? NUM : undefined],
                         ['שווי העסק — מכפיל 6 (יציב/צומח)', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m6) ? Math.round(feasibilitySummary.multDeal.m6) : 'לא זמין', feasibilitySummary.multDeal && isFinite(feasibilitySummary.multDeal.m6) ? NUM : undefined],
                         ['שווי העסקה (שווי העסק במכפיל 4 − השקעה)', feasibilitySummary.dealValueNpv4 === null || !isFinite(feasibilitySummary.dealValueNpv4) ? 'לא זמין' : Math.round(feasibilitySummary.dealValueNpv4), feasibilitySummary.dealValueNpv4 === null || !isFinite(feasibilitySummary.dealValueNpv4) ? undefined : NUM],
+                        ...(feasibilitySummary.adj && feasibilitySummary.adj.active ? [
+                            ['— התאמות מאזניות (הוזנו) —', ''],
+                            ['התאמת הון חוזר (בפועל − נורמלי)', feasibilitySummary.adj.wcActive ? Math.round(feasibilitySummary.adj.wcAdj) : 'לא הוזן', feasibilitySummary.adj.wcActive ? NUM : undefined],
+                            ['הון חוזר נורמלי (ימים × הכנסות ÷ 365)', feasibilitySummary.adj.normalWC !== null ? Math.round(feasibilitySummary.adj.normalWC) : 'לא הוזן', feasibilitySummary.adj.normalWC !== null ? NUM : undefined],
+                            ['הון חוזר בפועל (' + (feasibilitySummary.adj.actualSrc || 'לא הוזן') + ')', feasibilitySummary.adj.actualWC !== null ? Math.round(feasibilitySummary.adj.actualWC) : 'לא הוזן', feasibilitySummary.adj.actualWC !== null ? NUM : undefined],
+                            ['חוב נטו בעסק (מזומן − חוב)', feasibilitySummary.adj.netDebtActive ? Math.round(feasibilitySummary.adj.netDebtAdj) : 'לא הוזן', feasibilitySummary.adj.netDebtActive ? NUM : undefined],
+                            ['התאמות ידניות (תוספת − הפחתה)', feasibilitySummary.adj.manualActive ? Math.round(feasibilitySummary.adj.manualAdj) : 'לא הוזן', feasibilitySummary.adj.manualActive ? NUM : undefined],
+                            ['סך ההתאמה המאזנית', Math.round(feasibilitySummary.adj.stockAdj), NUM],
+                            ['שווי העסק המותאם (מכפיל 4)', feasibilitySummary.multDealAdj && isFinite(feasibilitySummary.multDealAdj.m4) ? Math.round(feasibilitySummary.multDealAdj.m4) : 'לא זמין', feasibilitySummary.multDealAdj ? NUM : undefined],
+                            ['שווי העסקה המותאם — קובע', feasibilitySummary.dealValueAdj !== null && isFinite(feasibilitySummary.dealValueAdj) ? Math.round(feasibilitySummary.dealValueAdj) : 'לא זמין', feasibilitySummary.dealValueAdj !== null ? NUM : undefined],
+                            ['IRR העסקה מותאם', feasibilitySummary.unleveragedIrrAdjPct === null ? 'לא זמין' : feasibilitySummary.unleveragedIrrAdjPct / 100, feasibilitySummary.unleveragedIrrAdjPct === null ? undefined : pctFmt],
+                            ['תקופת החזר השקעה מותאמת', feasibilitySummary.paybackOpAdjTxt || 'לא זמין'],
+                            ['הערת התאמות', 'ההתאמה חלה זהה על מכפיל 4/5/6 ועל שלוש הערכות ה-DCF. יתרות מאזן הן צילום נקודת זמן; בעסק עונתי מומלץ ממוצע יתרות חודשיות.']
+                        ] : [
+                            ['התאמות מאזניות', 'לא הוזנו — ההערכה מניחה עסקה נקייה (הון חוזר נורמלי, ללא חוב/מזומן בעסק, ללא נכסים עודפים)']
+                        ]),
                         ['ריבית חסרת סיכון (DCF, הערכה 3 בלבד)', (feasibilitySummary.discountRatePct ?? 5) / 100, pctFmt],
                         ['הרדל — תשואה נדרשת (היוון הערכות 1–2)', (feasibilitySummary.requiredRoi ?? 15) / 100, pctFmt],
                         ['שווי העסקה — הצלבת DCF (הערכה 1)', feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? 'לא זמין' : Math.round(feasibilitySummary.selectedNpv), feasibilitySummary.selectedNpv === null || !isFinite(feasibilitySummary.selectedNpv) ? undefined : NUM],
