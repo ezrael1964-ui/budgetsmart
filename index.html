@@ -1260,8 +1260,22 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             
             <div id="toast-notification-zone" class="fixed top-20 left-4 z-50 pointer-events-none"></div>
 
-            <!-- כפתור מעבר קבוע בראש הדף — תמיד גלוי -->
-            
+            <!-- ══ טאבי מודל: תקציב ↔ כדאיות/שווי — מעבר על אותם נתונים ══ -->
+            <div id="model-tabs-wrap" class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+                <div class="flex gap-1 bg-slate-100 rounded-xl p-1">
+                    <button id="model-tab-existing" type="button" onclick="switchModelTab('existing')"
+                        class="flex-1 min-w-[120px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-bold transition-all">
+                        📊 תקציב ותחזית
+                    </button>
+                    <button id="model-tab-new" type="button" onclick="switchModelTab('new')"
+                        class="flex-1 min-w-[120px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-bold transition-all">
+                        📈 בדיקת כדאיות ושווי
+                    </button>
+                </div>
+                <p class="text-[11.5px] text-slate-500 leading-relaxed mt-2.5">
+                    התקציב והכדאיות מחושבים על אותם נתונים. מודל התקציב המפורט — בזכות פריסת ההכנסות וההוצאות על פני החודשים והשנים — מזין הערכת כדאיות ושווי מדויקת יותר ממודל מקוצר. מעבר בין המצבים שומר את כל הנתונים שהוזנו.
+                </p>
+            </div>
 
             <div id="dashboard-content">
             <!-- ── בדיקת כדאיות השקעה — מוצג בראש דף המדדים במסלול בדיקת כדאיות ── -->
@@ -3069,11 +3083,48 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 }
             }
             if((parseFloat(String(document.getElementById('input-amortization')?.value || '0').replace(/[^0-9.\-]/g,'')) || 0) > 0) toggleAmortizationAdvanced(true);
+            if(typeof updateModelTabsUI === 'function') updateModelTabsUI();
             initLucideIcons();
         }
         function switchMode() {
             showModePicker();
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ── מעבר בין מודל התקציב למודל הכדאיות/שווי על אותם נתונים (מסך התוצאות) ──
+        function switchModelTab(mode) {
+            if(S.appMode === mode) { updateModelTabsUI(); return; }
+            if(mode === 'new') {
+                // מעבר לכדאיות/שווי — אם אין נתוני השקעה, הקפץ לשלב ההשקעה והמימון
+                const invNow = (finNum('input-investment') || S.investment || 0);
+                S.appMode = 'new';
+                applyModeVisibility();
+                applyModeCopy();
+                if(invNow <= 0) {
+                    try { saveDataToStorage(); } catch(e){}
+                    goToStep('fin');
+                    if(typeof showToastNotification === 'function') showToastNotification('כדי לחשב שווי — השלם השקעה ומימון');
+                    updateModelTabsUI();
+                    return;
+                }
+            } else {
+                S.appMode = 'existing';
+            }
+            // הישאר במסך התוצאות ורנדר מחדש על אותם נתונים
+            goToStep('5');
+            updateModelTabsUI();
+            try { saveDataToStorage(); } catch(e){}
+        }
+
+        // ── עדכון הדגשת הטאב הפעיל לפי המצב הנוכחי ──
+        function updateModelTabsUI() {
+            const active   = 'flex-1 min-w-[120px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-bold transition-all bg-white text-slate-800 shadow';
+            const inactive = 'flex-1 min-w-[120px] py-2.5 px-3 rounded-lg text-xs md:text-sm font-bold transition-all text-slate-500';
+            const isNew = S.appMode === 'new';
+            const bExisting = document.getElementById('model-tab-existing');
+            const bNew = document.getElementById('model-tab-new');
+            if(bExisting) bExisting.className = isNew ? inactive : active;
+            if(bNew) bNew.className = isNew ? active : inactive;
         }
 
         function goToStep(stepId) {
