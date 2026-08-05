@@ -8681,7 +8681,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             if(st) st.textContent = elapsed === 0
                 ? 'טרם הוזנו נתוני ביצוע — מלא את חודש 1 כדי להתחיל'
                 : `נתונים מעודכנים נכון לחודש ${elapsed}`;
-            if(elapsed===0){ const r=document.getElementById('actual-results'); if(r) r.classList.add('hidden'); return; }
+            if(elapsed===0){ if(!renderActualsTeaser()){ const r=document.getElementById('actual-results'); if(r) r.classList.add('hidden'); } return; }
             for(let m=0;m<=lastIdx;m++){
                 const g=document.getElementById(`actc-gross-${m}`); if(g) g.textContent=_actFmt0(d.gross[m]);
                 const nt=document.getElementById(`actc-net-${m}`);   if(nt){ nt.textContent=_actFmt0(d.net[m]); nt.style.color=d.net[m]<0?'#dc2626':'#0f172a'; }
@@ -8727,6 +8727,35 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             updateActualsComputed();
         }
 
+        // ── טיזר Pro לשלב 7: כשאין עדיין נתוני ביצוע, מציגים את שלד הטבלה האמיתי
+        //    עם מקפים במקום ערכים, כדי ששכבת הנעילה תהיה על מה לשבת. תצוגה בלבד. ──
+        function renderActualsTeaser() {
+            if (typeof APP_PLAN !== 'undefined' && APP_PLAN === 'pro') return false;
+            const r = document.getElementById('actual-results');
+            if (!r) return false;
+            const labels = ['הכנסות','עלות מכר','מרווח גולמי %','רווח גולמי','שיווק','שכר',
+                            'הוצאות מכירה הנהלה וכלליות (ללא שכר ושיווק)','רווח נקי משוער'];
+            const th = (t,bg) => `<th style="padding:8px;border:1px solid #e2e8f0;background:${bg};color:#fff">${t}</th>`;
+            let h = `<h3 style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px">השוואת ביצוע מול תחזית</h3>
+                <p style="font-size:12px;color:#64748b;margin-bottom:12px">סטיות מול התקציב, חיזוי לסוף השנה (EAC) ודגלי בקרה.</p>
+                <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;direction:rtl;font-size:13px">
+                <thead><tr>
+                <th style="padding:8px;border:1px solid #e2e8f0;background:#0f172a;color:#fff;text-align:right;min-width:130px">סעיף</th>
+                ${th('ביצוע מצטבר','#0f172a')}${th('תחזית מצטברת','#0f172a')}${th('סטייה','#0f172a')}${th('דגל','#0f172a')}
+                ${th('חיזוי שנתי (EAC)','#0f766e')}${th('תחזית שנתית','#0f766e')}${th('פער צפוי (VAC)','#0f766e')}
+                </tr></thead><tbody>`;
+            labels.forEach(l => {
+                h += `<tr><td style="padding:7px;border:1px solid #e2e8f0;text-align:right;font-weight:600;background:#fff;min-width:130px">${l}</td>`;
+                for (let i = 0; i < 7; i++) h += `<td style="padding:7px;border:1px solid #e2e8f0;text-align:center;color:#94a3b8">—</td>`;
+                h += `</tr>`;
+            });
+            h += `</tbody></table></div>`;
+            r.innerHTML = h;
+            r.classList.remove('hidden');
+            applyProLocks();
+            return true;
+        }
+
         function renderActualsResults(elapsed, lastIdx, d) {
             const results = document.getElementById('actual-results');
             const missNote = document.getElementById('actual-missing-note');
@@ -8744,7 +8773,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             } else {
                 if(missNote) missNote.classList.add('hidden');
             }
-            if(lastIdx < 0){ results.classList.add('hidden'); return; }
+            if(lastIdx < 0){ if(!renderActualsTeaser()) results.classList.add('hidden'); return; }
             results.classList.remove('hidden');
 
             const weights = computeMonthlyWeights().weights;
