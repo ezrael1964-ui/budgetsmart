@@ -1,31 +1,32 @@
 <!DOCTYPE html>
-
+<!--
+BudgetSmart Pro — תוכנה לתכנון פיננסי ובדיקת כדאיות
+© 2026 עזרא אליעזר (ezraeliezer.com). כל הזכויות שמורות.
+הקובץ מסופק ברישיון שימוש לעסק יחיד, אישי ובלתי-ניתן להעברה. אין להעתיק, להפיץ,
+למכור, לפרסם, לשנות או ליצור יצירות נגזרות, ואין להסיר או לשנות הודעות זכויות
+יוצרים וסימוני רישוי — ללא הרשאה בכתב.
+Free edition
+-->
 <html lang="he" dir="rtl">
 <head>
     <!-- ══════════════════════════════════════════════════════════════
-         Google Analytics — בגרסת Free בלבד (הגרסה הציבורית באתר).
-         בגרסת Pro אין מדידה כלל: הלקוח רכש את הקובץ והוא יושב על
-         המחשב הפרטי שלו.
-         ⚠️ נמדד רק מסע המשתמש — צפיות, התקדמות בשלבים, נגיעה בפיצ'ר
-         נעול וקליק לשדרוג. שום נתון עסקי (הכנסות, שכר, מרווח, שווי)
-         אינו נשלח ואסור שיישלח. אין להעביר ערכים מספריים ל-gaEvent.
+         Google Analytics הוסר מגרסת Pro במכוון.
+         הלקוח רכש את הקובץ והוא יושב על המחשב הפרטי שלו — אין מקום
+         למעקב. gaEvent נשמרת כפונקציה ריקה כדי שאתרי הקריאה לא יישברו.
+         (גרסת Free באתר ממשיכה לכלול GA.)
          ══════════════════════════════════════════════════════════════ -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NGB6JB9MYM"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-NGB6JB9MYM', { anonymize_ip: true });
-        function gaEvent(action, category, label) {
-            try {
-                if (typeof gtag !== 'function') return;
-                gtag('event', action, { event_category: category, event_label: label });
-            } catch (e) { /* מדידה לעולם לא תפיל את הכלי */ }
-        }
+
+ // GA4 - free edition only. PRIVACY: journey only. NEVER pass revenue, payroll,
+ // margin, valuation or any numeric business value to gaEvent.
+ function gaEvent(name, params) {
+ try { if(typeof gtag === 'function') gtag('event', name, params || {}); } catch(e) {}
+ }
+
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BudgetSmart — כלי לתכנון תקציב, בדיקת כדאיות והערכת שווי לעסק. בונה תחזית תקציב ותזרים מזומנים, ומתרגם אותה לבדיקת כדאיות השקעה ולהערכת שווי. החלטה עסקית מבוססת תוך 10–15 דקות. מאת עזרא אליעזר, CFO ויועץ פיננסי בכיר.">
+    <meta name="description" content="BudgetSmart — תוכנה לתכנון תקציב, בדיקת כדאיות והערכת שווי לעסק. בונה תחזית תקציב ותזרים מזומנים, ומתרגם אותה לבדיקת כדאיות השקעה ולהערכת שווי. החלטה עסקית מבוססת תוך 10–15 דקות. מאת עזרא אליעזר, CFO ויועץ פיננסי בכיר.">
     <title>BudgetSmart — תכנון תקציב, כדאיות והערכת שווי לעסק | עזרא אליעזר</title>
     <link rel="icon" type="image/png" id="app-favicon">
     <link rel="apple-touch-icon" type="image/png" id="app-apple-icon">
@@ -52,7 +53,7 @@
     <!-- ══════════════════════════════════════════════════════════════
          ספריות מוטמעות — הקובץ אינו יוצא לאינטרנט.
          קודם לכן נטענו מ-cdn.jsdelivr.net ו-unpkg.com; לקוח ללא חיבור
-         קיבל כלי בלי גרפים, בלי ייצוא Excel ובלי אייקונים.
+         קיבל תוכנה בלי גרפים, בלי ייצוא Excel ובלי אייקונים.
          ══════════════════════════════════════════════════════════════ -->
     <script type="text/plain" id="lib-chart">/* Chart.js v4 — MIT License */
 /*!
@@ -602,6 +603,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
     
 
 </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NGB6JB9MYM"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NGB6JB9MYM',{anonymize_ip:true});</script>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
@@ -881,7 +884,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                             </div>
                             <p class="text-xs text-slate-500 mt-1.5">
                                 ניתן להזין גם ערך שלילי (ירידה) או 0 (ללא גידול).
-                                <span class="text-slate-400">התקרה 100% — הכלי בנוי לעסק מסורתי; מעבר לכך מבנה העלויות אינו מייצג.</span>
+                                <span class="text-slate-400">התקרה 100% — התוכנה בנויה לעסק מסורתי; מעבר לכך מבנה העלויות אינו מייצג.</span>
                             </p>
                         </div>
 
@@ -893,9 +896,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
                         <!-- ══════════════════════════════════════════════════════════
                              אזהרת גידול — משרתת גם גידול ידני וגם גידול היסטורי מחושב.
-                             הכלי מניח מבנה עלויות קבוע; מעל ~25% ההנחה מפסיקה להחזיק,
+                             התוכנה מניחה מבנה עלויות קבוע; מעל ~25% ההנחה מפסיקה להחזיק,
                              כי עסק שגדל מהותית צריך שכירות, ציוד וכוח אדם נוספים.
-                             מאירה ואינה חוסמת — ברוח שאר הכלי.
+                             מאירה ואינה חוסמת — ברוח שאר התוכנה.
                              ══════════════════════════════════════════════════════════ -->
                         <div id="growth-warning" class="hidden mt-2 rounded-lg px-3 py-2.5">
                             <div class="flex items-start gap-2">
@@ -1487,8 +1490,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                                 <span style="color:#fda4af;font-size:16px;line-height:1.2">⛔</span>
                                 <div style="font-size:11.5px;color:#fecdd3;line-height:1.65">
                                     <strong style="color:#fff">חסר: ריבית ותקופת החזר.</strong>
-                                    הכלי זיהה שנדרשת הלוואה למימון ההשקעה, אך תנאיה לא הוזנו — ולכן שירות החוב מחושב כאפס.
-                                    <strong style="color:#fff">בלי הנתונים האלה הכלי יציג "ללא חוב חיצוני" ויחזיר GO על עסקה ממונפת שלא נבדקה.</strong>
+                                    התוכנה זיהתה שנדרשת הלוואה למימון ההשקעה, אך תנאיה לא הוזנו — ולכן שירות החוב מחושב כאפס.
+                                    <strong style="color:#fff">בלי הנתונים האלה התוכנה תציג "ללא חוב חיצוני" ויחזיר GO על עסקה ממונפת שלא נבדקה.</strong>
                                     מלא ריבית ותקופה, או הגדל את המזומן/ההון העצמי כך שלא תידרש הלוואה.
                                 </div>
                             </div>
@@ -1597,6 +1600,25 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             </div>
 
             <div id="dashboard-content">
+
+            <!-- ── פנייה לאחר התוצאה — מוצגת בגרסה החינמית בלבד (APP_PLAN === 'free').
+                 משתמשת בטופס ה-Formspree שכבר קיים בתחתית הדף; אין endpoint חדש. ── -->
+            <div id="lead-capture-prompt" class="hidden mb-5 rounded-xl px-4 py-4" style="background:#eff6ff;border:1px solid #bfdbfe">
+                <div class="flex items-start gap-3 flex-wrap">
+                    <i data-lucide="message-square" class="w-5 h-5 flex-shrink-0 mt-0.5" style="color:#1d4ed8"></i>
+                    <div class="flex-grow" style="min-width:220px">
+                        <div class="text-sm font-bold" style="color:#1e3a8a">רוצה שנעבור על המספרים האלה יחד?</div>
+                        <div class="text-[12px] mt-1 leading-relaxed" style="color:#1e40af">
+                            השאר פרטים ועזרא אליעזר, CFO עם 30+ שנות ניסיון, יחזור אליך עם קריאה מקצועית של התחזית — הנחות, סיכוני תזרים והזדמנויות לשיפור רווחיות.
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" onclick="goToContactForm()" class="text-xs font-bold px-3.5 py-2 rounded-lg cursor-pointer" style="background:#2563eb;color:#fff">השאר פרטים</button>
+                        <button type="button" onclick="dismissLeadPrompt()" class="text-xs font-semibold px-3 py-2 rounded-lg cursor-pointer" style="background:#fff;color:#64748b;border:1px solid #cbd5e1">לא עכשיו</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- ── בדיקת כדאיות השקעה — מוצג בראש דף המדדים במסלול בדיקת כדאיות ── -->
             <div id="feasibility-zone" class="hidden"></div>
 
@@ -1604,7 +1626,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             <section id="balance-adjustments-panel" class="mode-only-new hidden bg-white rounded-xl border border-slate-200 shadow-sm p-5">
                 <div class="border-b border-slate-200 pb-3 mb-4">
                     <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2"><i data-lucide="scale" class="w-4 h-4 text-indigo-600"></i> התאמות מאזניות <span class="text-xs font-semibold text-slate-400">(רשות — למי שמחזיק נתוני מאזן)</span></h3>
-                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">ההערכה שלמעלה מניחה <strong>עסקה נקייה</strong>: מסירה עם הון חוזר נורמלי, ללא חוב פיננסי או מזומן עודף בתוך העסק, וללא נכסים עודפים — כלומר כל ההתאמות כאן שוות אפס. מילוי הנתונים מדייק את השווי ואת מדדי העסקה; כל שדה ריק נשאר בהנחת האפס, ומחיקת הנתונים מחזירה את הכלי להתנהגות המקורית.</p>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">ההערכה שלמעלה מניחה <strong>עסקה נקייה</strong>: מסירה עם הון חוזר נורמלי, ללא חוב פיננסי או מזומן עודף בתוך העסק, וללא נכסים עודפים — כלומר כל ההתאמות כאן שוות אפס. מילוי הנתונים מדייק את השווי ואת מדדי העסקה; כל שדה ריק נשאר בהנחת האפס, ומחיקת הנתונים מחזירה את התוכנה להתנהגות המקורית.</p>
                 </div>
 
                 <!-- הערת נרמול הרווח — מלל בלבד, גלוי בשתי הגרסאות -->
@@ -1627,7 +1649,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     <!-- בלוק א' — הון חוזר נורמלי -->
                     <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
                         <h4 class="text-sm font-bold text-slate-700 mb-1">א׳ · הון חוזר נורמלי מול בפועל</h4>
-                        <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">המכפיל מניח שהעסק נמסר עם הון חוזר נורמלי. הזן את ימי האשראי הנורמליים לעסק, ואת היתרות מהמאזן — הכלי יחשב את הפער, שמתווסף או נגרע מהשווי שקל-בשקל. <strong>עסק חדש ללא מאזן?</strong> הזן 0 ביתרות — הכלי יחשב את בניית ההון החוזר הנדרשת כהשקעה נוספת ביום הראשון.</p>
+                        <p class="text-[11px] text-slate-500 mb-3 leading-relaxed">המכפיל מניח שהעסק נמסר עם הון חוזר נורמלי. הזן את ימי האשראי הנורמליים לעסק, ואת היתרות מהמאזן — התוכנה תחשב את הפער, שמתווסף או נגרע מהשווי שקל-בשקל. <strong>עסק חדש ללא מאזן?</strong> הזן 0 ביתרות — התוכנה תחשב את בניית ההון החוזר הנדרשת כהשקעה נוספת ביום הראשון.</p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
                             <div>
                                 <label class="text-[11px] font-bold text-slate-600 block mb-1">ימי לקוחות (נורמלי)</label>
@@ -2128,11 +2150,6 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     <span>הזן את הנתונים בפועל לכל חודש שהסתיים. בכל שורה ניתן להזין <strong>עלות מכר</strong> או <strong>מרווח גולמי %</strong> — והמערכת תשלים את השני. הוצאות מכירה הנהלה וכלליות (ללא שכר ושיווק) מגיעות כברירת מחדל מהתחזית — שנה רק אם השתנו. ההשוואה והחיזוי (EAC/VAC) מחושבים לפי העונתיות שנקבעה.</span>
                 </div>
 
-                <div data-free-only class="mb-3 flex items-start gap-2 text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5">
-                    <i data-lucide="lock" class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"></i>
-                    <span>הזנת הנתונים פתוחה לכולם. <strong>ההשוואה מול התחזית, תחזית סיום השנה והדגלים זמינים בגרסת Pro.</strong></span>
-                </div>
-
                 <!-- טבלת קלט -->
                 <div id="actual-input-wrap" class="overflow-x-auto -mx-2 px-2"></div>
                 <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">
@@ -2146,7 +2163,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 </div>
 
                 <!-- תוצרים: השוואה, EAC/VAC, דגלים, פירוש — מוצג בשני המסלולים מתחת לטבלת הבקרה בפועל -->
-                <div id="actual-results" class="mt-6 hidden" data-pro-lock="מעקב ביצוע מול תקציב — סטיות, תחזית סיום שנה ודגלים"></div>
+                <div id="actual-results" class="mt-6 hidden"></div>
 
                 <div class="mt-6 pt-4 border-t border-gray-100 flex flex-col sm:flex-row gap-3 justify-between">
                     <button onclick="goToStep(6)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer">
@@ -2196,9 +2213,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
          class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"
          onclick="if(event.target===this)this.style.display='none'">
         <div class="bg-white rounded-xl max-w-md w-full p-6 text-right space-y-4 shadow-2xl" dir="rtl">
-            <h3 class="text-lg font-bold text-slate-900">מדיניות פרטיות — כלי תכנון תקציב</h3>
+            <h3 class="text-lg font-bold text-slate-900">מדיניות פרטיות — תוכנת תכנון תקציב</h3>
             <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
-                <p><strong>מה הכלי עושה:</strong> כלי זה מסייע לך לתכנן תקציב עסקי חזוי על בסיס נתונים שאתה מזין.</p>
+                <p><strong>מה התוכנה עושה:</strong> תוכנה זו מסייעת לך לתכנן תקציב עסקי חזוי על בסיס נתונים שאתה מזין.</p>
                 <p><strong>אילו נתונים נשמרים:</strong> כל הנתונים (הכנסות, הוצאות, תחזיות) נשמרים <strong>בדפדפן שלך בלבד</strong> באמצעות localStorage. הנתונים אינם עוברים לאף שרת חיצוני.</p>
                 <p><strong>טופס יצירת קשר:</strong> אם תמלא את הטופס בתחתית הדף, הפרטים שתזין (שם, טלפון, אימייל) יישלחו ישירות לעזרא אליעזר לצורך יצירת קשר בלבד.</p>
                 <p><strong>ייצוא Excel:</strong> הקובץ נוצר ישירות בדפדפן שלך ומורד למחשבך — אינו עובר דרך שרת.</p>
@@ -2239,7 +2256,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             </div>
             <p class="text-center text-[11px] text-slate-400 mb-4">לאחר השנה הראשונה — 20 ₪ לחודש לעדכונים (רשות). הנתונים שלך נשארים אצלך, על המחשב.</p>
 
-            <a id="upgrade-cta" onclick="gaEvent('upgrade_click', 'conversion', 'to_pro_page')" href="https://www.ezraeliezer.com/budgetsmart-pro" target="_blank" rel="noopener"
+            <a id="upgrade-cta" href="https://www.ezraeliezer.com/budgetsmart-pro" target="_blank" rel="noopener"
                class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-sm text-center transition-all mb-2">
                 שדרג ל-Pro ←
             </a>
@@ -2289,20 +2306,20 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     הבהרה משפטית והסרת אחריות:
                 </p>
                 <p class="block text-slate-400 font-normal">
-                    השימוש באפליקציה/תוכנה זו נעשה על אחריותו הבלעדית והמלאה של המשתמש. BudgetSmart הוא כלי למידול פיננסי ולתמיכה בקבלת החלטות, למטרות מידע והערכה עצמית בלבד. אין הוא מהווה תחליף לייעוץ פיננסי, חשבונאי, מסי, משפטי, השקעתי או עסקי פרטני המותאם לנסיבותיך. תוצאות המודל מבוססות על הנתונים וההנחות שהוזנו, ואין בהן משום ערובה, הבטחה או מצג לביצועים או לרווחיות עתידיים.
+                    השימוש באפליקציה/תוכנה זו נעשה על אחריותו הבלעדית והמלאה של המשתמש. BudgetSmart היא תוכנה למידול פיננסי ולתמיכה בקבלת החלטות, למטרות מידע והערכה עצמית בלבד. אין הוא מהווה תחליף לייעוץ פיננסי, חשבונאי, מסי, משפטי, השקעתי או עסקי פרטני המותאם לנסיבותיך. תוצאות המודל מבוססות על הנתונים וההנחות שהוזנו, ואין בהן משום ערובה, הבטחה או מצג לביצועים או לרווחיות עתידיים.
                 </p>
                 <p class="block font-semibold text-slate-300 mb-1">
                     רישיון שימוש (תמצית):
                 </p>
                 <p class="block text-slate-400 font-normal">
-                    הכלי מסופק ברישיון לשימוש עסק יחיד — עסק/חברה אחת של הרוכש. הרישיון אישי ואינו ניתן להעברה. אין להעתיק, להפיץ, לפרסם, למכור מחדש, למתג מחדש או לשנות את הקובץ, ואין להסיר סימוני זכויות יוצרים או רישוי. מלוא זכויות הקניין הרוחני נותרות בידי עזרא אליעזר. הכלי מיועד למידע והערכה עצמית בלבד ואינו תחליף לייעוץ מקצועי — ראו ההבהרה המשפטית לעיל. הפרת התנאים מבטלת את הרישיון.
+                    התוכנה מסופקת ברישיון לשימוש עסק יחיד — עסק/חברה אחת של הרוכש. הרישיון אישי ואינו ניתן להעברה. אין להעתיק, להפיץ, לפרסם, למכור מחדש, למתג מחדש או לשנות את הקובץ, ואין להסיר סימוני זכויות יוצרים או רישוי. מלוא זכויות הקניין הרוחני נותרות בידי עזרא אליעזר. התוכנה מיועדת למידע והערכה עצמית בלבד ואינה תחליף לייעוץ מקצועי — ראו ההבהרה המשפטית לעיל. הפרת התנאים מבטלת את הרישיון.
                 </p>
                 <p class="block text-center text-[11px] text-slate-500 pt-3 border-t border-slate-800/60 mt-3">
                     <span class="font-semibold text-slate-400">BudgetSmart Pro</span>
                     <span id="app-version-indicator"></span>
                 </p>
                 <p class="block text-center text-[11px] text-slate-500">
-                    © 2026 עזרא אליעזר — כל הזכויות שמורות · גרסה חינמית · לשימוש אישי · שדרוג ל-Pro באתר
+                    גרסה חינמית · לשימוש אישי · שדרוג ל-Pro באתר
                 </p>
             </div>
         </div>
@@ -2310,8 +2327,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
     <script>
         // ── חיווי גרסה — מקור אמת יחיד. עדכן כאן בכל שחרור גרסה. ──
-        const APP_VERSION = 'V-28';
-        const APP_BUILD_DATE = '02.08.2026';
+        const APP_VERSION = 'V-29';
+        const APP_BUILD_DATE = '11.08.2026';
         const APP_PLAN = 'free'; // 'free' | 'pro' — תשתית עתידית לחלוקת גרסאות
 
         // ── ליבת Free/Pro: שער יחיד לכל פיצ'ר נעול ──
@@ -2327,7 +2344,6 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 : 'פיצ\'ר זה זמין בגרסת Pro.';
             const m = document.getElementById('upgrade-modal');
             if (m) m.style.display = 'flex';
-            gaEvent('upgrade_prompt', 'conversion', featureName || 'unknown');
         }
         function closeUpgradeModal() {
             const m = document.getElementById('upgrade-modal');
@@ -2335,7 +2351,29 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
         }
 
         // עוטף כל אזור עם data-pro-lock בשכבת נעילה ויזואלית (טיזר). שקוף לגמרי ב-Pro.
-        function applyProLocks() {
+       
+ // פנייה לאחר התוצאה — חינמית בלבד
+ function applyLeadCapturePrompt() {
+ const box = document.getElementById('lead-capture-prompt');
+ if(!box) return;
+ if(APP_PLAN === 'pro') { box.classList.add('hidden'); return; }
+ if(window._leadPromptDismissed) return;
+ box.classList.remove('hidden');
+ if(window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
+ }
+ function dismissLeadPrompt() {
+ window._leadPromptDismissed = true;
+ const box = document.getElementById('lead-capture-prompt');
+ if(box) box.classList.add('hidden');
+ }
+ function goToContactForm() {
+ try { gaEvent('lead_prompt_click'); } catch(e) {}
+ const form = document.getElementById('app-form-container');
+ if(form) form.scrollIntoView({ behavior:'smooth', block:'center' });
+ const name = document.getElementById('contact-name');
+ if(name) setTimeout(() => name.focus(), 500);
+ }
+ function applyProLocks() {
             const locked = APP_PLAN !== 'pro';
             document.body.classList.toggle('plan-free', locked);
             document.querySelectorAll('[data-pro-lock]').forEach(el => {
@@ -2355,6 +2393,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     if (existing) existing.remove();
                 }
             });
+            applyLeadCapturePrompt();
         }
 
         // מבנה הנתונים המרכזי של האפליקציה
@@ -2473,9 +2512,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             // בניית ה-manifest בזמן ריצה (Blob) — מאפשר אייקון תקין ל-PWA בלי לשכפל את ה-base64 במקור
             try {
                 const manifest = {
-                    name: "כלי תכנון ובקרת תקציב חזוי תקציב עזרא אליעזר CFO",
+                    name: "תוכנת תכנון ובקרת תקציב חזוי עזרא אליעזר CFO",
                     short_name: "תקציב חזוי",
-                    description: "כלי מקצועי לתכנון תקציב עסקי חזוי",
+                    description: "תוכנה מקצועית לתכנון תקציב עסקי חזוי",
                     start_url: "/",
                     display: "standalone",
                     background_color: "#0f172a",
@@ -3087,7 +3126,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
         // ── שמירת עבודה לקובץ (מחשב בלבד — בנייד הכפתורים מוסתרים) ──
         function saveWorkToFile() {
-            if (!requirePro('שמירת עבודה לקובץ')) return;
+            // הנעילה יושבת כאן ולא בסקריפט הבנייה — ב-Pro requirePro מחזירה true ויוצאת מיד
+            if(!requirePro('שמירת עבודה לקובץ')) return;
             saveDataToStorage(); // סנכרון מה-DOM ושמירה ל-localStorage
             const data = localStorage.getItem('cfo_budget_app_data');
             if(!data) { showToastNotification('אין נתונים לשמירה עדיין'); return; }
@@ -3103,7 +3143,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
         // ── טעינת עבודה מקובץ ──
         function loadWorkFromFile(event) {
-            if (!requirePro('טעינת עבודה שמורה')) { event.target.value = ''; return; }
+            if(!requirePro('טעינת עבודה מקובץ')) { if(event && event.target) event.target.value = ''; return; }
             const file = event.target.files[0];
             if(!file) return;
             const reader = new FileReader();
@@ -5037,10 +5077,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
                 if(extreme) {
                     titleEl.innerText = `גידול היסטורי חריג — ${g.toFixed(0)}%. `;
-                    bodyEl.innerText  = 'קפיצה כזו מגיעה כמעט תמיד מבסיס נמוך או מאירוע חד-פעמי, והיא אינה מייצגת קצב שנתי. הכלי מכפיל אותה בבסיס — התחזית שתתקבל אינה סבירה. עבור ל"גידול ידני" והזן קצב שאתה יכול להצדיק.';
+                    bodyEl.innerText  = 'קפיצה כזו מגיעה כמעט תמיד מבסיס נמוך או מאירוע חד-פעמי, והיא אינה מייצגת קצב שנתי. התוכנה מכפילה אותה בבסיס — התחזית שתתקבל אינה סבירה. עבור ל"גידול ידני" והזן קצב שאתה יכול להצדיק.';
                 } else {
                     titleEl.innerText = `גידול של ${g.toFixed(0)}% — ${isHistorical ? 'מחושב מהנתונים ההיסטוריים. ' : 'אגרסיבי. '}`;
-                    bodyEl.innerText  = 'בקצב כזה עלויות קבועות מפסיקות להיות קבועות: שכירות, ציוד וכוח אדם. הכלי לא יוסיף אותן בשבילך — עדכן ידנית את ההוצאות הקבועות ואת מנוע כוח האדם, אחרת הרווחיות המוצגת מנופחת.';
+                    bodyEl.innerText  = 'בקצב כזה עלויות קבועות מפסיקות להיות קבועות: שכירות, ציוד וכוח אדם. התוכנה לא תוסיף אותן בשבילך — עדכן ידנית את ההוצאות הקבועות ואת מנוע כוח האדם, אחרת הרווחיות המוצגת מנופחת.';
                 }
                 box.classList.remove('hidden');
                 if(window.lucide && typeof lucide.createIcons === 'function') lucide.createIcons();
@@ -5463,8 +5503,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             let bal = openBal, minBal = openBal, minBalIdx = -1, firstNegIdx = -1, lastNegIdx = -1;
             let anyNeg = false;
             const negMonths = []; // כל חודש שלילי — טווח ראשון..אחרון עלול לכלול חודשים חיוביים
+            // בסיס מזומן עם ימי אשראי — זהה לגיליון הסיכונים באקסל ולהתרעה בגרסה האנגלית
+            const _tmw = computeCashTiming(months);
             months.forEach((m, i) => {
-                const netCF = m.revenue - m.costOfGoods - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
+                const netCF = (_tmw.collections[i]||0) - (_tmw.supplierPayments[i]||0) - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                 bal += netCF;
                 if(bal < minBal) { minBal = bal; minBalIdx = i; }
                 if(bal < 0) { anyNeg = true; if(firstNegIdx === -1) firstNegIdx = i; lastNegIdx = i; negMonths.push(i); }
@@ -5478,13 +5520,14 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             if (anyNeg) {
                 const negContiguous = negMonths.length === (lastNegIdx - firstNegIdx + 1);
                 const rangeTxt = (endsNegative && negContiguous)
-                    ? `מחודש <strong>${mName(firstNegIdx)}</strong> ונשארת שלילית עד סוף השנה`
+                    ? `מ<strong>${mName(firstNegIdx)}</strong> ונשארת שלילית עד סוף השנה`
                     : (negMonths.length === 1
-                        ? `בחודש <strong>${mName(firstNegIdx)}</strong> בלבד`
+                        ? `ב<strong>${mName(firstNegIdx)}</strong> בלבד`
                         : (negContiguous
-                            ? `מחודש <strong>${mName(firstNegIdx)}</strong> עד חודש <strong>${mName(lastNegIdx)}</strong>`
+                            ? `מ<strong>${mName(firstNegIdx)}</strong> עד <strong>${mName(lastNegIdx)}</strong>`
                             : `בחודשים: <strong>${negMonths.map(mName).join(', ')}</strong>`));
-                const troughTxt = minBalIdx >= 0 ? `בחודש <strong>${mName(minBalIdx)}</strong>` : 'כבר ביתרת הפתיחה';
+                // שמות החודשים גנריים ("חודש N") — התחיליות כאן הן אות אחת בלבד, אחרת ייווצר "מחודש חודש 5"
+            const troughTxt = minBalIdx >= 0 ? `ב<strong>${mName(minBalIdx)}</strong>` : 'כבר ביתרת הפתיחה';
                 const div = document.createElement('div');
                 div.className = "p-3 bg-rose-100 border-2 border-rose-400 text-rose-900 rounded-lg text-sm flex items-start gap-2 font-medium";
                 div.innerHTML = `<i data-lucide="alert-octagon" class="w-5 h-5 text-rose-700 flex-shrink-0 mt-0.5"></i>
@@ -8118,7 +8161,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                     });
                     r++;
                 });
-                put(r,1,'© עזרא אליעזר · ezraeliezer.com', st('FFFFFF','94A3B8',{sz:9,alH:'right'}));
+                put(r,1,'גרסה חינמית · © עזרא אליעזר · ezraeliezer.com', st('FFFFFF','94A3B8',{sz:9,alH:'right'}));
                 for(let c=2;c<=6;c++) put(r,c,'', st('FFFFFF','94A3B8',{}));
                 merges.push({s:{r:r-1,c:0},e:{r:r-1,c:5}});
                 r++;
@@ -8681,7 +8724,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             if(st) st.textContent = elapsed === 0
                 ? 'טרם הוזנו נתוני ביצוע — מלא את חודש 1 כדי להתחיל'
                 : `נתונים מעודכנים נכון לחודש ${elapsed}`;
-            if(elapsed===0){ if(!renderActualsTeaser()){ const r=document.getElementById('actual-results'); if(r) r.classList.add('hidden'); } return; }
+            if(elapsed===0){ const r=document.getElementById('actual-results'); if(r) r.classList.add('hidden'); return; }
             for(let m=0;m<=lastIdx;m++){
                 const g=document.getElementById(`actc-gross-${m}`); if(g) g.textContent=_actFmt0(d.gross[m]);
                 const nt=document.getElementById(`actc-net-${m}`);   if(nt){ nt.textContent=_actFmt0(d.net[m]); nt.style.color=d.net[m]<0?'#dc2626':'#0f172a'; }
@@ -8727,35 +8770,6 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             updateActualsComputed();
         }
 
-        // ── טיזר Pro לשלב 7: כשאין עדיין נתוני ביצוע, מציגים את שלד הטבלה האמיתי
-        //    עם מקפים במקום ערכים, כדי ששכבת הנעילה תהיה על מה לשבת. תצוגה בלבד. ──
-        function renderActualsTeaser() {
-            if (typeof APP_PLAN !== 'undefined' && APP_PLAN === 'pro') return false;
-            const r = document.getElementById('actual-results');
-            if (!r) return false;
-            const labels = ['הכנסות','עלות מכר','מרווח גולמי %','רווח גולמי','שיווק','שכר',
-                            'הוצאות מכירה הנהלה וכלליות (ללא שכר ושיווק)','רווח נקי משוער'];
-            const th = (t,bg) => `<th style="padding:8px;border:1px solid #e2e8f0;background:${bg};color:#fff">${t}</th>`;
-            let h = `<h3 style="font-size:15px;font-weight:800;color:#0f172a;margin-bottom:4px">השוואת ביצוע מול תחזית</h3>
-                <p style="font-size:12px;color:#64748b;margin-bottom:12px">סטיות מול התקציב, חיזוי לסוף השנה (EAC) ודגלי בקרה.</p>
-                <div style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;direction:rtl;font-size:13px">
-                <thead><tr>
-                <th style="padding:8px;border:1px solid #e2e8f0;background:#0f172a;color:#fff;text-align:right;min-width:130px">סעיף</th>
-                ${th('ביצוע מצטבר','#0f172a')}${th('תחזית מצטברת','#0f172a')}${th('סטייה','#0f172a')}${th('דגל','#0f172a')}
-                ${th('חיזוי שנתי (EAC)','#0f766e')}${th('תחזית שנתית','#0f766e')}${th('פער צפוי (VAC)','#0f766e')}
-                </tr></thead><tbody>`;
-            labels.forEach(l => {
-                h += `<tr><td style="padding:7px;border:1px solid #e2e8f0;text-align:right;font-weight:600;background:#fff;min-width:130px">${l}</td>`;
-                for (let i = 0; i < 7; i++) h += `<td style="padding:7px;border:1px solid #e2e8f0;text-align:center;color:#94a3b8">—</td>`;
-                h += `</tr>`;
-            });
-            h += `</tbody></table></div>`;
-            r.innerHTML = h;
-            r.classList.remove('hidden');
-            applyProLocks();
-            return true;
-        }
-
         function renderActualsResults(elapsed, lastIdx, d) {
             const results = document.getElementById('actual-results');
             const missNote = document.getElementById('actual-missing-note');
@@ -8773,7 +8787,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             } else {
                 if(missNote) missNote.classList.add('hidden');
             }
-            if(lastIdx < 0){ if(!renderActualsTeaser()) results.classList.add('hidden'); return; }
+            if(lastIdx < 0){ results.classList.add('hidden'); return; }
             results.classList.remove('hidden');
 
             const weights = computeMonthlyWeights().weights;
@@ -8846,7 +8860,6 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             h += `<p style="margin-top:12px;font-size:13px;color:#134e4a;font-weight:600">חיזוי רווח נקי לסוף השנה: <strong>${_actFmt(eNet)}</strong> מול תחזית ${_actFmt(fNet)}.</p>`;
             results.innerHTML = h;
             results.classList.remove('hidden');
-            applyProLocks(); // הבלוק נכתב מחדש — בלעדי שכבת הנעילה נמחקת
         }
 
         // בנייה מלאה — רק בכניסה לדף / טעינה
