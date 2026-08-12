@@ -2327,8 +2327,8 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
 
     <script>
         // ── חיווי גרסה — מקור אמת יחיד. עדכן כאן בכל שחרור גרסה. ──
-        const APP_VERSION = 'V-29';
-        const APP_BUILD_DATE = '11.08.2026';
+        const APP_VERSION = 'V-30';
+        const APP_BUILD_DATE = '12.08.2026';
         const APP_PLAN = 'free'; // 'free' | 'pro' — תשתית עתידית לחלוקת גרסאות
 
         // ── ליבת Free/Pro: שער יחיד לכל פיצ'ר נעול ──
@@ -3952,6 +3952,9 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             } else {
                 S.appMode = 'existing';
             }
+            // סנכרון לפני החישוב: עלות המימון נגזרת ממסלול הכדאיות, ובלי זה
+            // ריבית הלוואת הרכישה נשארת בתצוגה של התקציב עד החישוב הבא.
+            syncStateFromDOM();
             // הישאר במסך התוצאות ורנדר מחדש על אותם נתונים
             goToStep('5');
             updateModelTabsUI();
@@ -5503,11 +5506,17 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             let bal = openBal, minBal = openBal, minBalIdx = -1, firstNegIdx = -1, lastNegIdx = -1;
             let anyNeg = false;
             const negMonths = []; // כל חודש שלילי — טווח ראשון..אחרון עלול לכלול חודשים חיוביים
+            const netBurnMonths = [];        // חודשים שבהם התזרים הנטו שלילי — אחרי מס, ריבית וקרן
+            let annualOperatingFlow = 0;     // תפעולי לפני מימון (הכנסה פחות הוצאות מזומן)
+            let annualNetFlow = 0;           // נטו אחרי מס ושירות חוב
             // בסיס מזומן עם ימי אשראי — זהה לגיליון הסיכונים באקסל ולהתרעה בגרסה האנגלית
             const _tmw = computeCashTiming(months);
             months.forEach((m, i) => {
                 const netCF = (_tmw.collections[i]||0) - (_tmw.supplierPayments[i]||0) - m.mktCost - m.payrollCost - m.fixedCost - (m.financing||0) - (m.taxCash||0) - (m.loanPrincipal||0);
                 bal += netCF;
+                annualNetFlow += netCF;
+                annualOperatingFlow += (m.revenue || 0) - (m.cashExpenses || 0);
+                if(netCF < 0) netBurnMonths.push(m.monthName);
                 if(bal < minBal) { minBal = bal; minBalIdx = i; }
                 if(bal < 0) { anyNeg = true; if(firstNegIdx === -1) firstNegIdx = i; lastNegIdx = i; negMonths.push(i); }
             });
@@ -5560,12 +5569,30 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 container.appendChild(div);
             }
 
+            // ── שחיקת מזומן אחרי מס ושירות חוב, בלי שהיתרה ירדה מתחת לאפס ──
+            //  בדיקת ה-Cash Burn למעלה משווה הכנסה מול עלות מכר והוצאות תפעול בלבד.
+            //  עסק שהפעילות שלו חיובית אך ההחזרים שוחקים את הקופה עבר אותה בשקט,
+            //  ואם יתרת הפתיחה כיסתה את הפער — הוצג לו אישור ירוק.
+            if (!anyNeg && (annualNetFlow < 0 || netBurnMonths.length > 0)) {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-amber-50 border border-amber-200 text-amber-900 rounded-lg text-sm flex items-start gap-2 font-medium";
+                const _fmtFlow = v => (v < 0 ? '−' : '') + '₪' + Math.round(Math.abs(v)).toLocaleString('en-US');
+                div.innerHTML = `<i data-lucide="trending-down" class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5"></i>
+                    <div><strong>שחיקת מזומן — הקופה קטנה למרות שהיתרה נשארה חיובית</strong><br>
+                    <span class="font-normal">
+                    תזרים תפעולי לפני מימון: <strong>${_fmtFlow(annualOperatingFlow)}</strong> לשנה.<br>
+                    תזרים נטו אחרי מס ושירות חוב: <strong>${_fmtFlow(annualNetFlow)}</strong> לשנה.<br>
+                    ${netBurnMonths.length > 0 ? `חודשים שליליים נטו: <strong>${netBurnMonths.join(', ')}</strong>.<br>` : ''}
+                    היתרה לא ירדה מתחת לאפס רק בזכות יתרת הפתיחה. הפעילות עצמה יכולה להיות בריאה — ההחזרים הם ששוחקים את הקופה.</span></div>`;
+                container.appendChild(div);
+            }
+
             // ── הכל תקין ──
-            if (burnMonths.length === 0 && belowBEMonths.length === 0 && !anyNeg) {
+            if (burnMonths.length === 0 && belowBEMonths.length === 0 && !anyNeg && netBurnMonths.length === 0 && annualNetFlow >= 0) {
                 const div = document.createElement('div');
                 div.className = "p-3 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-lg text-sm flex items-center gap-2 font-medium";
                 div.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 flex-shrink-0"></i>
-                    <span>כל 12 החודשים החזויים מעל נקודת האיזון עם תזרים חיובי ויתרה מצטברת חיובית — תקציב מאוזן! ✅</span>`;
+                    <span>כל 12 החודשים החזויים מעל נקודת האיזון, התזרים הנטו חיובי גם אחרי מס ושירות חוב, והיתרה המצטברת חיובית — תקציב מאוזן! ✅</span>`;
                 container.appendChild(div);
             }
 
@@ -6011,7 +6038,15 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 return { g1, g2, g3, termShare, e1: g1 - base, e2: g2 - base, e3: g3 - base };
             }
             const dDeal = dcfThree(annualDealFlow, investment, exitValue);
-            const dInv  = dcfThree(annualInvestorFlow, equityBase, equityTerminalValue);
+            // ── ערך נוכחי לבעלים ──
+            //  קודם לכן הוצגו כאן שלוש הערכות על זרם קבוע = EBIT פחות שירות החוב של שנה 1.
+            //  בבוליט הקרן לא נגרעה אף פעם, וגורדון היוון לנצח זרם שמנוכה שירות חוב
+            //  שנגמר עם ההלוואה. במקום זה — היוון של זרם ההון העצמי בפועל, אותו זרם
+            //  שעליו מחושב IRR ההון העצמי (לוח סילוקין מלא + יציאה בניכוי יתרת ההלוואה).
+            const equityPvGross = (equityFlows.length > 1)
+                ? equityFlows.slice(1).reduce((s, cf, idx) => s + cf / Math.pow(1 + reqRate, idx + 1), 0)
+                : null;
+            const equityPvNet = (equityPvGross === null) ? null : equityPvGross - equityBase;
 
             // ── התאמות מאזניות (Pro): שכבת דיוק רשות. adj.active=false ⇒ אפס השפעה, הכל כמקודם ──
             // השפעת מלאי (חד-פעמית, יום המסירה): מתווספת באופן זהה לכל מודלי השווי — מכפילים ו-DCF.
@@ -6192,10 +6227,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 ? `<div style="font-size:10.5px;font-weight:700;color:#4f46e5">מותאם: ${_grossFmt(av)}</div>` : '';
             const _grossCellLead = (v, av) => `<td class="py-1.5" style="text-align:left;color:#0f172a;font-weight:700">${_grossFmt(v)}${_adjCellLine(av)}</td>`;
             const _grossCell = (v, av) => `<td class="py-1.5" style="text-align:left;color:#334155">${_grossFmt(v)}${_adjCellLine(av)}</td>`;
-            const _invHeadCell = _hasFinancing ? `<td class="py-1 font-medium" style="text-align:left">המשקיע<br><span class="font-normal text-[10px]">אחרי חוב והון עצמי</span></td>` : '';
-            const _invCellLead = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#334155;font-weight:600">${_grossFmt(dInv.g1)}</td>` : '';
-            const _invCell2 = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g2)}</td>` : '';
-            const _invCell3 = _hasFinancing ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g3)}</td>` : '';
+            const _invHeadCell = false ? `<td class="py-1 font-medium" style="text-align:left">המשקיע<br><span class="font-normal text-[10px]">אחרי חוב והון עצמי</span></td>` : '';
+            const _invCellLead = false ? `<td class="py-1.5" style="text-align:left;color:#334155;font-weight:600">${_grossFmt(dInv.g1)}</td>` : '';
+            const _invCell2 = false ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g2)}</td>` : '';
+            const _invCell3 = false ? `<td class="py-1.5" style="text-align:left;color:#475569">${_grossFmt(dInv.g3)}</td>` : '';
             const dcfHtml = `
                 <div class="rounded-xl border border-slate-200 bg-white p-4 mt-3">
                     <h4 class="text-sm font-bold text-slate-700 mb-1">שיטה ב׳ · היוון תזרים (DCF) — הצלבה</h4>
@@ -6222,9 +6257,16 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                             ${_invCell3}
                         </tr>
                     </table>
+                    ${(_hasFinancing && equityPvGross !== null) ? `<div style="margin-top:11px;padding-top:9px;border-top:1px solid #f1f5f9">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                            <span class="text-[12px] font-bold text-slate-700">ערך נוכחי לבעלים — אחרי שירות חוב בפועל</span>
+                            <span class="text-sm font-bold" style="color:#0f172a">${_grossFmt(equityPvGross)}</span>
+                        </div>
+                        <p class="text-[10.5px] text-slate-500" style="margin:3px 0 0;line-height:1.55">מהוון @ ${reqPctTxt}% על זרם ההון העצמי בפועל — לפי לוח הסילוקין המלא (כולל פירעון קרן בשנת בלון) ויציאה בניכוי יתרת ההלוואה. זהו אותו זרם שעליו מחושב IRR ההון העצמי. מספר אחד ולא שלוש הערכות: טווח ההערכות מתאים לשווי העסק, שבו הזרם קבוע — זרם הבעלים משתנה משנה לשנה ונגמר עם ההלוואה.</p>
+                    </div>` : ''}
                     <div style="margin-top:11px;padding-top:9px;border-top:1px solid #f1f5f9;display:flex;align-items:flex-start;gap:7px">
                         <span style="color:#94a3b8;font-size:13px;line-height:1.2;margin-top:1px">ⓘ</span>
-                        <p class="text-[11px] text-slate-500" style="margin:0;line-height:1.6">שלוש ההערכות עוטפות את הטווח הראשי ומאשרות אותו — הערכה 3 היא הרצפה, גורדון היא התקרה.${_hasFinancing ? '' : ' עמודת ״המשקיע״ (אחרי חוב והון עצמי) תופיע כאן אוטומטית כשיוזן מימון.'}</p>
+                        <p class="text-[11px] text-slate-500" style="margin:0;line-height:1.6">שלוש ההערכות עוטפות את הטווח הראשי ומאשרות אותו — הערכה 3 היא הרצפה, גורדון היא התקרה. הערכים הם שווי העסק ואינם מושפעים ממבנה המימון של הרכישה.${_hasFinancing ? '' : ' שורת ״ערך נוכחי לבעלים״ תופיע כאן אוטומטית כשיוזן מימון.'}</p>
                     </div>
                 </div>`;
 
@@ -6247,16 +6289,24 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             // ── החלטה 2: איכות מבנה המימון בלבד ──
             // תיקון: הלוואה נדרשת ללא ריבית/תקופה חייבת להיחסם כאן ולא להתחזות ל"ללא חוב חיצוני".
             let financingLevel = 'safe';
+            // הסיווג נקבע לפי השנה הקשה ביותר ולא לפי שנה 1. בגרייס ובבוליט שנה 1
+            // מחמיאה (ריבית בלבד) — DSCR 6.65 בשנה 1 מול 0.49 בשנת הפירעון קיבל בעבר "תקין".
+            const dscrEffective = (dscr === null) ? dscrMin
+                                : (dscrMin === null ? dscr : Math.min(dscr, dscrMin));
             if(fin.termsIncomplete) {
                 financingLevel = 'incomplete';
             } else if(annualDebtService > 0) {
-                if(annualCashFlow < 0 || (dscr !== null && dscr < 1)) financingLevel = 'risky';
-                else if((dscr !== null && dscr < 1.2) || annualCashFlow < cfads * 0.15) financingLevel = 'watch';
+                if(annualCashFlow < 0 || (dscrEffective !== null && dscrEffective < 1)) financingLevel = 'risky';
+                else if((dscrEffective !== null && dscrEffective < 1.2) || annualCashFlow < cfads * 0.15) financingLevel = 'watch';
             }
+            // כשהסיווג נקבע על שנה מאוחרת — נאמר במפורש איזו, אחרת האדום נראה שרירותי
+            const _dscrWorstNote = (dscrMin !== null && dscrMinYear && dscr !== null && dscrMin < dscr - 0.005)
+                ? ` הסיווג נקבע לפי השנה הקשה ביותר (שנה ${dscrMinYear}, DSCR ${dscrMin.toFixed(2)}) ולא לפי שנה 1 (${dscr.toFixed(2)}) — לפי תזרים תפעולי קבוע.`
+                : '';
             const financingCfg = {
-                safe:  { emoji:'🟢', title: annualDebtService > 0 ? 'מבנה המימון תקין' : 'ללא חוב חיצוני', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub: annualDebtService > 0 ? 'התזרים לאחר שירות חוב חיובי ויחס הכיסוי סביר.' : 'אין עומס שירות חוב ולכן סיכון המימון נמוך.' },
-                watch: { emoji:'🟡', title:'מבנה מימון גבולי', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה יכולה לשרת את החוב, אך מרווח הביטחון נמוך. מומלץ לבדוק פריסה ארוכה/הפחתת ריבית/הון עצמי נוסף.' },
-                risky: { emoji:'🔴', title:'מבנה המימון מסוכן', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'שירות החוב יוצר תזרים שלילי או DSCR נמוך מ-1. מבנה המימון דורש שינוי.' },
+                safe:  { emoji:'🟢', title: annualDebtService > 0 ? 'מבנה המימון תקין' : 'ללא חוב חיצוני', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub: annualDebtService > 0 ? 'התזרים לאחר שירות חוב חיובי ויחס הכיסוי סביר לאורך כל חיי ההלוואה.' : 'אין עומס שירות חוב ולכן סיכון המימון נמוך.' },
+                watch: { emoji:'🟡', title:'מבנה מימון גבולי', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'העסקה יכולה לשרת את החוב, אך מרווח הביטחון נמוך. מומלץ לבדוק פריסה ארוכה/הפחתת ריבית/הון עצמי נוסף.' + _dscrWorstNote },
+                risky: { emoji:'🔴', title:'מבנה המימון מסוכן', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'שירות החוב יוצר תזרים שלילי או DSCR נמוך מ-1. מבנה המימון דורש שינוי.' + _dscrWorstNote },
                 incomplete: { emoji:'⛔', title:'תנאי ההלוואה לא הוזנו', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:`נדרשת הלוואה של ₪${fmtILS(Math.round(fin.loan))} אך לא הוזנו ריבית ו/או תקופת החזר. שירות החוב מחושב כאפס — כל מדדי המימון בעמוד זה אינם תקפים. חזור לדף המימון והשלם את התנאים.` }
             }[financingLevel];
 
@@ -6281,19 +6331,19 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             } else if(priceTooHigh) {
                 decisionLevel = 'price_high';
                 conclusion = `העסק איתן ורווחי, אך במחיר/השקעה הנוכחיים (₪${fmtILS(Math.round(investment))}) ההשקעה גבוהה מהשווי השמרני לפי מכפיל 4 — מכפיל שמגלם בקירוב תשואה של 25%, ללא קשר לתשואה שהזנת. המחיר ההוגן לפי מכפיל זה הוא ${fairPriceTxt}. שקול לנהל את המחיר לכיוון זה, או מכפיל גבוה יותר (5–6) אם יציבות העסק וההכנסה החוזרת מצדיקות זאת. זו אינה פסילה של העסק — זו אזהרת מחיר.`;
-            } else if(irrPct !== null && isFinite(irrPct) && irrPct < (S.requiredRoi ?? 15)) {
-                // ── IRR מתחת לתשואה המבוקשת → CAUTION ──
-                //  הכרטיסים כבר נצבעים מול הרף; כאן ההחלטה עצמה מיושרת עם מה
-                //  שהמסך מבטיח. לא פוסל — מדליק בדיקה. המשקיע הזה, בדרישה הזו,
-                //  לא מקבל את התשואה שביקש גם אם העסקה סבירה בשוק.
-                decisionLevel = 'caution';
-                conclusion = `העסק רווחי והמחיר בטווח הסביר, אך ה-IRR המשוער (${irrPct.toFixed(1)}%) נמוך מהתשואה שביקשת (${S.requiredRoi ?? 15}%). העסקה אינה עומדת ברף שהגדרת — גם אם היא סבירה במונחי שוק. שקול: מחיר נמוך יותר, מבנה מימון שמשפר את תשואת ההון העצמי, או עדכון הרף אם הוא גבוה מהנדרש.`;
             } else if(financingLevel === 'watch') {
                 decisionLevel = 'caution';
                 conclusion = 'העסק רווחי, אך מרווח הביטחון של שירות החוב נמוך — שווה לבדוק את תנאי המימון. מדדי ההחזר והתשואה מוצגים כתמונת מצב ואינם פוסלים את העסקה.';
             } else {
+                // התשואה המבוקשת היא קו ייחוס ואינה פוסלת — כך כתוב בכרטיס ה-IRR,
+                // ולכן היא אינה ענף בקסקדה. כדי ש-GO לא ישתוק כשהרף לא הושג —
+                // המשפט הבא נוסף להסבר עצמו.
+                const _irrBelowHurdle = (irrPct !== null && isFinite(irrPct) && irrPct < (S.requiredRoi ?? 15));
+                const _irrNote = _irrBelowHurdle
+                    ? ` שים לב: ה-IRR המשוער (${irrPct.toFixed(1)}%) נמוך מהתשואה שביקשת (${S.requiredRoi ?? 15}%) — העסקה עברה את המבחנים הכלכליים, אך אינה מגיעה לרף שהגדרת. הרף הוא קו ייחוס אישי ואינו פוסל.`
+                    : '';
                 decisionLevel = 'go';
-                conclusion = 'העסק רווחי, מבנה המימון תקין ופער השווי מול ההשקעה חיובי (המחיר נמוך מהשווי השמרני). שלושת המבחנים הכלכליים במודל עברו. הבדיקה מבוססת על הנתונים וההנחות שהזנת בלבד, ואינה כוללת בדיקת נאותות, חוזים, מיסוי, תלות בבעלים או ריכוזיות לקוחות — אלה נבחנים בנפרד לפני כל התקשרות. מדדי ההחזר וה-IRR מוצגים בכרטיסים מול התשואה שביקשת.';
+                conclusion = 'העסק רווחי, מבנה המימון תקין ופער השווי מול ההשקעה חיובי (המחיר נמוך מהשווי השמרני). שלושת המבחנים הכלכליים במודל עברו. הבדיקה מבוססת על הנתונים וההנחות שהזנת בלבד, ואינה כוללת בדיקת נאותות, חוזים, מיסוי, תלות בבעלים או ריכוזיות לקוחות — אלה נבחנים בנפרד לפני כל התקשרות. מדדי ההחזר וה-IRR מוצגים בכרטיסים מול התשואה שביקשת.' + _irrNote;
             }
 
             const decisionCfg = {
@@ -6305,7 +6355,7 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 incomplete:   { emoji:'⛔', title:'נתונים חסרים — אין הכרעה', bg:'#fff1f2', border:'#f43f5e', fg:'#9f1239', sub:'תנאי ההלוואה לא הוזנו. מדדי המימון בעמוד זה אינם תקפים.' }
             }[decisionLevel];
 
-            const riskLevel = (financingLevel === 'incomplete' || financingLevel === 'risky') ? 'high' : (financingLevel === 'watch' || dealLevel === 'caution' || priceTooHigh ? 'medium' : (dealLevel === 'nogo' ? 'high' : 'low'));
+            const riskLevel = (financingLevel === 'incomplete' || financingLevel === 'risky') ? 'high' : (financingLevel === 'watch' || dealLevel === 'review' || priceTooHigh ? 'medium' : (dealLevel === 'nogo' ? 'high' : 'low'));
             const riskCfg = {
                 low:    { emoji:'🟢', title:'סיכון נמוך', bg:'#ecfdf5', border:'#10b981', fg:'#065f46', sub:'כדאיות העסקה והמימון נראים תקינים לפי ROI/IRR/DSCR.' },
                 medium: { emoji:'🟡', title:'סיכון בינוני', bg:'#fffbeb', border:'#f59e0b', fg:'#92400e', sub:'אחד ממדדי הכדאיות או המימון גבולי ודורש בדיקת תרחישים.' },
@@ -6417,8 +6467,10 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
             const marginGrossPct = totalRev > 0 ? (totalGross / totalRev * 100) : 0;
             const marginEbitdaPct = totalRev > 0 ? (totalEbitda / totalRev * 100) : 0;
             const marginNetPct = totalRev > 0 ? (totalNet / totalRev * 100) : 0;
-            const monthsNegativeCashFlow = monthsData.filter(m => {
-                const netCF = (m.revenue || 0) - (m.costOfGoods || 0) - (m.mktCost || 0) - (m.payrollCost || 0) - (m.fixedCost || 0) - (m.financing || 0) - (m.taxCash || 0) - (m.loanPrincipal || 0);
+            // אותו בסיס מזומן של annualCashFlow ושל ההתראה — אחרת כרטיס הסטטוס
+            // יכול לספור חודשים שליליים אחרים מההתראה שמעליו באותו מסך.
+            const monthsNegativeCashFlow = monthsData.filter((m, i) => {
+                const netCF = (_act.collections[i] || 0) - (_act.supplierPayments[i] || 0) - (m.mktCost || 0) - (m.payrollCost || 0) - (m.fixedCost || 0) - (m.financing || 0) - (m.taxCash || 0) - (m.loanPrincipal || 0);
                 return netCF < 0;
             }).length;
             const monthsBelowBE = breakEvenPoint > 0 ? monthsData.filter(m => (m.revenue || 0) < breakEvenPoint).length : 0;
@@ -6990,6 +7042,22 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
                 caution: {
                     label: 'CAUTION',
                     sentence: 'ההשקעה גבולית — מומלץ לבדוק הנחות ומבנה מימון',
+                    color: '#d97706',
+                    bg: '#fffbeb',
+                    border: '#d97706',
+                    icon: '⚠️'
+                },
+                finance_risk: {
+                    label: 'GO מותנה',
+                    sentence: 'העסק תקין — מבנה המימון דורש התאמה',
+                    color: '#d97706',
+                    bg: '#fffbeb',
+                    border: '#d97706',
+                    icon: '⚠️'
+                },
+                price_high: {
+                    label: 'GO מותנה',
+                    sentence: 'העסק תקין — המחיר גבוה מהשווי השמרני',
                     color: '#d97706',
                     bg: '#fffbeb',
                     border: '#d97706',
