@@ -681,9 +681,14 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
     document.body.appendChild(d);
   }
 
-  // A visible entry point, so installing never depends on a timed popup.
+  // ── The entry point is ALWAYS visible ─────────────────────────
+  //  Earlier the button only appeared once the browser volunteered an
+  //  install prompt. When it stayed silent — under file://, in a private
+  //  window, on Firefox, or when the engagement heuristic had not been
+  //  met — the person saw nothing at all and had no way to know why.
+  //  Silence is the worst possible failure mode here.
   function showBar() {
-    if (standalone() || document.getElementById('bs-install-bar')) return;
+    if (standalone() || dismissed() || document.getElementById('bs-install-bar')) return;
     var b = document.createElement('button');
     b.id = 'bs-install-bar'; b.type = 'button';
     b.textContent = '📲 התקן כאפליקציה';
@@ -695,22 +700,71 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
   }
 
   window.bsInstall = function () {
+    // 1. the browser offered — use it
     if (deferred) {
       deferred.prompt();
-      deferred.userChoice.then(function () { deferred = null; remember(); var x = document.getElementById('bs-install-bar'); if (x) x.remove(); });
-    } else if (isIOS()) {
-      card('הוסף למסך הבית', 'לחץ על כפתור השיתוף למטה, ואז על "הוסף למסך הבית".', [{ label: 'לא עכשיו', onClick: function () {} }]);
-    } else {
-      card('התקן את BudgetSmart',
-           'ההתקנה נעשית מתפריט הדפדפן: ⋮ ← התקנת אפליקציה.',
-           [{ label: 'לא עכשיו', onClick: function () {} }]);
+      deferred.userChoice.then(function () {
+        deferred = null; remember();
+        var x = document.getElementById('bs-install-bar'); if (x) x.remove();
+      });
+      return;
     }
+    // 2. opened from disk — installing is impossible, say so plainly
+    if (!HTTP) {
+      card('פתח מהכתובת באינטרנט',
+           'הקובץ נפתח מהמחשב ולכן לא ניתן להתקין אותו. פתח את הכלי מהכתובת באינטרנט, ואז אפשר יהיה להוסיף אייקון.',
+           [{ label: 'סגור', onClick: function () {} }]);
+      return;
+    }
+    // 3. iPhone / iPad — Safari never offers, it is always manual
+    if (isIOS()) {
+      card('הוסף למסך הבית',
+           'לחץ על כפתור השיתוף למטה, ואז על "הוסף למסך הבית".',
+           [{ label: 'סגור', onClick: function () {} }]);
+      return;
+    }
+    // 4. desktop, no automatic offer — the menu path always works
+    var ua = navigator.userAgent;
+    var msg;
+    if (/Edg\//.test(ua)) {
+      msg = 'בתפריט הדפדפן (⋯ בפינה): Apps ← Install this site as an app.';
+    } else if (/Firefox/.test(ua)) {
+      msg = 'Firefox במחשב אינו תומך בהתקנה. פתח את הכלי ב-Chrome או ב-Edge, או צור סימנייה (Ctrl+D).';
+    } else if (/Chrome/.test(ua)) {
+      msg = 'בתפריט הדפדפן (⋮ בפינה): Cast, save and share ← Install page as app. בגרסאות ישנות: More tools ← Create shortcut, וסמן "Open as window".';
+    } else {
+      msg = 'בתפריט הדפדפן חפש "התקן" / "Install", או צור סימנייה (Ctrl+D).';
+    }
+    card('הוספת אייקון למחשב', msg, [{ label: 'סגור', onClick: function () {} }]);
+  };
+
+  // A one-line diagnosis, for when something still refuses to work.
+  window.bsDiag = function () {
+    var out = {
+      protocol: location.protocol,
+      url: location.href,
+      standalone: standalone(),
+      browserOfferedInstall: !!deferred,
+      dismissedEarlier: dismissed(),
+      serviceWorkerSupported: 'serviceWorker' in navigator,
+      userAgent: navigator.userAgent
+    };
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (r) {
+        out.serviceWorkersRegistered = r.length;
+        console.log('[PWA DIAG]', out);
+      });
+    } else { console.log('[PWA DIAG]', out); }
+    fetch('manifest.json').then(function (r) {
+      console.log('[PWA DIAG] manifest.json ->', r.status, r.ok ? 'OK' : 'NOT FOUND');
+    }).catch(function (e) { console.log('[PWA DIAG] manifest.json -> failed:', e.message); });
+    return 'running — see the lines starting with [PWA DIAG]';
   };
 
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault();
     deferred = e;
-    if (!standalone()) showBar();
+    showBar();
   });
 
   window.addEventListener('appinstalled', function () {
@@ -718,20 +772,20 @@ details.vx-acc[open]>summary{border-bottom-left-radius:0;border-bottom-right-rad
     var x = document.getElementById('bs-install-bar'); if (x) x.remove();
   });
 
-  // iOS never fires beforeinstallprompt — surface the bar anyway.
-  setTimeout(function () {
-    if (!standalone() && isIOS() && HTTP) showBar();
-  }, 20000);
+  // Show the button regardless of whether the browser volunteered.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(showBar, 12000); });
+  } else {
+    setTimeout(showBar, 12000);
+  }
 
-  // Gentle one-time card, only after the person has used the tool.
+  // Gentle one-time card, only once the person has used the tool.
   setTimeout(function () {
-    if (standalone() || dismissed()) return;
-    if (deferred) {
-      card('התקן את BudgetSmart', 'קבל אייקון על המסך — פתיחה בלחיצה אחת, גם ללא אינטרנט.', [
-        { label: 'התקן', primary: true, onClick: function () { window.bsInstall(); } },
-        { label: 'לא עכשיו', onClick: remember }
-      ]);
-    }
+    if (standalone() || dismissed() || !deferred) return;
+    card('התקן את BudgetSmart', 'קבל אייקון על המסך — פתיחה בלחיצה אחת, גם ללא אינטרנט.', [
+      { label: 'התקן', primary: true, onClick: function () { window.bsInstall(); } },
+      { label: 'לא עכשיו', onClick: remember }
+    ]);
   }, 60000);
 })();
 </script>
